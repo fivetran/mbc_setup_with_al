@@ -1,4 +1,4 @@
-page 50167 "APIV2 Gen. Journal Batch"
+page 50102 "APIV2 Gen. Journal Batch"
 {
    APIVersion = 'v1.0';
    APIPublisher = 'fivetran';
