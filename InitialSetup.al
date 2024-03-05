@@ -20191,4 +20191,40 @@ page 90064 Job
     }
 }
 
+page 90065 "Table Metadata"
+{
+    APIGroup = 'metadata';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'tableMetadata';
+    DelayedInsert = true;
+    EntityName = 'tableMetadata';
+    EntitySetName = 'tableMetadata';
+    PageType = API;
+    SourceTable = "Table Metadata";
+    Editable = false;
+    DataAccessIntent = ReadOnly;
 
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(ID; Rec.ID)
+                {
+                    Caption = 'Table ID';
+                }
+                field(Name; Rec.Name)
+                {
+                    Caption = 'Table Name';
+                }
+                field(DataPerCompany; Rec.DataPerCompany)
+                {
+                    Caption = 'Data Per Company';
+                }
+            }
+        }
+    }
+}
