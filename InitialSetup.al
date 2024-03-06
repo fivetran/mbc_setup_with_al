@@ -64,13 +64,13 @@ page 90001 "G/L Account"
     DelayedInsert = true;
     DeleteAllowed = false;
     Editable = false;
-    EntityName = 'generalLedgerAccount';
-    EntitySetName = 'generalLedgerAccounts';
+    EntityName = 'generalLedgerAccount'; // page Name - schema - destination
+    EntitySetName = 'generalLedgerAccounts'; // url 
     InsertAllowed = false;
     ModifyAllowed = false;
     ODataKeyFields = SystemId;
     PageType = API;
-    SourceTable = "G/L Account";
+    SourceTable = "G/L Account"; // no - access
     DataAccessIntent = ReadOnly;
 
     layout
@@ -1796,25 +1796,21 @@ page 90008 "Contacts Information Buffer"
 
     layout
     {
-        area(Content)
+        area(content)
         {
-            repeater(GroupName)
+            repeater(General)
             {
-                field(SystemId; Rec.SystemId)
-                {
-                    Caption = 'System Id';
-                }
                 field(contactId; Rec."Contact Id")
                 {
                     Caption = 'Contact Id';
                 }
-                field(contactNumber; Rec."Contact No.")
-                {
-                    Caption = 'Contact No.';
-                }
                 field(contactName; Rec."Contact Name")
                 {
                     Caption = 'Contact Name';
+                }
+                field(contactNo; Rec."Contact No.")
+                {
+                    Caption = 'Contact No.';
                 }
                 field(contactType; Rec."Contact Type")
                 {
@@ -1827,11 +1823,26 @@ page 90008 "Contacts Information Buffer"
                 field(relatedType; Rec."Related Type")
                 {
                     Caption = 'Related Type';
-                    Editable = false;
                 }
-                field(SystemModifiedAt; Rec.SystemModifiedAt)
+                field(systemCreatedAt; Rec.SystemCreatedAt)
                 {
-                    Caption = 'System Modifed At';
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
                 }
             }
         }
