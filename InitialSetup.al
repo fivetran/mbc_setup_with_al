@@ -4302,11 +4302,11 @@ page 90017 "DimensionSetEntryBuffer"
     APIGroup = 'standardEndpoints';
     DataAccessIntent = ReadOnly;
     Editable = false;
-    EntityCaption = 'Dimension Set Line';
-    EntitySetCaption = 'Dimension Set Lines';
+    EntityCaption = 'Dimension Set Entry Buffer';
+    EntitySetCaption = 'Dimension Set Entry Buffer';
     ODataKeyFields = SystemId;
-    EntityName = 'dimensionSetLine';
-    EntitySetName = 'dimensionSetLines';
+    EntityName = 'dimensionSetEntryBuffer';
+    EntitySetName = 'dimensionSetEntryBuffer';
     SourceTable = "Dimension Set Entry Buffer";
 
     layout
