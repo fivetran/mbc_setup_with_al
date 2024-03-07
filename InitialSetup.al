@@ -20248,8 +20248,8 @@ page 90066 Company
     ApplicationArea = All;
     Caption = 'company';
     DelayedInsert = true;
-    EntityName = 'company';
-    EntitySetName = 'companies';
+    EntityName = 'rawCompany';
+    EntitySetName = 'rawCompanies';
     PageType = API;
     SourceTable = Company;
     Editable = false;
