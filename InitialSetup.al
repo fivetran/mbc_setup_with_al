@@ -1,60 +1,405 @@
-page 90000 "Page metadata"
+/*
+* Mandatory table, pages and code units for connector setup and delete capture.
+*/
+table 90000 "Custom Subscription"
 {
+    DataClassification = ToBeClassified;
+    DataPerCompany = false;
+
+    fields
+    {
+        field(1; id; Guid)
+        {
+            caption = 'Id';
+        }
+        field(2; url; Text[200])
+        {
+            caption = 'URL';
+        }
+        field(3; recordsDeleted; BigInteger)
+        {
+            caption = 'Records Deleted';
+        }
+        field(4; companyId; Text[200])
+        {
+            caption = 'Company ID';
+        }
+        field(5; tableId; Integer)
+        {
+            caption = 'Table ID';
+        }
+
+    }
+
+    trigger OnInsert()
+    begin
+        id := System.CreateGuid();
+    end;
+}
+
+page 90000 "API Custom Subscription"
+{
+    PageType = API;
+    ApplicationArea = All;
+    SourceTable = "Custom Subscription";
     APIVersion = 'v1.0';
+    APIPublisher = 'fivetran';
+    APIGroup = 'webhook';
+    EntityName = 'customSubscription';
+    EntitySetName = 'customSubscriptions';
+    DelayedInsert = true;
+    ODataKeyFields = SystemId;
+    Extensible = false;
+
+    layout
+    {
+        area(Content)
+        {
+            group(GroupName)
+            {
+                field(id; Rec.id) { }
+                field(url; Rec.url) { }
+                field(recordsDeleted; Rec.recordsDeleted) { }
+                field(tableId; Rec.tableId) { }
+                field(companyId; Rec.companyId) { }
+                field(systemCreatedAt; Rec.SystemCreatedAt) { }
+                field(systemModifiedAt; Rec.SystemModifiedAt) { }
+                field(systemId; Rec.SystemId) { }
+
+            }
+        }
+    }
+}
+
+page 90001 "Page metadata"
+{
     APIPublisher = 'fivetran';
     DataAccessIntent = ReadOnly;
     APIGroup = 'metadata';
+    APIVersion = 'v1.0';
     Editable = false;
     EntityName = 'pageMetadata';
     EntitySetName = 'pageMetadata';
     DelayedInsert = true;
     PageType = API;
     SourceTable = "Page Metadata";
-
     layout
     {
         area(content)
         {
-            repeater(Group)
+            repeater(General)
             {
-                field(pageId; Rec.ID)
-                {
-                    Caption = 'Page Id';
-                }
-                field(sourceTable; Rec.SourceTable)
-                {
-                    Caption = 'Source Table Id';
-                }
-                field(entityName; Rec.EntityName)
-                {
-                    Caption = 'Entity Name';
-                }
-                field(entitySetName; Rec.EntitySetName)
-                {
-                    Caption = 'Entity Set Name';
-                }
-                field(APIGroup; Rec.APIGroup)
+                field(apiGroup; Rec.APIGroup)
                 {
                     Caption = 'APIGroup';
                 }
-                field(APIPublisher; Rec.APIPublisher)
+                field(apiPublisher; Rec.APIPublisher)
                 {
                     Caption = 'APIPublisher';
                 }
-                field(APIVersion; Rec.APIVersion)
+                field(apiVersion; Rec.APIVersion)
                 {
                     Caption = 'APIVersion';
                 }
+                field(autoSplitKey; Rec.AutoSplitKey)
+                {
+                    Caption = 'AutoSplitKey';
+                }
+                field(caption; Rec.Caption)
+                {
+                    Caption = 'Caption';
+                }
+                field(cardPageID; Rec.CardPageID)
+                {
+                    Caption = 'CardPageID';
+                }
+                field(changeTrackingAllowed; Rec.ChangeTrackingAllowed)
+                {
+                    Caption = 'ChangeTrackingAllowed';
+                }
+                field(dataCaptionExpr; Rec."DataCaptionExpr.")
+                {
+                    Caption = 'DataCaptionExpr.';
+                }
+                field(dataCaptionFields; Rec.DataCaptionFields)
+                {
+                    Caption = 'DataCaptionFields';
+                }
+                field(delayedInsert; Rec.DelayedInsert)
+                {
+                    Caption = 'DelayedInsert';
+                }
+                field(deleteAllowed; Rec.DeleteAllowed)
+                {
+                    Caption = 'DeleteAllowed';
+                }
+                field(editable; Rec.Editable)
+                {
+                    Caption = 'Editable';
+                }
+                field(entityName; Rec.EntityName)
+                {
+                    Caption = 'EntityName';
+                }
+                field(entitySetName; Rec.EntitySetName)
+                {
+                    Caption = 'EntitySetName';
+                }
+                field(id; Rec.ID)
+                {
+                    Caption = 'ID';
+                }
+                field(insertAllowed; Rec.InsertAllowed)
+                {
+                    Caption = 'InsertAllowed';
+                }
+                field(linksAllowed; Rec.LinksAllowed)
+                {
+                    Caption = 'LinksAllowed';
+                }
+                field(modifyAllowed; Rec.ModifyAllowed)
+                {
+                    Caption = 'ModifyAllowed';
+                }
+                field(multipleNewLines; Rec.MultipleNewLines)
+                {
+                    Caption = 'MultipleNewLines';
+                }
+                field(name; Rec.Name)
+                {
+                    Caption = 'Name';
+                }
+                field(pageType; Rec.PageType)
+                {
+                    Caption = 'PageType';
+                }
+                field(populateAllFields; Rec.PopulateAllFields)
+                {
+                    Caption = 'PopulateAllFields';
+                }
+                field(refreshOnActivate; Rec.RefreshOnActivate)
+                {
+                    Caption = 'RefreshOnActivate';
+                }
+                field(saveValues; Rec.SaveValues)
+                {
+                    Caption = 'SaveValues';
+                }
+                field(showFilter; Rec.ShowFilter)
+                {
+                    Caption = 'ShowFilter';
+                }
+                field(sourceTable; Rec.SourceTable)
+                {
+                    Caption = 'SourceTable';
+                }
+                field(sourceTableTemporary; Rec.SourceTableTemporary)
+                {
+                    Caption = 'SourceTableTemporary';
+                }
+                field(sourceTableView; Rec.SourceTableView)
+                {
+                    Caption = 'SourceTableView';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
                 field(systemModifiedAt; Rec.SystemModifiedAt)
                 {
-                    Caption = 'systemModifiedAt';
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
                 }
             }
         }
     }
 }
 
-page 90001 "G/L Account"
+page 90002 "Table Metadata"
+{
+    APIGroup = 'metadata';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'tableMetadata';
+    DelayedInsert = true;
+    EntityName = 'tableMetadata';
+    EntitySetName = 'tableMetadata';
+    PageType = API;
+    SourceTable = "Table Metadata";
+    Editable = false;
+    DataAccessIntent = ReadOnly;
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(caption; Rec.Caption)
+                {
+                    Caption = 'Caption';
+                }
+                field(compressionType; Rec.CompressionType)
+                {
+                    Caption = 'CompressionType';
+                }
+                field(dataCaptionFields; Rec.DataCaptionFields)
+                {
+                    Caption = 'DataCaptionFields';
+                }
+                field("dataClassification"; Rec."DataClassification")
+                {
+                    Caption = 'DataClassification';
+                }
+                field(dataIsExternal; Rec.DataIsExternal)
+                {
+                    Caption = 'DataIsExternal';
+                }
+                field(dataPerCompany; Rec.DataPerCompany)
+                {
+                    Caption = 'DataPerCompany';
+                }
+                field(drillDownPageId; Rec.DrillDownPageId)
+                {
+                    Caption = 'DrillDownPageId';
+                }
+                field(externalName; Rec.ExternalName)
+                {
+                    Caption = 'ExternalName';
+                }
+                field(id; Rec.ID)
+                {
+                    Caption = 'ID';
+                }
+                field(linkedObject; Rec.LinkedObject)
+                {
+                    Caption = 'LinkedObject';
+                }
+                field(lookupPageID; Rec.LookupPageID)
+                {
+                    Caption = 'LookupPageID';
+                }
+                field(name; Rec.Name)
+                {
+                    Caption = 'Name';
+                }
+                field(obsoleteReason; Rec.ObsoleteReason)
+                {
+                    Caption = 'ObsoleteReason';
+                }
+                field(obsoleteState; Rec.ObsoleteState)
+                {
+                    Caption = 'ObsoleteState';
+                }
+                field(pasteIsValid; Rec.PasteIsValid)
+                {
+                    Caption = 'PasteIsValid';
+                }
+                field(replicateData; Rec.ReplicateData)
+                {
+                    Caption = 'ReplicateData';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+                field(tableType; Rec.TableType)
+                {
+                    Caption = 'TableType';
+                }
+            }
+        }
+    }
+}
+
+codeunit 50101 GlobalEventHandle
+{
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Global Triggers", 'GetDatabaseTableTriggerSetup', '', false, false)]
+    local procedure GetDatabaseTableTriggerSetup(TableId: Integer; var OnDatabaseInsert: Boolean; var OnDatabaseModify: Boolean; var OnDatabaseDelete: Boolean)
+    begin
+        OnDatabaseInsert := false;
+        OnDatabaseModify := false;
+        OnDatabaseDelete := true;
+    end;
+
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Global Triggers", 'OnDatabaseDelete', '', false, false)]
+    local procedure OnDatabaseDelete(RecRef: RecordRef)
+    var
+        JSONObject: JsonObject;
+        json: Text[1200];
+        client: HttpClient;
+        Response: HttpResponseMessage;
+        content: HttpContent;
+        systemModifiedAt: DateTime;
+        contentHeaders: HttpHeaders;
+        urlToUse: Text[200];
+        subscription: Record "Custom Subscription";
+        company: Record Company;
+        systemId: Text[200];
+    begin
+        company.Get(RecRef.CurrentCompany);
+        subscription.SetCurrentKey(companyId, tableId);
+        subscription.SetFilter(tableId, Format(RecRef.Number()));
+        subscription.SetFilter(companyId, Format(company.Id).ToLower().Replace('{', '').Replace('}', ''));
+
+        if subscription.FindSet() then begin
+            JSONObject.Add('tableId', RecRef.Number());
+            JSONObject.Add('companyId', Format(company.Id).ToLower().Replace('{', '').Replace('}', ''));
+            JSONObject.Add('payloadId', '');
+            JSONObject.Add('systemId', Format(RecRef.Field(2000000000).Value).ToLower().Replace('{', '').Replace('}', ''));
+            systemModifiedAt := RecRef.Field(RecRef.SystemCreatedAtNo).Value;
+            JSONObject.Add('systemModifiedAt', systemModifiedAt);
+            repeat
+                subscription.recordsDeleted := subscription.recordsDeleted + 1;
+                subscription.Modify();
+                JSONObject.Replace('payloadId', subscription.recordsDeleted);
+                Client.Clear();
+                JSONObject.WriteTo(json);
+                Content.WriteFrom(json);
+                content.GetHeaders(contentHeaders);
+                contentHeaders.Clear();
+                contentHeaders.Add('Content-Type', 'application/json');
+                urlToUse := subscription.url;
+                Client.Post(urlToUse, Content, Response);
+            until subscription.Next() = 0;
+        end;
+    end;
+}
+
+/*
+* Pages for few of the standard tables, which exposes the all of the supported columns.
+*/
+
+page 90003 "G/L Account"
 {
     APIVersion = 'v1.0';
     APIPublisher = 'fivetran';
@@ -358,188 +703,6 @@ page 90001 "G/L Account"
                 field(vatReportingDateFilter; Rec."VAT Reporting Date Filter")
                 {
                     Caption = 'VAT Reporting Date Filter';
-                }
-            }
-        }
-    }
-}
-
-page 90002 "Aged Report Entity"
-{
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    EntityCaption = 'Aged Report Entity';
-    EntitySetCaption = 'Aged Report Entity';
-    DelayedInsert = true;
-    DeleteAllowed = false;
-    Editable = false;
-    EntityName = 'agedReportEntity';
-    EntitySetName = 'agedReportEntities';
-    InsertAllowed = false;
-    ModifyAllowed = false;
-    PageType = API;
-    SourceTable = "Aged Report Entity";
-    SourceTableTemporary = true;
-    ODataKeyFields = SystemId;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(accountId; Rec.AccountId)
-                {
-                    Caption = 'AccountId';
-                }
-                field(after; Rec.After)
-                {
-                    Caption = 'After';
-                }
-                field(balance; Rec.Balance)
-                {
-                    Caption = 'Balance';
-                }
-                field(before; Rec.Before)
-                {
-                    Caption = 'Before';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(displayOrder; Rec."Display Order")
-                {
-                    Caption = 'Display Order';
-                }
-                field(name; Rec.Name)
-                {
-                    Caption = 'Name';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(period1; Rec."Period 1")
-                {
-                    Caption = 'Period 1';
-                }
-                field(period2; Rec."Period 2")
-                {
-                    Caption = 'Period 2';
-                }
-                field(period3; Rec."Period 3")
-                {
-                    Caption = 'Period 3';
-                }
-                field(periodLength; Rec."Period Length")
-                {
-                    Caption = 'Period Length';
-                }
-                field(periodStartDate; Rec."Period Start Date")
-                {
-                    Caption = 'Period Start Date';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-            }
-        }
-    }
-}
-
-page 90003 "Balance Sheet Buffer"
-{
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    EntityCaption = 'Balance Sheet Buffer';
-    EntitySetCaption = 'Balance Sheet Buffer';
-    DelayedInsert = true;
-    DeleteAllowed = false;
-    Editable = false;
-    EntityName = 'balanceSheetBuffer';
-    EntitySetName = 'balanceSheetBuffer';
-    InsertAllowed = false;
-    ModifyAllowed = false;
-    PageType = API;
-    SourceTable = "Balance Sheet Buffer";
-    SourceTableTemporary = true;
-    ODataKeyFields = SystemId;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(balance; Rec.Balance)
-                {
-                    Caption = 'Balance';
-                }
-                field(dateFilter; Rec."Date Filter")
-                {
-                    Caption = 'Date Filter';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(indentation; Rec.Indentation)
-                {
-                    Caption = 'Indentation';
-                }
-                field(lineNo; Rec."Line No.")
-                {
-                    Caption = 'Line No.';
-                }
-                field(lineType; Rec."Line Type")
-                {
-                    Caption = 'Line Type';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
                 }
             }
         }
@@ -966,86 +1129,7 @@ page 90004 "Bank Account"
     }
 }
 
-page 90005 "Acc. Schedule Line Entity"
-{
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    EntityCaption = 'Acc. Schedule Line Entity';
-    EntitySetCaption = 'Acc. Schedule Line Entities';
-    DelayedInsert = true;
-    DeleteAllowed = false;
-    Editable = false;
-    EntityName = 'accountScheduleLineEntity';
-    EntitySetName = 'accountScheduleLineEntities';
-    InsertAllowed = false;
-    ModifyAllowed = false;
-    PageType = API;
-    SourceTable = "Acc. Schedule Line Entity";
-    SourceTableTemporary = true;
-    ODataKeyFields = SystemId;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(dateFilter; Rec."Date Filter")
-                {
-                    Caption = 'Date Filter';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(indentation; Rec.Indentation)
-                {
-                    Caption = 'Indentation';
-                }
-                field(lineNo; Rec."Line No.")
-                {
-                    Caption = 'Line No.';
-                }
-                field(lineType; Rec."Line Type")
-                {
-                    Caption = 'Line Type';
-                }
-                field(netChange; Rec."Net Change")
-                {
-                    Caption = 'Net Change';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-            }
-        }
-    }
-}
-
-page 90006 "API - Company Information"
+page 90005 "API - Company Information"
 {
     APIVersion = 'v1.0';
     APIPublisher = 'fivetran';
@@ -1387,7 +1471,7 @@ page 90006 "API - Company Information"
     }
 }
 
-page 90007 "Contact"
+page 90006 "Contact"
 {
     APIVersion = 'v1.0';
     APIPublisher = 'fivetran';
@@ -1774,82 +1858,7 @@ page 90007 "Contact"
     }
 }
 
-page 90008 "Contacts Information Buffer"
-{
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Contact Information Buffer';
-    EntitySetCaption = 'Contacts Information Buffer';
-    DelayedInsert = true;
-    EntityName = 'contactInformationBuffer';
-    EntitySetName = 'contactsInformationBuffer';
-    ODataKeyFields = SystemId;
-    PageType = API;
-    SourceTable = "Contact Information Buffer";
-    SourceTableTemporary = true;
-    InsertAllowed = false;
-    ModifyAllowed = false;
-    DeleteAllowed = false;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(contactId; Rec."Contact Id")
-                {
-                    Caption = 'Contact Id';
-                }
-                field(contactName; Rec."Contact Name")
-                {
-                    Caption = 'Contact Name';
-                }
-                field(contactNo; Rec."Contact No.")
-                {
-                    Caption = 'Contact No.';
-                }
-                field(contactType; Rec."Contact Type")
-                {
-                    Caption = 'Contact Type';
-                }
-                field(relatedId; Rec."Related Id")
-                {
-                    Caption = 'Related Id';
-                }
-                field(relatedType; Rec."Related Type")
-                {
-                    Caption = 'Related Type';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-            }
-        }
-    }
-}
-
-page 90009 "API - Countries/Regions"
+page 90007 "API - Countries/Regions"
 {
     APIVersion = 'v1.0';
     APIPublisher = 'fivetran';
@@ -1944,7 +1953,7 @@ page 90009 "API - Countries/Regions"
     }
 }
 
-page 90010 "API - Currencies"
+page 90008 "API - Currencies"
 {
     APIVersion = 'v1.0';
     APIPublisher = 'fivetran';
@@ -2167,7 +2176,7 @@ page 90010 "API - Currencies"
     }
 }
 
-page 90011 "API- Currency Exchange Rates"
+page 90009 "API- Currency Exchange Rates"
 {
     APIVersion = 'v1.0';
     APIPublisher = 'fivetran';
@@ -2248,15 +2257,15 @@ page 90011 "API- Currency Exchange Rates"
     }
 }
 
-page 90012 "Customer"
+page 90010 "Customer"
 {
     PageType = API;
     APIVersion = 'v1.0';
     APIPublisher = 'fivetran';
     APIGroup = 'standardEndpoints';
     DataAccessIntent = ReadOnly;
-    EntityName = 'Customer';
-    EntitySetName = 'Customers';
+    EntityName = 'customer';
+    EntitySetName = 'customers';
     EntityCaption = 'customer';
     EntitySetCaption = 'customers';
     SourceTable = Customer;
@@ -3044,9 +3053,13 @@ page 90012 "Customer"
             }
         }
     }
+    trigger OnAfterGetRecord()
+    begin
+        Rec.CalcFields("Balance Due (LCY)", "Sales (LCY)", "Balance (LCY)");
+    end;
 }
 
-page 90013 "Gen. Journal Batch"
+page 90011 "Gen. Journal Batch"
 {
     PageType = API;
     APIVersion = 'v1.0';
@@ -3169,7 +3182,7 @@ page 90013 "Gen. Journal Batch"
     }
 }
 
-page 90014 "Reason Code"
+page 90012 "Reason Code"
 {
     DelayedInsert = true;
     PageType = API;
@@ -3232,7 +3245,7 @@ page 90014 "Reason Code"
     }
 }
 
-page 90015 "Gen. Journal Line"
+page 90013 "Gen. Journal Line"
 {
     DelayedInsert = true;
     PageType = API;
@@ -4198,7 +4211,7 @@ page 90015 "Gen. Journal Line"
     }
 }
 
-page 90016 "Default Dimension"
+page 90014 "Default Dimension"
 {
     DelayedInsert = true;
     PageType = API;
@@ -4293,102 +4306,7 @@ page 90016 "Default Dimension"
     }
 }
 
-page 90017 "DimensionSetEntryBuffer"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Dimension Set Entry Buffer';
-    EntitySetCaption = 'Dimension Set Entry Buffer';
-    ODataKeyFields = SystemId;
-    EntityName = 'dimensionSetEntryBuffer';
-    EntitySetName = 'dimensionSetEntryBuffer';
-    SourceTable = "Dimension Set Entry Buffer";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(dimValConsolidationCode; Rec."Dim. Val. Consolidation Code")
-                {
-                    Caption = 'Dimension Value Consolidation Code';
-                }
-                field(dimensionCode; Rec."Dimension Code")
-                {
-                    Caption = 'Dimension Code';
-                }
-                field(dimensionConsolidationCode; Rec."Dimension Consolidation Code")
-                {
-                    Caption = 'Dimension Consolidation Code';
-                }
-                field(dimensionId; Rec."Dimension Id")
-                {
-                    Caption = 'Dimension Id';
-                }
-                field(dimensionName; Rec."Dimension Name")
-                {
-                    Caption = 'Dimension Name';
-                }
-                field(dimensionSetID; Rec."Dimension Set ID")
-                {
-                    Caption = 'Dimension Set ID';
-                }
-                field(dimensionValueCode; Rec."Dimension Value Code")
-                {
-                    Caption = 'Dimension Value Code';
-                }
-                field(dimensionValueID; Rec."Dimension Value ID")
-                {
-                    Caption = 'Dimension Value ID';
-                }
-                field(dimensionValueName; Rec."Dimension Value Name")
-                {
-                    Caption = 'Dimension Value Name';
-                }
-                field(parentId; Rec."Parent Id")
-                {
-                    Caption = 'Parent Id';
-                }
-                field(parentType; Rec."Parent Type")
-                {
-                    Caption = 'Parent Type';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(valueId; Rec."Value Id")
-                {
-                    Caption = 'Value Id';
-                }
-            }
-        }
-    }
-}
-
-page 90018 "Dimension Value"
+page 90015 "Dimension Value"
 {
     DelayedInsert = true;
     PageType = API;
@@ -4491,7 +4409,7 @@ page 90018 "Dimension Value"
     }
 }
 
-page 90019 "Dimension"
+page 90016 "Dimension"
 {
     DelayedInsert = true;
     PageType = API;
@@ -4574,7 +4492,7 @@ page 90019 "Dimension"
     }
 }
 
-page 90020 "Employee"
+page 90017 "Employee"
 {
     DelayedInsert = true;
     PageType = API;
@@ -4583,11 +4501,11 @@ page 90020 "Employee"
     APIGroup = 'standardEndpoints';
     DataAccessIntent = ReadOnly;
     Editable = false;
-    EntityCaption = 'Employee';
-    EntitySetCaption = 'Employees';
+    EntityCaption = 'employee';
+    EntitySetCaption = 'mployees';
     ODataKeyFields = SystemId;
-    EntityName = 'Employee';
-    EntitySetName = 'Employees';
+    EntityName = 'employee';
+    EntitySetName = 'employees';
     SourceTable = Employee;
 
     layout
@@ -4881,7 +4799,7 @@ page 90020 "Employee"
     }
 }
 
-page 90021 "G/L Entry"
+page 90018 "G/L Entry"
 {
     SourceTable = "G/L Entry";
     DelayedInsert = true;
@@ -5207,7 +5125,7 @@ page 90021 "G/L Entry"
     }
 }
 
-page 90022 "Gen. Product Posting Group"
+page 90019 "Gen. Product Posting Group"
 {
     DelayedInsert = true;
     PageType = API;
@@ -5216,11 +5134,11 @@ page 90022 "Gen. Product Posting Group"
     APIGroup = 'standardEndpoints';
     DataAccessIntent = ReadOnly;
     Editable = false;
-    EntityCaption = 'generalLedgerPostingGroup';
-    EntitySetCaption = 'generalLedgerPostingGroups';
+    EntityCaption = 'generalProductPostingGroup';
+    EntitySetCaption = 'generalProductPostingGroups';
     ODataKeyFields = SystemId;
-    EntityName = 'generalLedgerPostingGroup';
-    EntitySetName = 'generalLedgerPostingGroups';
+    EntityName = 'generalProductPostingGroup';
+    EntitySetName = 'generalProductPostingGroups';
     SourceTable = "Gen. Product Posting Group";
 
     layout
@@ -5270,7 +5188,7 @@ page 90022 "Gen. Product Posting Group"
     }
 }
 
-page 90023 "Vendor"
+page 90020 "Vendor"
 {
     DelayedInsert = true;
     PageType = API;
@@ -5938,7 +5856,7 @@ page 90023 "Vendor"
     }
 }
 
-page 90024 "Inventory Posting Group"
+page 90021 "Inventory Posting Group"
 {
     DelayedInsert = true;
     PageType = API;
@@ -5993,7 +5911,7 @@ page 90024 "Inventory Posting Group"
     }
 }
 
-page 90025 "Item Category"
+page 90022 "Item Category"
 {
     DelayedInsert = true;
     PageType = API;
@@ -6067,7 +5985,7 @@ page 90025 "Item Category"
     }
 }
 
-page 90026 "Item Ledger Entry"
+page 90023 "Item Ledger Entry"
 {
     DelayedInsert = true;
     PageType = API;
@@ -6430,7 +6348,7 @@ page 90026 "Item Ledger Entry"
     }
 }
 
-page 90027 "Item Variant"
+page 90024 "Item Variant"
 {
     DelayedInsert = true;
     PageType = API;
@@ -6509,7 +6427,7 @@ page 90027 "Item Variant"
     }
 }
 
-page 90028 "Item"
+page 90025 "Item"
 {
     DelayedInsert = true;
     PageType = API;
@@ -7454,9 +7372,14 @@ page 90028 "Item"
             }
         }
     }
+
+    trigger OnOpenPage()
+    begin
+        Rec.SetAutoCalcFields(Inventory);
+    end;
 }
 
-page 90029 "Location"
+page 90026 "Location"
 {
     DelayedInsert = true;
     PageType = API;
@@ -7756,7 +7679,7 @@ page 90029 "Location"
     }
 }
 
-page 90030 "Opportunity"
+page 90027 "Opportunity"
 {
     DelayedInsert = true;
     PageType = API;
@@ -7955,7 +7878,7 @@ page 90030 "Opportunity"
     }
 }
 
-page 90031 "Payment Method"
+page 90028 "Payment Method"
 {
     DelayedInsert = true;
     PageType = API;
@@ -8042,7 +7965,7 @@ page 90031 "Payment Method"
     }
 }
 
-page 90032 "API V2 - Payment Terms"
+page 90029 "API V2 - Payment Terms"
 {
     DelayedInsert = true;
     PageType = API;
@@ -8121,226 +8044,7 @@ page 90032 "API V2 - Payment Terms"
     }
 }
 
-page 90033 "Purch. Inv. Line Aggregate"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Purch. Inv. Line Aggregate';
-    EntitySetCaption = 'Purch. Inv. Line Aggregates';
-    ODataKeyFields = SystemId;
-    EntityName = 'purchaseInvoiceLineAggregate';
-    EntitySetName = 'purchaseInvoiceLineAggregates';
-    SourceTable = "Purch. Inv. Line Aggregate";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(apiType; Rec."API Type")
-                {
-                    Caption = 'API Type';
-                }
-                field(accountId; Rec."Account Id")
-                {
-                    Caption = 'Account Id';
-                }
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(description2; Rec."Description 2")
-                {
-                    Caption = 'Description 2';
-                }
-                field(directUnitCost; Rec."Direct Unit Cost")
-                {
-                    Caption = 'Direct Unit Cost';
-                }
-                field(discountAppliedBeforeTax; Rec."Discount Applied Before Tax")
-                {
-                    Caption = 'Discount Applied Before Tax';
-                }
-                field(documentId; Rec."Document Id")
-                {
-                    Caption = 'Document Id';
-                }
-                field(expectedReceiptDate; Rec."Expected Receipt Date")
-                {
-                    Caption = 'Expected Receipt Date';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(invDiscountAmount; Rec."Inv. Discount Amount")
-                {
-                    Caption = 'Inv. Discount Amount';
-                }
-                field(invDiscountAmountExclVAT; Rec."Inv. Discount Amount Excl. VAT")
-                {
-                    Caption = 'Inv. Discount Amount Excl. VAT';
-                }
-                field(itemId; Rec."Item Id")
-                {
-                    Caption = 'Item Id';
-                }
-                field(lineAmount; Rec."Line Amount")
-                {
-                    Caption = 'Line Amount';
-                }
-                field(lineAmountExcludingTax; Rec."Line Amount Excluding Tax")
-                {
-                    Caption = 'Line Amount Excluding Tax';
-                }
-                field(lineAmountIncludingTax; Rec."Line Amount Including Tax")
-                {
-                    Caption = 'Line Amount Including Tax';
-                }
-                field(lineDiscount; Rec."Line Discount %")
-                {
-                    Caption = 'Line Discount %';
-                }
-                field(lineDiscountAmount; Rec."Line Discount Amount")
-                {
-                    Caption = 'Line Discount Amount';
-                }
-                field(lineNo; Rec."Line No.")
-                {
-                    Caption = 'Line No.';
-                }
-                field(lineTaxAmount; Rec."Line Tax Amount")
-                {
-                    Caption = 'Line Tax Amount';
-                }
-                field(locationCode; Rec."Location Code")
-                {
-                    Caption = 'Location Code';
-                }
-                field(locationId; Rec."Location Id")
-                {
-                    Caption = 'Location Id';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(pricesIncludingTax; Rec."Prices Including Tax")
-                {
-                    Caption = 'Prices Including Tax';
-                }
-                field(qtyToInvoice; Rec."Qty. to Invoice")
-                {
-                    Caption = 'Qty. to Invoice';
-                }
-                field(qtyToReceive; Rec."Qty. to Receive")
-                {
-                    Caption = 'Qty. to Receive';
-                }
-                field(quantity; Rec.Quantity)
-                {
-                    Caption = 'Quantity';
-                }
-                field(quantityInvoiced; Rec."Quantity Invoiced")
-                {
-                    Caption = 'Quantity Invoiced';
-                }
-                field(quantityReceived; Rec."Quantity Received")
-                {
-                    Caption = 'Quantity Received';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAmount; Rec."Tax Amount")
-                {
-                    Caption = 'Tax Amount';
-                }
-                field(taxCode; Rec."Tax Code")
-                {
-                    Caption = 'Tax Code';
-                }
-                field(taxGroupCode; Rec."Tax Group Code")
-                {
-                    Caption = 'Tax Group Code';
-                }
-                field(taxId; Rec."Tax Id")
-                {
-                    Caption = 'Tax Id';
-                }
-                field("type"; Rec."Type")
-                {
-                    Caption = 'Type';
-                }
-                field(unitOfMeasureCode; Rec."Unit of Measure Code")
-                {
-                    Caption = 'Unit of Measure Code';
-                }
-                field(unitOfMeasureId; Rec."Unit of Measure Id")
-                {
-                    Caption = 'Unit of Measure Id';
-                }
-                field(vat; Rec."VAT %")
-                {
-                    Caption = 'VAT %';
-                }
-                field(vatBaseAmount; Rec."VAT Base Amount")
-                {
-                    Caption = 'VAT Base Amount';
-                }
-                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
-                {
-                    Caption = 'VAT Prod. Posting Group';
-                }
-                field(variantCode; Rec."Variant Code")
-                {
-                    Caption = 'Variant Code';
-                }
-                field(variantId; Rec."Variant Id")
-                {
-                    Caption = 'Variant Id';
-                }
-            }
-        }
-    }
-}
-
-page 90034 "Purch. Rcpt. Line"
+page 90030 "Purch. Rcpt. Line"
 {
     DelayedInsert = true;
     PageType = API;
@@ -8871,21 +8575,21 @@ page 90034 "Purch. Rcpt. Line"
     }
 }
 
-page 90035 "Purch. Cr. Memo Entity Buffer"
+page 90031 "Sales credit memo line"
 {
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
     APIGroup = 'standardEndpoints';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'salesCreditMemoLine';
+    DelayedInsert = true;
+    EntityName = 'salesCreditMemoLine';
+    EntitySetName = 'salesCreditMemoLines';
+    PageType = API;
+    SourceTable = "Sales Cr.Memo Line";
+    ODataKeyFields = SystemId;
     DataAccessIntent = ReadOnly;
     Editable = false;
-    EntityCaption = 'Purch. Cr. Memo Entity Buffer';
-    EntitySetCaption = 'Purch. Cr. Memo Entity Buffer';
-    ODataKeyFields = SystemId;
-    EntityName = 'PurchaseCreditMemoEntityBuffer';
-    EntitySetName = 'PurchaseCreditMemoEntityBuffer';
-    SourceTable = "Purch. Cr. Memo Entity Buffer";
 
     layout
     {
@@ -8893,6 +8597,14 @@ page 90035 "Purch. Cr. Memo Entity Buffer"
         {
             repeater(General)
             {
+                field(allowInvoiceDisc; Rec."Allow Invoice Disc.")
+                {
+                    Caption = 'Allow Invoice Disc.';
+                }
+                field(allowLineDisc; Rec."Allow Line Disc.")
+                {
+                    Caption = 'Allow Line Disc.';
+                }
                 field(amount; Rec.Amount)
                 {
                     Caption = 'Amount';
@@ -8901,440 +8613,265 @@ page 90035 "Purch. Cr. Memo Entity Buffer"
                 {
                     Caption = 'Amount Including VAT';
                 }
-                field(appliesToDocNo; Rec."Applies-to Doc. No.")
+                field(applFromItemEntry; Rec."Appl.-from Item Entry")
                 {
-                    Caption = 'Applies-to Doc. No.';
+                    Caption = 'Appl.-from Item Entry';
                 }
-                field(appliesToDocType; Rec."Applies-to Doc. Type")
+                field(applToItemEntry; Rec."Appl.-to Item Entry")
                 {
-                    Caption = 'Applies-to Doc. Type';
+                    Caption = 'Appl.-to Item Entry';
                 }
-                field(buyFromAddress; Rec."Buy-from Address")
+                field("area"; Rec."Area")
                 {
-                    Caption = 'Buy-from Address';
+                    Caption = 'Area';
                 }
-                field(buyFromAddress2; Rec."Buy-from Address 2")
+                field(attachedToLineNo; Rec."Attached to Line No.")
                 {
-                    Caption = 'Buy-from Address 2';
+                    Caption = 'Attached to Line No.';
                 }
-                field(buyFromCity; Rec."Buy-from City")
+                field(billToCustomerNo; Rec."Bill-to Customer No.")
                 {
-                    Caption = 'Buy-from City';
+                    Caption = 'Bill-to Customer No.';
                 }
-                field(buyFromContact; Rec."Buy-from Contact")
+                field(binCode; Rec."Bin Code")
                 {
-                    Caption = 'Buy-from Contact';
+                    Caption = 'Bin Code';
                 }
-                field(buyFromContactNo; Rec."Buy-from Contact No.")
+                field(blanketOrderLineNo; Rec."Blanket Order Line No.")
                 {
-                    Caption = 'Buy-from Contact No.';
+                    Caption = 'Blanket Order Line No.';
                 }
-                field(buyFromCountryRegionCode; Rec."Buy-from Country/Region Code")
+                field(blanketOrderNo; Rec."Blanket Order No.")
                 {
-                    Caption = 'Buy-from Country/Region Code';
+                    Caption = 'Blanket Order No.';
                 }
-                field(buyFromCounty; Rec."Buy-from County")
+                field(customerDiscGroup; Rec."Customer Disc. Group")
                 {
-                    Caption = 'Buy-from County';
+                    Caption = 'Customer Disc. Group';
                 }
-                field(buyFromPostCode; Rec."Buy-from Post Code")
+                field(customerPriceGroup; Rec."Customer Price Group")
                 {
-                    Caption = 'Buy-from Post Code';
+                    Caption = 'Customer Price Group';
                 }
-                field(buyFromVendorName; Rec."Buy-from Vendor Name")
+                field(deferralCode; Rec."Deferral Code")
                 {
-                    Caption = 'Buy-from Vendor Name';
+                    Caption = 'Deferral Code';
                 }
-                field(buyFromVendorNo; Rec."Buy-from Vendor No.")
+                field(deprUntilFAPostingDate; Rec."Depr. until FA Posting Date")
                 {
-                    Caption = 'Buy-from Vendor No.';
+                    Caption = 'Depr. until FA Posting Date';
                 }
-                field(currencyCode; Rec."Currency Code")
+                field(depreciationBookCode; Rec."Depreciation Book Code")
                 {
-                    Caption = 'Currency Code';
+                    Caption = 'Depreciation Book Code';
                 }
-                field(currencyId; Rec."Currency Id")
+                field(description; Rec.Description)
                 {
-                    Caption = 'Currency Id';
+                    Caption = 'Description';
                 }
-                field(discountAppliedBeforeTax; Rec."Discount Applied Before Tax")
+                field(description2; Rec."Description 2")
                 {
-                    Caption = 'Discount Applied Before Tax';
+                    Caption = 'Description 2';
                 }
-                field(documentDate; Rec."Document Date")
+                field(dimensionSetID; Rec."Dimension Set ID")
                 {
-                    Caption = 'Document Date';
+                    Caption = 'Dimension Set ID';
                 }
-                field(dueDate; Rec."Due Date")
+                field(documentNo; Rec."Document No.")
                 {
-                    Caption = 'Due Date';
+                    Caption = 'Document No.';
                 }
-                field(id; Rec.Id)
+                field(duplicateInDepreciationBook; Rec."Duplicate in Depreciation Book")
                 {
-                    Caption = 'Id';
+                    Caption = 'Duplicate in Depreciation Book';
                 }
-                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
+                field(exitPoint; Rec."Exit Point")
                 {
-                    Caption = 'Invoice Discount Amount';
+                    Caption = 'Exit Point';
+                }
+                field(faPostingDate; Rec."FA Posting Date")
+                {
+                    Caption = 'FA Posting Date';
+                }
+                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
+                {
+                    Caption = 'Gen. Bus. Posting Group';
+                }
+                field(genProdPostingGroup; Rec."Gen. Prod. Posting Group")
+                {
+                    Caption = 'Gen. Prod. Posting Group';
+                }
+                field(grossWeight; Rec."Gross Weight")
+                {
+                    Caption = 'Gross Weight';
+                }
+                field(icItemReferenceNo; Rec."IC Item Reference No.")
+                {
+                    Caption = 'IC Item Reference No.';
+                }
+                field(icPartnerCode; Rec."IC Partner Code")
+                {
+                    Caption = 'IC Partner Code';
+                }
+                field(icPartnerRefType; Rec."IC Partner Ref. Type")
+                {
+                    Caption = 'IC Partner Ref. Type';
+                }
+                field(icPartnerReference; Rec."IC Partner Reference")
+                {
+                    Caption = 'IC Partner Reference';
+                }
+                field(invDiscountAmount; Rec."Inv. Discount Amount")
+                {
+                    Caption = 'Inv. Discount Amount';
+                }
+                field(itemCategoryCode; Rec."Item Category Code")
+                {
+                    Caption = 'Item Category Code';
+                }
+                field(itemReferenceNo; Rec."Item Reference No.")
+                {
+                    Caption = 'Item Reference No.';
+                }
+                field(itemReferenceType; Rec."Item Reference Type")
+                {
+                    Caption = 'Item Reference Type';
+                }
+                field(itemReferenceTypeNo; Rec."Item Reference Type No.")
+                {
+                    Caption = 'Item Reference Type No.';
+                }
+                field(itemReferenceUnitOfMeasure; Rec."Item Reference Unit of Measure")
+                {
+                    Caption = 'Unit of Measure (Item Ref.)';
+                }
+                field(jobContractEntryNo; Rec."Job Contract Entry No.")
+                {
+                    Caption = 'Job Contract Entry No.';
+                }
+                field(jobNo; Rec."Job No.")
+                {
+                    Caption = 'Job No.';
+                }
+                field(jobTaskNo; Rec."Job Task No.")
+                {
+                    Caption = 'Job Task No.';
+                }
+                field(lineAmount; Rec."Line Amount")
+                {
+                    Caption = 'Line Amount';
+                }
+                field(lineDiscount; Rec."Line Discount %")
+                {
+                    Caption = 'Line Discount %';
+                }
+                field(lineDiscountAmount; Rec."Line Discount Amount")
+                {
+                    Caption = 'Line Discount Amount';
+                }
+                field(lineDiscountCalculation; Rec."Line Discount Calculation")
+                {
+                    Caption = 'Line Discount Calculation';
+                }
+                field(lineNo; Rec."Line No.")
+                {
+                    Caption = 'Line No.';
+                }
+                field(locationCode; Rec."Location Code")
+                {
+                    Caption = 'Location Code';
+                }
+                field(netWeight; Rec."Net Weight")
+                {
+                    Caption = 'Net Weight';
                 }
                 field(no; Rec."No.")
                 {
                     Caption = 'No.';
                 }
-                field(payToAddress; Rec."Pay-to Address")
+                field(nonstock; Rec.Nonstock)
                 {
-                    Caption = 'Pay-to Address';
+                    Caption = 'Catalog';
                 }
-                field(payToAddress2; Rec."Pay-to Address 2")
+                field(orderLineNo; Rec."Order Line No.")
                 {
-                    Caption = 'Pay-to Address 2';
-                }
-                field(payToCity; Rec."Pay-to City")
-                {
-                    Caption = 'Pay-to City';
-                }
-                field(payToContact; Rec."Pay-to Contact")
-                {
-                    Caption = 'Pay-to Contact';
-                }
-                field(payToCountryRegionCode; Rec."Pay-to Country/Region Code")
-                {
-                    Caption = 'Pay-to Country/Region Code';
-                }
-                field(payToCounty; Rec."Pay-to County")
-                {
-                    Caption = 'Pay-to County';
-                }
-                field(payToName; Rec."Pay-to Name")
-                {
-                    Caption = 'Pay-to Name';
-                }
-                field(payToPostCode; Rec."Pay-to Post Code")
-                {
-                    Caption = 'Pay-to Post Code';
-                }
-                field(payToVendorId; Rec."Pay-to Vendor Id")
-                {
-                    Caption = 'Pay-to Vendor Id';
-                }
-                field(payToVendorNo; Rec."Pay-to Vendor No.")
-                {
-                    Caption = 'Pay-to Vendor No.';
-                }
-                field(paymentTermsCode; Rec."Payment Terms Code")
-                {
-                    Caption = 'Payment Terms Code';
-                }
-                field(paymentTermsId; Rec."Payment Terms Id")
-                {
-                    Caption = 'Payment Terms Id';
-                }
-                field(posted; Rec.Posted)
-                {
-                    Caption = 'Posted';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(pricesIncludingVAT; Rec."Prices Including VAT")
-                {
-                    Caption = 'Prices Including VAT';
-                }
-                field(purchaserCode; Rec."Purchaser Code")
-                {
-                    Caption = 'Purchaser Code';
-                }
-                field(reasonCode; Rec."Reason Code")
-                {
-                    Caption = 'Reason Code';
-                }
-                field(reasonCodeId; Rec."Reason Code Id")
-                {
-                    Caption = 'Reason Code Id';
-                }
-                field(shipmentMethodCode; Rec."Shipment Method Code")
-                {
-                    Caption = 'Shipment Method Code';
-                }
-                field(shipmentMethodId; Rec."Shipment Method Id")
-                {
-                    Caption = 'Shipment Method Id';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(status; Rec.Status)
-                {
-                    Caption = 'Status';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(totalTaxAmount; Rec."Total Tax Amount")
-                {
-                    Caption = 'Total Tax Amount';
-                }
-                field(vendorId; Rec."Vendor Id")
-                {
-                    Caption = 'Vendor Id';
-                }
-                field(vendorLedgerEntryNo; Rec."Vendor Ledger Entry No.")
-                {
-                    Caption = 'Vendor Ledger Entry No.';
-                }
-                field(vendorPostingGroup; Rec."Vendor Posting Group")
-                {
-                    Caption = 'Vendor Posting Group';
-                }
-            }
-        }
-    }
-}
-
-page 90036 "Purch. Inv. Entity Aggregate"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Purch. Inv. Entity Aggregate';
-    EntitySetCaption = 'Purch. Inv. Entity Aggregates';
-    ODataKeyFields = SystemId;
-    EntityName = 'purchaseInvoiceEntityAggregate';
-    EntitySetName = 'purchaseInvoiceEntityAggregates';
-    SourceTable = "Purch. Inv. Entity Aggregate";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(buyFromAddress; Rec."Buy-from Address")
-                {
-                    Caption = 'Buy-from Address';
-                }
-                field(buyFromAddress2; Rec."Buy-from Address 2")
-                {
-                    Caption = 'Buy-from Address 2';
-                }
-                field(buyFromCity; Rec."Buy-from City")
-                {
-                    Caption = 'Buy-from City';
-                }
-                field(buyFromContact; Rec."Buy-from Contact")
-                {
-                    Caption = 'Buy-from Contact';
-                }
-                field(buyFromContactNo; Rec."Buy-from Contact No.")
-                {
-                    Caption = 'Buy-from Contact No.';
-                }
-                field(buyFromCountryRegionCode; Rec."Buy-from Country/Region Code")
-                {
-                    Caption = 'Buy-from Country/Region Code';
-                }
-                field(buyFromCounty; Rec."Buy-from County")
-                {
-                    Caption = 'Buy-from County';
-                }
-                field(buyFromPostCode; Rec."Buy-from Post Code")
-                {
-                    Caption = 'Buy-from Post Code';
-                }
-                field(buyFromVendorName; Rec."Buy-from Vendor Name")
-                {
-                    Caption = 'Buy-from Vendor Name';
-                }
-                field(buyFromVendorNo; Rec."Buy-from Vendor No.")
-                {
-                    Caption = 'Buy-from Vendor No.';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(currencyId; Rec."Currency Id")
-                {
-                    Caption = 'Currency Id';
-                }
-                field(discountAppliedBeforeTax; Rec."Discount Applied Before Tax")
-                {
-                    Caption = 'Discount Applied Before Tax';
-                }
-                field(documentDate; Rec."Document Date")
-                {
-                    Caption = 'Document Date';
-                }
-                field(documentType; Rec."Document Type")
-                {
-                    Caption = 'Document Type';
-                }
-                field(dueDate; Rec."Due Date")
-                {
-                    Caption = 'Due Date';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
-                {
-                    Caption = 'Invoice Discount Amount';
-                }
-                field(lastModifiedDateTime; Rec."Last Modified Date Time")
-                {
-                    Caption = 'Last Modified Date Time';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(orderId; Rec."Order Id")
-                {
-                    Caption = 'Order Id';
+                    Caption = 'Order Line No.';
                 }
                 field(orderNo; Rec."Order No.")
                 {
                     Caption = 'Order No.';
                 }
-                field(payToAddress; Rec."Pay-to Address")
+                field(packageTrackingNo; Rec."Package Tracking No.")
                 {
-                    Caption = 'Pay-to Address';
+                    Caption = 'Package Tracking No.';
                 }
-                field(payToAddress2; Rec."Pay-to Address 2")
+                field(pmtDiscountAmount; Rec."Pmt. Discount Amount")
                 {
-                    Caption = 'Pay-to Address 2';
-                }
-                field(payToCity; Rec."Pay-to City")
-                {
-                    Caption = 'Pay-to City';
-                }
-                field(payToContact; Rec."Pay-to Contact")
-                {
-                    Caption = 'Pay-to Contact';
-                }
-                field(payToCountryRegionCode; Rec."Pay-to Country/Region Code")
-                {
-                    Caption = 'Pay-to Country/Region Code';
-                }
-                field(payToCounty; Rec."Pay-to County")
-                {
-                    Caption = 'Pay-to County';
-                }
-                field(payToName; Rec."Pay-to Name")
-                {
-                    Caption = 'Pay-to Name';
-                }
-                field(payToPostCode; Rec."Pay-to Post Code")
-                {
-                    Caption = 'Pay-to Post Code';
-                }
-                field(payToVendorId; Rec."Pay-to Vendor Id")
-                {
-                    Caption = 'Pay-to Vendor Id';
-                }
-                field(payToVendorNo; Rec."Pay-to Vendor No.")
-                {
-                    Caption = 'Pay-to Vendor No.';
-                }
-                field(paymentTermsCode; Rec."Payment Terms Code")
-                {
-                    Caption = 'Payment Terms Code';
-                }
-                field(posted; Rec.Posted)
-                {
-                    Caption = 'Posted';
+                    Caption = 'Pmt. Discount Amount';
                 }
                 field(postingDate; Rec."Posting Date")
                 {
                     Caption = 'Posting Date';
                 }
-                field(pricesIncludingVAT; Rec."Prices Including VAT")
+                field(postingGroup; Rec."Posting Group")
                 {
-                    Caption = 'Prices Including VAT';
+                    Caption = 'Posting Group';
                 }
-                field(purchaserCode; Rec."Purchaser Code")
+                field(prepaymentLine; Rec."Prepayment Line")
                 {
-                    Caption = 'Purchaser Code';
+                    Caption = 'Prepayment Line';
                 }
-                field(recalculateInvoiceDisc; Rec."Recalculate Invoice Disc.")
+                field(priceCalculationMethod; Rec."Price Calculation Method")
                 {
-                    Caption = 'Recalculate Invoice Disc.';
+                    Caption = 'Price Calculation Method';
                 }
-                field(shipToAddress; Rec."Ship-to Address")
+                field(purchasingCode; Rec."Purchasing Code")
                 {
-                    Caption = 'Ship-to Address';
+                    Caption = 'Purchasing Code';
                 }
-                field(shipToAddress2; Rec."Ship-to Address 2")
+                field(qtyPerUnitOfMeasure; Rec."Qty. per Unit of Measure")
                 {
-                    Caption = 'Ship-to Address 2';
+                    Caption = 'Qty. per Unit of Measure';
                 }
-                field(shipToCity; Rec."Ship-to City")
+                field(quantity; Rec.Quantity)
                 {
-                    Caption = 'Ship-to City';
+                    Caption = 'Quantity';
                 }
-                field(shipToCode; Rec."Ship-to Code")
+                field(quantityBase; Rec."Quantity (Base)")
                 {
-                    Caption = 'Ship-to Code';
+                    Caption = 'Quantity (Base)';
                 }
-                field(shipToContact; Rec."Ship-to Contact")
+                field(responsibilityCenter; Rec."Responsibility Center")
                 {
-                    Caption = 'Ship-to Contact';
+                    Caption = 'Responsibility Center';
                 }
-                field(shipToCountryRegionCode; Rec."Ship-to Country/Region Code")
+                field(retentionAttachedToLineNo; Rec."Retention Attached to Line No.")
                 {
-                    Caption = 'Ship-to Country/Region Code';
+                    Caption = 'Retention Attached to Line No.';
                 }
-                field(shipToCounty; Rec."Ship-to County")
+                field(retentionVAT; Rec."Retention VAT %")
                 {
-                    Caption = 'Ship-to County';
+                    Caption = 'Retention VAT %';
                 }
-                field(shipToName; Rec."Ship-to Name")
+                field(returnReasonCode; Rec."Return Reason Code")
                 {
-                    Caption = 'Ship-to Name';
+                    Caption = 'Return Reason Code';
                 }
-                field(shipToPostCode; Rec."Ship-to Post Code")
+                field(returnReceiptLineNo; Rec."Return Receipt Line No.")
                 {
-                    Caption = 'Ship-to Post Code';
+                    Caption = 'Return Receipt Line No.';
                 }
-                field(shipmentMethodCode; Rec."Shipment Method Code")
+                field(returnReceiptNo; Rec."Return Receipt No.")
                 {
-                    Caption = 'Shipment Method Code';
+                    Caption = 'Return Receipt No.';
+                }
+                field(sellToCustomerNo; Rec."Sell-to Customer No.")
+                {
+                    Caption = 'Sell-to Customer No.';
+                }
+                field(shipmentDate; Rec."Shipment Date")
+                {
+                    Caption = 'Shipment Date';
                 }
                 field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
                 {
@@ -9344,9 +8881,9 @@ page 90036 "Purch. Inv. Entity Aggregate"
                 {
                     Caption = 'Shortcut Dimension 2 Code';
                 }
-                field(status; Rec.Status)
+                field(systemCreatedEntry; Rec."System-Created Entry")
                 {
-                    Caption = 'Status';
+                    Caption = 'System-Created Entry';
                 }
                 field(systemCreatedAt; Rec.SystemCreatedAt)
                 {
@@ -9368,307 +8905,116 @@ page 90036 "Purch. Inv. Entity Aggregate"
                 {
                     Caption = 'SystemModifiedBy';
                 }
-                field(totalTaxAmount; Rec."Total Tax Amount")
+                field(taxAreaCode; Rec."Tax Area Code")
                 {
-                    Caption = 'Total Tax Amount';
+                    Caption = 'Tax Area Code';
                 }
-                field(vendorId; Rec."Vendor Id")
+                field(taxCategory; Rec."Tax Category")
                 {
-                    Caption = 'Vendor Id';
+                    Caption = 'Tax Category';
                 }
-                field(vendorInvoiceNo; Rec."Vendor Invoice No.")
+                field(taxGroupCode; Rec."Tax Group Code")
                 {
-                    Caption = 'Vendor Invoice No.';
+                    Caption = 'Tax Group Code';
                 }
-                field(vendorLedgerEntryNo; Rec."Vendor Ledger Entry No.")
+                field(taxLiable; Rec."Tax Liable")
                 {
-                    Caption = 'Vendor Ledger Entry No.';
+                    Caption = 'Tax Liable';
                 }
-                field(vendorPostingGroup; Rec."Vendor Posting Group")
+                field(transactionSpecification; Rec."Transaction Specification")
                 {
-                    Caption = 'Vendor Posting Group';
+                    Caption = 'Transaction Specification';
                 }
-                field(yourReference; Rec."Your Reference")
+                field("transactionType"; Rec."Transaction Type")
                 {
-                    Caption = 'Your Reference';
+                    Caption = 'Transaction Type';
+                }
+                field(transportMethod; Rec."Transport Method")
+                {
+                    Caption = 'Transport Method';
+                }
+                field("type"; Rec."Type")
+                {
+                    Caption = 'Type';
+                }
+                field(unitCost; Rec."Unit Cost")
+                {
+                    Caption = 'Unit Cost';
+                }
+                field(unitCostLCY; Rec."Unit Cost (LCY)")
+                {
+                    Caption = 'Unit Cost (LCY)';
+                }
+                field(unitPrice; Rec."Unit Price")
+                {
+                    Caption = 'Unit Price';
+                }
+                field(unitVolume; Rec."Unit Volume")
+                {
+                    Caption = 'Unit Volume';
+                }
+                field(unitOfMeasure; Rec."Unit of Measure")
+                {
+                    Caption = 'Unit of Measure';
+                }
+                field(unitOfMeasureCode; Rec."Unit of Measure Code")
+                {
+                    Caption = 'Unit of Measure Code';
+                }
+                field(unitsPerParcel; Rec."Units per Parcel")
+                {
+                    Caption = 'Units per Parcel';
+                }
+                field(useDuplicationList; Rec."Use Duplication List")
+                {
+                    Caption = 'Use Duplication List';
+                }
+                field(vat; Rec."VAT %")
+                {
+                    Caption = 'VAT %';
+                }
+                field(vatBaseAmount; Rec."VAT Base Amount")
+                {
+                    Caption = 'VAT Base Amount';
+                }
+                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
+                {
+                    Caption = 'VAT Bus. Posting Group';
+                }
+                field(vatCalculationType; Rec."VAT Calculation Type")
+                {
+                    Caption = 'VAT Calculation Type';
+                }
+                field(vatClauseCode; Rec."VAT Clause Code")
+                {
+                    Caption = 'VAT Clause Code';
+                }
+                field(vatDifference; Rec."VAT Difference")
+                {
+                    Caption = 'VAT Difference';
+                }
+                field(vatIdentifier; Rec."VAT Identifier")
+                {
+                    Caption = 'VAT Identifier';
+                }
+                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
+                {
+                    Caption = 'VAT Prod. Posting Group';
+                }
+                field(variantCode; Rec."Variant Code")
+                {
+                    Caption = 'Variant Code';
+                }
+                field(workTypeCode; Rec."Work Type Code")
+                {
+                    Caption = 'Work Type Code';
                 }
             }
         }
     }
 }
 
-page 90037 "Purchase Order Entity Buffer"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Purchase Order Entity Buffer';
-    EntitySetCaption = 'Purchase Order Entity Buffer';
-    ODataKeyFields = SystemId;
-    EntityName = 'purchaseOrderEntityBuffer';
-    EntitySetName = 'purchaseOrderEntityBuffer';
-    SourceTable = "Purchase Order Entity Buffer";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(buyFromAddress; Rec."Buy-from Address")
-                {
-                    Caption = 'Buy-from Address';
-                }
-                field(buyFromAddress2; Rec."Buy-from Address 2")
-                {
-                    Caption = 'Buy-from Address 2';
-                }
-                field(buyFromCity; Rec."Buy-from City")
-                {
-                    Caption = 'Buy-from City';
-                }
-                field(buyFromContact; Rec."Buy-from Contact")
-                {
-                    Caption = 'Buy-from Contact';
-                }
-                field(buyFromContactNo; Rec."Buy-from Contact No.")
-                {
-                    Caption = 'Buy-from Contact No.';
-                }
-                field(buyFromCountryRegionCode; Rec."Buy-from Country/Region Code")
-                {
-                    Caption = 'Buy-from Country/Region Code';
-                }
-                field(buyFromCounty; Rec."Buy-from County")
-                {
-                    Caption = 'Buy-from County';
-                }
-                field(buyFromPostCode; Rec."Buy-from Post Code")
-                {
-                    Caption = 'Buy-from Post Code';
-                }
-                field(buyFromVendorName; Rec."Buy-from Vendor Name")
-                {
-                    Caption = 'Buy-from Vendor Name';
-                }
-                field(buyFromVendorNo; Rec."Buy-from Vendor No.")
-                {
-                    Caption = 'Buy-from Vendor No.';
-                }
-                field(completelyReceived; Rec."Completely Received")
-                {
-                    Caption = 'Completely Received';
-                }
-                field(contactGraphId; Rec."Contact Graph Id")
-                {
-                    Caption = 'Contact Graph Id';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(currencyId; Rec."Currency Id")
-                {
-                    Caption = 'Currency Id';
-                }
-                field(discountAppliedBeforeTax; Rec."Discount Applied Before Tax")
-                {
-                    Caption = 'Discount Applied Before Tax';
-                }
-                field(documentDate; Rec."Document Date")
-                {
-                    Caption = 'Document Date';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
-                {
-                    Caption = 'Invoice Discount Amount';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(payToAddress; Rec."Pay-to Address")
-                {
-                    Caption = 'Pay-to Address';
-                }
-                field(payToAddress2; Rec."Pay-to Address 2")
-                {
-                    Caption = 'Pay-to Address 2';
-                }
-                field(payToCity; Rec."Pay-to City")
-                {
-                    Caption = 'Pay-to City';
-                }
-                field(payToContact; Rec."Pay-to Contact")
-                {
-                    Caption = 'Pay-to Contact';
-                }
-                field(payToCountryRegionCode; Rec."Pay-to Country/Region Code")
-                {
-                    Caption = 'Pay-to Country/Region Code';
-                }
-                field(payToCounty; Rec."Pay-to County")
-                {
-                    Caption = 'Pay-to County';
-                }
-                field(payToName; Rec."Pay-to Name")
-                {
-                    Caption = 'Pay-to Name';
-                }
-                field(payToPostCode; Rec."Pay-to Post Code")
-                {
-                    Caption = 'Pay-to Post Code';
-                }
-                field(payToVendorId; Rec."Pay-to Vendor Id")
-                {
-                    Caption = 'Pay-to Vendor Id';
-                }
-                field(payToVendorNo; Rec."Pay-to Vendor No.")
-                {
-                    Caption = 'Pay-to Vendor No.';
-                }
-                field(paymentTermsCode; Rec."Payment Terms Code")
-                {
-                    Caption = 'Payment Terms Code';
-                }
-                field(paymentTermsId; Rec."Payment Terms Id")
-                {
-                    Caption = 'Payment Terms Id';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(pricesIncludingVAT; Rec."Prices Including VAT")
-                {
-                    Caption = 'Prices Including VAT';
-                }
-                field(purchaserCode; Rec."Purchaser Code")
-                {
-                    Caption = 'Purchaser Code';
-                }
-                field(recalculateInvoiceDisc; Rec."Recalculate Invoice Disc.")
-                {
-                    Caption = 'Recalculate Invoice Disc.';
-                }
-                field(requestedReceiptDate; Rec."Requested Receipt Date")
-                {
-                    Caption = 'Requested Receipt Date';
-                }
-                field(shipToAddress; Rec."Ship-to Address")
-                {
-                    Caption = 'Ship-to Address';
-                }
-                field(shipToAddress2; Rec."Ship-to Address 2")
-                {
-                    Caption = 'Ship-to Address 2';
-                }
-                field(shipToCity; Rec."Ship-to City")
-                {
-                    Caption = 'Ship-to City';
-                }
-                field(shipToCode; Rec."Ship-to Code")
-                {
-                    Caption = 'Ship-to Code';
-                }
-                field(shipToContact; Rec."Ship-to Contact")
-                {
-                    Caption = 'Ship-to Contact';
-                }
-                field(shipToCountryRegionCode; Rec."Ship-to Country/Region Code")
-                {
-                    Caption = 'Ship-to Country/Region Code';
-                }
-                field(shipToCounty; Rec."Ship-to County")
-                {
-                    Caption = 'Ship-to County';
-                }
-                field(shipToName; Rec."Ship-to Name")
-                {
-                    Caption = 'Ship-to Name';
-                }
-                field(shipToPostCode; Rec."Ship-to Post Code")
-                {
-                    Caption = 'Ship-to Post Code';
-                }
-                field(shipmentMethodCode; Rec."Shipment Method Code")
-                {
-                    Caption = 'Shipment Method Code';
-                }
-                field(shipmentMethodId; Rec."Shipment Method Id")
-                {
-                    Caption = 'Shipment Method Id';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(status; Rec.Status)
-                {
-                    Caption = 'Status';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(totalTaxAmount; Rec."Total Tax Amount")
-                {
-                    Caption = 'Total Tax Amount';
-                }
-                field(vendorId; Rec."Vendor Id")
-                {
-                    Caption = 'Vendor Id';
-                }
-                field(vendorLedgerEntryNo; Rec."Vendor Ledger Entry No.")
-                {
-                    Caption = 'Vendor Ledger Entry No.';
-                }
-                field(vendorPostingGroup; Rec."Vendor Posting Group")
-                {
-                    Caption = 'Vendor Posting Group';
-                }
-            }
-        }
-    }
-}
-
-page 90038 "Purch. Rcpt. Header"
+page 90032 "Purch. Rcpt. Header"
 {
     DelayedInsert = true;
     PageType = API;
@@ -10095,21 +9441,21 @@ page 90038 "Purch. Rcpt. Header"
     }
 }
 
-page 90039 "Sales Invoice Line Aggregate"
+page 90033 Job
 {
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
     APIGroup = 'standardEndpoints';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'job';
+    DelayedInsert = true;
+    EntityName = 'job';
+    EntitySetName = 'jobs';
+    PageType = API;
+    SourceTable = Job;
+    ODataKeyFields = SystemId;
     DataAccessIntent = ReadOnly;
     Editable = false;
-    EntityCaption = 'Sales Invoice Line Aggregate';
-    EntitySetCaption = 'Sales Invoice Line Aggregate';
-    ODataKeyFields = SystemId;
-    EntityName = 'salesInvoiceLineAggregate';
-    EntitySetName = 'salesInvoiceLineAggregates';
-    SourceTable = "Sales Invoice Line Aggregate";
 
     layout
     {
@@ -10117,1947 +9463,21 @@ page 90039 "Sales Invoice Line Aggregate"
         {
             repeater(General)
             {
-                field(apiType; Rec."API Type")
+                field(allowScheduleContractLines; Rec."Allow Schedule/Contract Lines")
                 {
-                    Caption = 'API Type';
+                    Caption = 'Allow Budget/Billable Lines';
                 }
-                field(accountId; Rec."Account Id")
+                field(appliedCostsGLAmount; Rec."Applied Costs G/L Amount")
                 {
-                    Caption = 'Account Id';
+                    Caption = 'Applied Costs G/L Amount';
                 }
-                field(amount; Rec.Amount)
+                field(appliedSalesGLAmount; Rec."Applied Sales G/L Amount")
                 {
-                    Caption = 'Amount';
+                    Caption = 'Applied Sales G/L Amount';
                 }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
+                field(applyUsageLink; Rec."Apply Usage Link")
                 {
-                    Caption = 'Amount Including VAT';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(description2; Rec."Description 2")
-                {
-                    Caption = 'Description 2';
-                }
-                field(discountAppliedBeforeTax; Rec."Discount Applied Before Tax")
-                {
-                    Caption = 'Discount Applied Before Tax';
-                }
-                field(documentId; Rec."Document Id")
-                {
-                    Caption = 'Document Id';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(invDiscountAmount; Rec."Inv. Discount Amount")
-                {
-                    Caption = 'Inv. Discount Amount';
-                }
-                field(invDiscountAmountExclVAT; Rec."Inv. Discount Amount Excl. VAT")
-                {
-                    Caption = 'Inv. Discount Amount Excl. VAT';
-                }
-                field(itemId; Rec."Item Id")
-                {
-                    Caption = 'Item Id';
-                }
-                field(lineAmount; Rec."Line Amount")
-                {
-                    Caption = 'Line Amount';
-                }
-                field(lineAmountExcludingTax; Rec."Line Amount Excluding Tax")
-                {
-                    Caption = 'Line Amount Excluding Tax';
-                }
-                field(lineAmountIncludingTax; Rec."Line Amount Including Tax")
-                {
-                    Caption = 'Line Amount Including Tax';
-                }
-                field(lineDiscount; Rec."Line Discount %")
-                {
-                    Caption = 'Line Discount %';
-                }
-                field(lineDiscountAmount; Rec."Line Discount Amount")
-                {
-                    Caption = 'Line Discount Amount';
-                }
-                field(lineDiscountCalculation; Rec."Line Discount Calculation")
-                {
-                    Caption = 'Line Discount Calculation';
-                }
-                field(lineDiscountValue; Rec."Line Discount Value")
-                {
-                    Caption = 'Line Discount Value';
-                }
-                field(lineNo; Rec."Line No.")
-                {
-                    Caption = 'Line No.';
-                }
-                field(lineTaxAmount; Rec."Line Tax Amount")
-                {
-                    Caption = 'Line Tax Amount';
-                }
-                field(locationCode; Rec."Location Code")
-                {
-                    Caption = 'Location Code';
-                }
-                field(locationId; Rec."Location Id")
-                {
-                    Caption = 'Location Id';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(pricesIncludingTax; Rec."Prices Including Tax")
-                {
-                    Caption = 'Prices Including Tax';
-                }
-                field(qtyToInvoice; Rec."Qty. to Invoice")
-                {
-                    Caption = 'Qty. to Invoice';
-                }
-                field(qtyToShip; Rec."Qty. to Ship")
-                {
-                    Caption = 'Qty. to Ship';
-                }
-                field(quantity; Rec.Quantity)
-                {
-                    Caption = 'Quantity';
-                }
-                field(quantityInvoiced; Rec."Quantity Invoiced")
-                {
-                    Caption = 'Quantity Invoiced';
-                }
-                field(quantityShipped; Rec."Quantity Shipped")
-                {
-                    Caption = 'Quantity Shipped';
-                }
-                field(shipmentDate; Rec."Shipment Date")
-                {
-                    Caption = 'Shipment Date';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAmount; Rec."Tax Amount")
-                {
-                    Caption = 'Tax Amount';
-                }
-                field(taxCode; Rec."Tax Code")
-                {
-                    Caption = 'Tax Code';
-                }
-                field(taxGroupCode; Rec."Tax Group Code")
-                {
-                    Caption = 'Tax Group Code';
-                }
-                field(taxId; Rec."Tax Id")
-                {
-                    Caption = 'Tax Id';
-                }
-                field("type"; Rec."Type")
-                {
-                    Caption = 'Type';
-                }
-                field(unitPrice; Rec."Unit Price")
-                {
-                    Caption = 'Unit Price';
-                }
-                field(unitOfMeasureCode; Rec."Unit of Measure Code")
-                {
-                    Caption = 'Unit of Measure Code';
-                }
-                field(unitOfMeasureId; Rec."Unit of Measure Id")
-                {
-                    Caption = 'Unit of Measure Id';
-                }
-                field(vat; Rec."VAT %")
-                {
-                    Caption = 'VAT %';
-                }
-                field(vatBaseAmount; Rec."VAT Base Amount")
-                {
-                    Caption = 'VAT Base Amount';
-                }
-                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
-                {
-                    Caption = 'VAT Prod. Posting Group';
-                }
-                field(variantCode; Rec."Variant Code")
-                {
-                    Caption = 'Variant Code';
-                }
-                field(variantId; Rec."Variant Id")
-                {
-                    Caption = 'Variant Id';
-                }
-            }
-        }
-    }
-}
-
-page 90040 "Sales Cr. Memo Entity Buffer"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Sales Cr. Memo Entity Buffer';
-    EntitySetCaption = 'Sales Cr. Memo Entity Buffer';
-    ODataKeyFields = SystemId;
-    EntityName = 'salesCreditMemoEntityBuffer';
-    EntitySetName = 'salesCreditMemoEntityBuffer';
-    SourceTable = "Sales Cr. Memo Entity Buffer";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(appliesToDocNo; Rec."Applies-to Doc. No.")
-                {
-                    Caption = 'Applies-to Doc. No.';
-                }
-                field(appliesToDocType; Rec."Applies-to Doc. Type")
-                {
-                    Caption = 'Applies-to Doc. Type';
-                }
-                field(billToAddress; Rec."Bill-to Address")
-                {
-                    Caption = 'Bill-to Address';
-                }
-                field(billToAddress2; Rec."Bill-to Address 2")
-                {
-                    Caption = 'Bill-to Address 2';
-                }
-                field(billToCity; Rec."Bill-to City")
-                {
-                    Caption = 'Bill-to City';
-                }
-                field(billToContact; Rec."Bill-to Contact")
-                {
-                    Caption = 'Bill-to Contact';
-                }
-                field(billToCountryRegionCode; Rec."Bill-to Country/Region Code")
-                {
-                    Caption = 'Bill-to Country/Region Code';
-                }
-                field(billToCounty; Rec."Bill-to County")
-                {
-                    Caption = 'Bill-to County';
-                }
-                field(billToCustomerId; Rec."Bill-to Customer Id")
-                {
-                    Caption = 'Bill-to Customer Id';
-                }
-                field(billToCustomerNo; Rec."Bill-to Customer No.")
-                {
-                    Caption = 'Bill-to Customer No.';
-                }
-                field(billToName; Rec."Bill-to Name")
-                {
-                    Caption = 'Bill-to Name';
-                }
-                field(billToPostCode; Rec."Bill-to Post Code")
-                {
-                    Caption = 'Bill-to Post Code';
-                }
-                field(completelyShipped; Rec."Completely Shipped")
-                {
-                    Caption = 'Completely Shipped';
-                }
-                field(contactGraphId; Rec."Contact Graph Id")
-                {
-                    Caption = 'Contact Graph Id';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(currencyId; Rec."Currency Id")
-                {
-                    Caption = 'Currency Id';
-                }
-                field(custLedgerEntryNo; Rec."Cust. Ledger Entry No.")
-                {
-                    Caption = 'Cust. Ledger Entry No.';
-                }
-                field(customerId; Rec."Customer Id")
-                {
-                    Caption = 'Customer Id';
-                }
-                field(customerPostingGroup; Rec."Customer Posting Group")
-                {
-                    Caption = 'Customer Posting Group';
-                }
-                field(discountAppliedBeforeTax; Rec."Discount Applied Before Tax")
-                {
-                    Caption = 'Discount Applied Before Tax';
-                }
-                field(documentDate; Rec."Document Date")
-                {
-                    Caption = 'Document Date';
-                }
-                field(dueDate; Rec."Due Date")
-                {
-                    Caption = 'Due Date';
-                }
-                field(externalDocumentNo; Rec."External Document No.")
-                {
-                    Caption = 'External Document No.';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
-                {
-                    Caption = 'Invoice Discount Amount';
-                }
-                field(lastModifiedDateTime; Rec."Last Modified Date Time")
-                {
-                    Caption = 'Last Modified Date Time';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(paymentTermsCode; Rec."Payment Terms Code")
-                {
-                    Caption = 'Payment Terms Code';
-                }
-                field(paymentTermsId; Rec."Payment Terms Id")
-                {
-                    Caption = 'Payment Terms Id';
-                }
-                field(posted; Rec.Posted)
-                {
-                    Caption = 'Posted';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(pricesIncludingVAT; Rec."Prices Including VAT")
-                {
-                    Caption = 'Prices Including VAT';
-                }
-                field(reasonCode; Rec."Reason Code")
-                {
-                    Caption = 'Reason Code';
-                }
-                field(reasonCodeId; Rec."Reason Code Id")
-                {
-                    Caption = 'Reason Code Id';
-                }
-                field(recalculateInvoiceDisc; Rec."Recalculate Invoice Disc.")
-                {
-                    Caption = 'Recalculate Invoice Disc.';
-                }
-                field(requestedDeliveryDate; Rec."Requested Delivery Date")
-                {
-                    Caption = 'Requested Delivery Date';
-                }
-                field(salespersonCode; Rec."Salesperson Code")
-                {
-                    Caption = 'Salesperson Code';
-                }
-                field(sellToAddress; Rec."Sell-to Address")
-                {
-                    Caption = 'Sell-to Address';
-                }
-                field(sellToAddress2; Rec."Sell-to Address 2")
-                {
-                    Caption = 'Sell-to Address 2';
-                }
-                field(sellToCity; Rec."Sell-to City")
-                {
-                    Caption = 'Sell-to City';
-                }
-                field(sellToContact; Rec."Sell-to Contact")
-                {
-                    Caption = 'Sell-to Contact';
-                }
-                field(sellToContactNo; Rec."Sell-to Contact No.")
-                {
-                    Caption = 'Sell-to Contact No.';
-                }
-                field(sellToCountryRegionCode; Rec."Sell-to Country/Region Code")
-                {
-                    Caption = 'Sell-to Country/Region Code';
-                }
-                field(sellToCounty; Rec."Sell-to County")
-                {
-                    Caption = 'Sell-to County';
-                }
-                field(sellToCustomerName; Rec."Sell-to Customer Name")
-                {
-                    Caption = 'Sell-to Customer Name';
-                }
-                field(sellToCustomerNo; Rec."Sell-to Customer No.")
-                {
-                    Caption = 'Sell-to Customer No.';
-                }
-                field(sellToEMail; Rec."Sell-to E-Mail")
-                {
-                    Caption = 'Email';
-                }
-                field(sellToPhoneNo; Rec."Sell-to Phone No.")
-                {
-                    Caption = 'Sell-to Phone No.';
-                }
-                field(sellToPostCode; Rec."Sell-to Post Code")
-                {
-                    Caption = 'Sell-to Post Code';
-                }
-                field(shipmentMethodCode; Rec."Shipment Method Code")
-                {
-                    Caption = 'Shipment Method Code';
-                }
-                field(shipmentMethodId; Rec."Shipment Method Id")
-                {
-                    Caption = 'Shipment Method Id';
-                }
-                field(shippingAdvice; Rec."Shipping Advice")
-                {
-                    Caption = 'Shipping Advice';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(status; Rec.Status)
-                {
-                    Caption = 'Status';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(totalTaxAmount; Rec."Total Tax Amount")
-                {
-                    Caption = 'Total Tax Amount';
-                }
-            }
-        }
-    }
-}
-
-page 90041 "Sales Invoice Entity Aggregate"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Sales Invoice Entity Aggregate';
-    EntitySetCaption = 'Sales Invoice Entity Aggregate';
-    ODataKeyFields = SystemId;
-    EntityName = 'salesInvoiceEntityAggregate';
-    EntitySetName = 'salesInvoiceEntityAggregate';
-    SourceTable = "Sales Invoice Entity Aggregate";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(billToAddress; Rec."Bill-to Address")
-                {
-                    Caption = 'Bill-to Address';
-                }
-                field(billToAddress2; Rec."Bill-to Address 2")
-                {
-                    Caption = 'Bill-to Address 2';
-                }
-                field(billToCity; Rec."Bill-to City")
-                {
-                    Caption = 'Bill-to City';
-                }
-                field(billToContact; Rec."Bill-to Contact")
-                {
-                    Caption = 'Bill-to Contact';
-                }
-                field(billToCountryRegionCode; Rec."Bill-to Country/Region Code")
-                {
-                    Caption = 'Bill-to Country/Region Code';
-                }
-                field(billToCounty; Rec."Bill-to County")
-                {
-                    Caption = 'Bill-to County';
-                }
-                field(billToCustomerId; Rec."Bill-to Customer Id")
-                {
-                    Caption = 'Bill-to Customer Id';
-                }
-                field(billToCustomerNo; Rec."Bill-to Customer No.")
-                {
-                    Caption = 'Bill-to Customer No.';
-                }
-                field(billToName; Rec."Bill-to Name")
-                {
-                    Caption = 'Bill-to Name';
-                }
-                field(billToPostCode; Rec."Bill-to Post Code")
-                {
-                    Caption = 'Bill-to Post Code';
-                }
-                field(contactGraphId; Rec."Contact Graph Id")
-                {
-                    Caption = 'Contact Graph Id';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(currencyId; Rec."Currency Id")
-                {
-                    Caption = 'Currency Id';
-                }
-                field(custLedgerEntryNo; Rec."Cust. Ledger Entry No.")
-                {
-                    Caption = 'Cust. Ledger Entry No.';
-                }
-                field(customerId; Rec."Customer Id")
-                {
-                    Caption = 'Customer Id';
-                }
-                field(customerPostingGroup; Rec."Customer Posting Group")
-                {
-                    Caption = 'Customer Posting Group';
-                }
-                field(discountAppliedBeforeTax; Rec."Discount Applied Before Tax")
-                {
-                    Caption = 'Discount Applied Before Tax';
-                }
-                field(documentDate; Rec."Document Date")
-                {
-                    Caption = 'Document Date';
-                }
-                field(documentType; Rec."Document Type")
-                {
-                    Caption = 'Document Type';
-                }
-                field(dueDate; Rec."Due Date")
-                {
-                    Caption = 'Due Date';
-                }
-                field(externalDocumentNo; Rec."External Document No.")
-                {
-                    Caption = 'External Document No.';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
-                {
-                    Caption = 'Invoice Discount Amount';
-                }
-                field(invoiceDiscountCalculation; Rec."Invoice Discount Calculation")
-                {
-                    Caption = 'Invoice Discount Calculation';
-                }
-                field(invoiceDiscountValue; Rec."Invoice Discount Value")
-                {
-                    Caption = 'Invoice Discount Value';
-                }
-                field(isTest; Rec.IsTest)
-                {
-                    Caption = 'IsTest';
-                }
-                field(lastModifiedDateTime; Rec."Last Modified Date Time")
-                {
-                    Caption = 'Last Modified Date Time';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(orderId; Rec."Order Id")
-                {
-                    Caption = 'Order Id';
-                }
-                field(orderNo; Rec."Order No.")
-                {
-                    Caption = 'Order No.';
-                }
-                field(paymentTermsCode; Rec."Payment Terms Code")
-                {
-                    Caption = 'Payment Terms Code';
-                }
-                field(paymentTermsId; Rec."Payment Terms Id")
-                {
-                    Caption = 'Payment Terms Id';
-                }
-                field(posted; Rec.Posted)
-                {
-                    Caption = 'Posted';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(pricesIncludingVAT; Rec."Prices Including VAT")
-                {
-                    Caption = 'Prices Including VAT';
-                }
-                field(recalculateInvoiceDisc; Rec."Recalculate Invoice Disc.")
-                {
-                    Caption = 'Recalculate Invoice Disc.';
-                }
-                field(salespersonCode; Rec."Salesperson Code")
-                {
-                    Caption = 'Salesperson Code';
-                }
-                field(sellToAddress; Rec."Sell-to Address")
-                {
-                    Caption = 'Sell-to Address';
-                }
-                field(sellToAddress2; Rec."Sell-to Address 2")
-                {
-                    Caption = 'Sell-to Address 2';
-                }
-                field(sellToCity; Rec."Sell-to City")
-                {
-                    Caption = 'Sell-to City';
-                }
-                field(sellToContact; Rec."Sell-to Contact")
-                {
-                    Caption = 'Sell-to Contact';
-                }
-                field(sellToContactNo; Rec."Sell-to Contact No.")
-                {
-                    Caption = 'Sell-to Contact No.';
-                }
-                field(sellToCountryRegionCode; Rec."Sell-to Country/Region Code")
-                {
-                    Caption = 'Sell-to Country/Region Code';
-                }
-                field(sellToCounty; Rec."Sell-to County")
-                {
-                    Caption = 'Sell-to County';
-                }
-                field(sellToCustomerName; Rec."Sell-to Customer Name")
-                {
-                    Caption = 'Sell-to Customer Name';
-                }
-                field(sellToCustomerNo; Rec."Sell-to Customer No.")
-                {
-                    Caption = 'Sell-to Customer No.';
-                }
-                field(sellToEMail; Rec."Sell-to E-Mail")
-                {
-                    Caption = 'Email';
-                }
-                field(sellToPhoneNo; Rec."Sell-to Phone No.")
-                {
-                    Caption = 'Sell-to Phone No.';
-                }
-                field(sellToPostCode; Rec."Sell-to Post Code")
-                {
-                    Caption = 'Sell-to Post Code';
-                }
-                field(shipToAddress; Rec."Ship-to Address")
-                {
-                    Caption = 'Ship-to Address';
-                }
-                field(shipToAddress2; Rec."Ship-to Address 2")
-                {
-                    Caption = 'Ship-to Address 2';
-                }
-                field(shipToCity; Rec."Ship-to City")
-                {
-                    Caption = 'Ship-to City';
-                }
-                field(shipToCode; Rec."Ship-to Code")
-                {
-                    Caption = 'Ship-to Code';
-                }
-                field(shipToContact; Rec."Ship-to Contact")
-                {
-                    Caption = 'Ship-to Contact';
-                }
-                field(shipToCountryRegionCode; Rec."Ship-to Country/Region Code")
-                {
-                    Caption = 'Ship-to Country/Region Code';
-                }
-                field(shipToCounty; Rec."Ship-to County")
-                {
-                    Caption = 'Ship-to County';
-                }
-                field(shipToName; Rec."Ship-to Name")
-                {
-                    Caption = 'Ship-to Name';
-                }
-                field(shipToPostCode; Rec."Ship-to Post Code")
-                {
-                    Caption = 'Ship-to Post Code';
-                }
-                field(shipmentMethodCode; Rec."Shipment Method Code")
-                {
-                    Caption = 'Shipment Method Code';
-                }
-                field(shipmentMethodId; Rec."Shipment Method Id")
-                {
-                    Caption = 'Shipment Method Id';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(status; Rec.Status)
-                {
-                    Caption = 'Status';
-                }
-                field(subtotalAmount; Rec."Subtotal Amount")
-                {
-                    Caption = 'Subtotal Amount';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAreaCode; Rec."Tax Area Code")
-                {
-                    Caption = 'Tax Area Code';
-                }
-                field(taxAreaID; Rec."Tax Area ID")
-                {
-                    Caption = 'Tax Area ID';
-                }
-                field(taxLiable; Rec."Tax Liable")
-                {
-                    Caption = 'Tax Liable';
-                }
-                field(totalTaxAmount; Rec."Total Tax Amount")
-                {
-                    Caption = 'Total Tax Amount';
-                }
-                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
-                {
-                    Caption = 'VAT Bus. Posting Group';
-                }
-                field(vatRegistrationNo; Rec."VAT Registration No.")
-                {
-                    Caption = 'VAT Registration No.';
-                }
-                field(yourReference; Rec."Your Reference")
-                {
-                    Caption = 'Your Reference';
-                }
-            }
-        }
-    }
-}
-
-page 90042 "Sales Order Entity Buffer"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Sales Order Entity Buffer';
-    EntitySetCaption = 'Sales Order Entity Buffer';
-    ODataKeyFields = SystemId;
-    EntityName = 'salesOrderEntityBuffer';
-    EntitySetName = 'salesOrderEntityBuffer';
-    SourceTable = "Sales Order Entity Buffer";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(billToAddress; Rec."Bill-to Address")
-                {
-                    Caption = 'Bill-to Address';
-                }
-                field(billToAddress2; Rec."Bill-to Address 2")
-                {
-                    Caption = 'Bill-to Address 2';
-                }
-                field(billToCity; Rec."Bill-to City")
-                {
-                    Caption = 'Bill-to City';
-                }
-                field(billToContact; Rec."Bill-to Contact")
-                {
-                    Caption = 'Bill-to Contact';
-                }
-                field(billToCountryRegionCode; Rec."Bill-to Country/Region Code")
-                {
-                    Caption = 'Bill-to Country/Region Code';
-                }
-                field(billToCounty; Rec."Bill-to County")
-                {
-                    Caption = 'Bill-to County';
-                }
-                field(billToCustomerId; Rec."Bill-to Customer Id")
-                {
-                    Caption = 'Bill-to Customer Id';
-                }
-                field(billToCustomerNo; Rec."Bill-to Customer No.")
-                {
-                    Caption = 'Bill-to Customer No.';
-                }
-                field(billToName; Rec."Bill-to Name")
-                {
-                    Caption = 'Bill-to Name';
-                }
-                field(billToPostCode; Rec."Bill-to Post Code")
-                {
-                    Caption = 'Bill-to Post Code';
-                }
-                field(completelyShipped; Rec."Completely Shipped")
-                {
-                    Caption = 'Completely Shipped';
-                }
-                field(contactGraphId; Rec."Contact Graph Id")
-                {
-                    Caption = 'Contact Graph Id';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(currencyId; Rec."Currency Id")
-                {
-                    Caption = 'Currency Id';
-                }
-                field(custLedgerEntryNo; Rec."Cust. Ledger Entry No.")
-                {
-                    Caption = 'Cust. Ledger Entry No.';
-                }
-                field(customerId; Rec."Customer Id")
-                {
-                    Caption = 'Customer Id';
-                }
-                field(customerPostingGroup; Rec."Customer Posting Group")
-                {
-                    Caption = 'Customer Posting Group';
-                }
-                field(discountAppliedBeforeTax; Rec."Discount Applied Before Tax")
-                {
-                    Caption = 'Discount Applied Before Tax';
-                }
-                field(documentDate; Rec."Document Date")
-                {
-                    Caption = 'Document Date';
-                }
-                field(externalDocumentNo; Rec."External Document No.")
-                {
-                    Caption = 'External Document No.';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
-                {
-                    Caption = 'Invoice Discount Amount';
-                }
-                field(lastModifiedDateTime; Rec."Last Modified Date Time")
-                {
-                    Caption = 'Last Modified Date Time';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(paymentTermsCode; Rec."Payment Terms Code")
-                {
-                    Caption = 'Payment Terms Code';
-                }
-                field(paymentTermsId; Rec."Payment Terms Id")
-                {
-                    Caption = 'Payment Terms Id';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(pricesIncludingVAT; Rec."Prices Including VAT")
-                {
-                    Caption = 'Prices Including VAT';
-                }
-                field(recalculateInvoiceDisc; Rec."Recalculate Invoice Disc.")
-                {
-                    Caption = 'Recalculate Invoice Disc.';
-                }
-                field(requestedDeliveryDate; Rec."Requested Delivery Date")
-                {
-                    Caption = 'Requested Delivery Date';
-                }
-                field(salespersonCode; Rec."Salesperson Code")
-                {
-                    Caption = 'Salesperson Code';
-                }
-                field(sellToContactNo; Rec."Sell-To Contact No.")
-                {
-                    Caption = 'Sell-To Contact No.';
-                }
-                field(sellToAddress; Rec."Sell-to Address")
-                {
-                    Caption = 'Sell-to Address';
-                }
-                field(sellToAddress2; Rec."Sell-to Address 2")
-                {
-                    Caption = 'Sell-to Address 2';
-                }
-                field(sellToCity; Rec."Sell-to City")
-                {
-                    Caption = 'Sell-to City';
-                }
-                field(sellToContact; Rec."Sell-to Contact")
-                {
-                    Caption = 'Sell-to Contact';
-                }
-                field(sellToCountryRegionCode; Rec."Sell-to Country/Region Code")
-                {
-                    Caption = 'Sell-to Country/Region Code';
-                }
-                field(sellToCounty; Rec."Sell-to County")
-                {
-                    Caption = 'Sell-to County';
-                }
-                field(sellToCustomerName; Rec."Sell-to Customer Name")
-                {
-                    Caption = 'Sell-to Customer Name';
-                }
-                field(sellToCustomerNo; Rec."Sell-to Customer No.")
-                {
-                    Caption = 'Sell-to Customer No.';
-                }
-                field(sellToEMail; Rec."Sell-to E-Mail")
-                {
-                    Caption = 'Email';
-                }
-                field(sellToPhoneNo; Rec."Sell-to Phone No.")
-                {
-                    Caption = 'Sell-to Phone No.';
-                }
-                field(sellToPostCode; Rec."Sell-to Post Code")
-                {
-                    Caption = 'Sell-to Post Code';
-                }
-                field(shipToAddress; Rec."Ship-to Address")
-                {
-                    Caption = 'Ship-to Address';
-                }
-                field(shipToAddress2; Rec."Ship-to Address 2")
-                {
-                    Caption = 'Ship-to Address 2';
-                }
-                field(shipToCity; Rec."Ship-to City")
-                {
-                    Caption = 'Ship-to City';
-                }
-                field(shipToCode; Rec."Ship-to Code")
-                {
-                    Caption = 'Ship-to Code';
-                }
-                field(shipToContact; Rec."Ship-to Contact")
-                {
-                    Caption = 'Ship-to Contact';
-                }
-                field(shipToCountryRegionCode; Rec."Ship-to Country/Region Code")
-                {
-                    Caption = 'Ship-to Country/Region Code';
-                }
-                field(shipToCounty; Rec."Ship-to County")
-                {
-                    Caption = 'Ship-to County';
-                }
-                field(shipToName; Rec."Ship-to Name")
-                {
-                    Caption = 'Ship-to Name';
-                }
-                field(shipToPostCode; Rec."Ship-to Post Code")
-                {
-                    Caption = 'Ship-to Post Code';
-                }
-                field(shipmentMethodCode; Rec."Shipment Method Code")
-                {
-                    Caption = 'Shipment Method Code';
-                }
-                field(shipmentMethodId; Rec."Shipment Method Id")
-                {
-                    Caption = 'Shipment Method Id';
-                }
-                field(shippingAdvice; Rec."Shipping Advice")
-                {
-                    Caption = 'Shipping Advice';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(status; Rec.Status)
-                {
-                    Caption = 'Status';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(totalTaxAmount; Rec."Total Tax Amount")
-                {
-                    Caption = 'Total Tax Amount';
-                }
-            }
-        }
-    }
-}
-
-page 90043 "Sales Quote Entity Buffer"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Sales Quote Entity Buffer';
-    EntitySetCaption = 'Sales Quote Entity Buffer';
-    ODataKeyFields = SystemId;
-    EntityName = 'salesQuoteEntityBuffer';
-    EntitySetName = 'salesQuoteEntityBuffer';
-    SourceTable = "Sales Quote Entity Buffer";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(billToAddress; Rec."Bill-to Address")
-                {
-                    Caption = 'Bill-to Address';
-                }
-                field(billToAddress2; Rec."Bill-to Address 2")
-                {
-                    Caption = 'Bill-to Address 2';
-                }
-                field(billToCity; Rec."Bill-to City")
-                {
-                    Caption = 'Bill-to City';
-                }
-                field(billToContact; Rec."Bill-to Contact")
-                {
-                    Caption = 'Bill-to Contact';
-                }
-                field(billToCountryRegionCode; Rec."Bill-to Country/Region Code")
-                {
-                    Caption = 'Bill-to Country/Region Code';
-                }
-                field(billToCounty; Rec."Bill-to County")
-                {
-                    Caption = 'Bill-to County';
-                }
-                field(billToCustomerId; Rec."Bill-to Customer Id")
-                {
-                    Caption = 'Bill-to Customer Id';
-                }
-                field(billToCustomerNo; Rec."Bill-to Customer No.")
-                {
-                    Caption = 'Bill-to Customer No.';
-                }
-                field(billToName; Rec."Bill-to Name")
-                {
-                    Caption = 'Bill-to Name';
-                }
-                field(billToPostCode; Rec."Bill-to Post Code")
-                {
-                    Caption = 'Bill-to Post Code';
-                }
-                field(contactGraphId; Rec."Contact Graph Id")
-                {
-                    Caption = 'Contact Graph Id';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(currencyId; Rec."Currency Id")
-                {
-                    Caption = 'Currency Id';
-                }
-                field(custLedgerEntryNo; Rec."Cust. Ledger Entry No.")
-                {
-                    Caption = 'Cust. Ledger Entry No.';
-                }
-                field(customerId; Rec."Customer Id")
-                {
-                    Caption = 'Customer Id';
-                }
-                field(customerPostingGroup; Rec."Customer Posting Group")
-                {
-                    Caption = 'Customer Posting Group';
-                }
-                field(discountAppliedBeforeTax; Rec."Discount Applied Before Tax")
-                {
-                    Caption = 'Discount Applied Before Tax';
-                }
-                field(documentDate; Rec."Document Date")
-                {
-                    Caption = 'Document Date';
-                }
-                field(documentType; Rec."Document Type")
-                {
-                    Caption = 'Document Type';
-                }
-                field(dueDate; Rec."Due Date")
-                {
-                    Caption = 'Due Date';
-                }
-                field(externalDocumentNo; Rec."External Document No.")
-                {
-                    Caption = 'External Document No.';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
-                {
-                    Caption = 'Invoice Discount Amount';
-                }
-                field(invoiceDiscountCalculation; Rec."Invoice Discount Calculation")
-                {
-                    Caption = 'Invoice Discount Calculation';
-                }
-                field(invoiceDiscountValue; Rec."Invoice Discount Value")
-                {
-                    Caption = 'Invoice Discount Value';
-                }
-                field(lastModifiedDateTime; Rec."Last Modified Date Time")
-                {
-                    Caption = 'Last Modified Date Time';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(paymentTermsCode; Rec."Payment Terms Code")
-                {
-                    Caption = 'Payment Terms Code';
-                }
-                field(paymentTermsId; Rec."Payment Terms Id")
-                {
-                    Caption = 'Payment Terms Id';
-                }
-                field(posted; Rec.Posted)
-                {
-                    Caption = 'Posted';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(pricesIncludingVAT; Rec."Prices Including VAT")
-                {
-                    Caption = 'Prices Including VAT';
-                }
-                field(quoteAccepted; Rec."Quote Accepted")
-                {
-                    Caption = 'Quote Accepted';
-                }
-                field(quoteAcceptedDate; Rec."Quote Accepted Date")
-                {
-                    Caption = 'Quote Accepted Date';
-                }
-                field(quoteSentToCustomer; Rec."Quote Sent to Customer")
-                {
-                    Caption = 'Quote Sent to Customer';
-                }
-                field(quoteValidUntilDate; Rec."Quote Valid Until Date")
-                {
-                    Caption = 'Quote Valid Until Date';
-                }
-                field(recalculateInvoiceDisc; Rec."Recalculate Invoice Disc.")
-                {
-                    Caption = 'Recalculate Invoice Disc.';
-                }
-                field(salespersonCode; Rec."Salesperson Code")
-                {
-                    Caption = 'Salesperson Code';
-                }
-                field(sellToAddress; Rec."Sell-to Address")
-                {
-                    Caption = 'Sell-to Address';
-                }
-                field(sellToAddress2; Rec."Sell-to Address 2")
-                {
-                    Caption = 'Sell-to Address 2';
-                }
-                field(sellToCity; Rec."Sell-to City")
-                {
-                    Caption = 'Sell-to City';
-                }
-                field(sellToContact; Rec."Sell-to Contact")
-                {
-                    Caption = 'Sell-to Contact';
-                }
-                field(sellToContactNo; Rec."Sell-to Contact No.")
-                {
-                    Caption = 'Sell-to Contact No.';
-                }
-                field(sellToCountryRegionCode; Rec."Sell-to Country/Region Code")
-                {
-                    Caption = 'Sell-to Country/Region Code';
-                }
-                field(sellToCounty; Rec."Sell-to County")
-                {
-                    Caption = 'Sell-to County';
-                }
-                field(sellToCustomerName; Rec."Sell-to Customer Name")
-                {
-                    Caption = 'Sell-to Customer Name';
-                }
-                field(sellToCustomerNo; Rec."Sell-to Customer No.")
-                {
-                    Caption = 'Sell-to Customer No.';
-                }
-                field(sellToEMail; Rec."Sell-to E-Mail")
-                {
-                    Caption = 'Email';
-                }
-                field(sellToPhoneNo; Rec."Sell-to Phone No.")
-                {
-                    Caption = 'Sell-to Phone No.';
-                }
-                field(sellToPostCode; Rec."Sell-to Post Code")
-                {
-                    Caption = 'Sell-to Post Code';
-                }
-                field(shipToAddress; Rec."Ship-to Address")
-                {
-                    Caption = 'Ship-to Address';
-                }
-                field(shipToAddress2; Rec."Ship-to Address 2")
-                {
-                    Caption = 'Ship-to Address 2';
-                }
-                field(shipToCity; Rec."Ship-to City")
-                {
-                    Caption = 'Ship-to City';
-                }
-                field(shipToCode; Rec."Ship-to Code")
-                {
-                    Caption = 'Ship-to Code';
-                }
-                field(shipToContact; Rec."Ship-to Contact")
-                {
-                    Caption = 'Ship-to Contact';
-                }
-                field(shipToCountryRegionCode; Rec."Ship-to Country/Region Code")
-                {
-                    Caption = 'Ship-to Country/Region Code';
-                }
-                field(shipToCounty; Rec."Ship-to County")
-                {
-                    Caption = 'Ship-to County';
-                }
-                field(shipToName; Rec."Ship-to Name")
-                {
-                    Caption = 'Ship-to Name';
-                }
-                field(shipToPostCode; Rec."Ship-to Post Code")
-                {
-                    Caption = 'Ship-to Post Code';
-                }
-                field(shipmentMethodCode; Rec."Shipment Method Code")
-                {
-                    Caption = 'Shipment Method Code';
-                }
-                field(shipmentMethodId; Rec."Shipment Method Id")
-                {
-                    Caption = 'Shipment Method Id';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(status; Rec.Status)
-                {
-                    Caption = 'Status';
-                }
-                field(subtotalAmount; Rec."Subtotal Amount")
-                {
-                    Caption = 'Subtotal Amount';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAreaCode; Rec."Tax Area Code")
-                {
-                    Caption = 'Tax Area Code';
-                }
-                field(taxAreaID; Rec."Tax Area ID")
-                {
-                    Caption = 'Tax Area ID';
-                }
-                field(taxLiable; Rec."Tax Liable")
-                {
-                    Caption = 'Tax Liable';
-                }
-                field(totalTaxAmount; Rec."Total Tax Amount")
-                {
-                    Caption = 'Total Tax Amount';
-                }
-                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
-                {
-                    Caption = 'VAT Bus. Posting Group';
-                }
-                field(vatRegistrationNo; Rec."VAT Registration No.")
-                {
-                    Caption = 'VAT Registration No.';
-                }
-                field(yourReference; Rec."Your Reference")
-                {
-                    Caption = 'Your Reference';
-                }
-            }
-        }
-    }
-}
-
-page 90044 "Sales Shipment Line"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Sales Shipment Line';
-    EntitySetCaption = 'Sales Shipment Lines';
-    ODataKeyFields = SystemId;
-    EntityName = 'salesShipmentLine';
-    EntitySetName = 'salesShipmentLines';
-    SourceTable = "Sales Shipment Line";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(allowInvoiceDisc; Rec."Allow Invoice Disc.")
-                {
-                    Caption = 'Allow Invoice Disc.';
-                }
-                field(allowLineDisc; Rec."Allow Line Disc.")
-                {
-                    Caption = 'Allow Line Disc.';
-                }
-                field(applFromItemEntry; Rec."Appl.-from Item Entry")
-                {
-                    Caption = 'Appl.-from Item Entry';
-                }
-                field(applToItemEntry; Rec."Appl.-to Item Entry")
-                {
-                    Caption = 'Appl.-to Item Entry';
-                }
-                field("area"; Rec."Area")
-                {
-                    Caption = 'Area';
-                }
-                field(attachedToLineNo; Rec."Attached to Line No.")
-                {
-                    Caption = 'Attached to Line No.';
-                }
-                field(authorizedForCreditCard; Rec."Authorized for Credit Card")
-                {
-                    Caption = 'Authorized for Credit Card';
-                }
-                field(billToCustomerNo; Rec."Bill-to Customer No.")
-                {
-                    Caption = 'Bill-to Customer No.';
-                }
-                field(binCode; Rec."Bin Code")
-                {
-                    Caption = 'Bin Code';
-                }
-                field(blanketOrderLineNo; Rec."Blanket Order Line No.")
-                {
-                    Caption = 'Blanket Order Line No.';
-                }
-                field(blanketOrderNo; Rec."Blanket Order No.")
-                {
-                    Caption = 'Blanket Order No.';
-                }
-                field(correction; Rec.Correction)
-                {
-                    Caption = 'Correction';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(customTransitNumber; Rec."Custom Transit Number")
-                {
-                    Caption = 'Custom Transit Number';
-                }
-                field(customerDiscGroup; Rec."Customer Disc. Group")
-                {
-                    Caption = 'Customer Disc. Group';
-                }
-                field(customerPriceGroup; Rec."Customer Price Group")
-                {
-                    Caption = 'Customer Price Group';
-                }
-                field(deprUntilFAPostingDate; Rec."Depr. until FA Posting Date")
-                {
-                    Caption = 'Depr. until FA Posting Date';
-                }
-                field(depreciationBookCode; Rec."Depreciation Book Code")
-                {
-                    Caption = 'Depreciation Book Code';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(description2; Rec."Description 2")
-                {
-                    Caption = 'Description 2';
-                }
-                field(dimensionSetID; Rec."Dimension Set ID")
-                {
-                    Caption = 'Dimension Set ID';
-                }
-                field(documentId; Rec."Document Id")
-                {
-                    Caption = 'Document Id';
-                }
-                field(documentNo; Rec."Document No.")
-                {
-                    Caption = 'Document No.';
-                }
-                field(dropShipment; Rec."Drop Shipment")
-                {
-                    Caption = 'Drop Shipment';
-                }
-                field(duplicateInDepreciationBook; Rec."Duplicate in Depreciation Book")
-                {
-                    Caption = 'Duplicate in Depreciation Book';
-                }
-                field(exitPoint; Rec."Exit Point")
-                {
-                    Caption = 'Exit Point';
-                }
-                field(faPostingDate; Rec."FA Posting Date")
-                {
-                    Caption = 'FA Posting Date';
-                }
-                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
-                {
-                    Caption = 'Gen. Bus. Posting Group';
-                }
-                field(genProdPostingGroup; Rec."Gen. Prod. Posting Group")
-                {
-                    Caption = 'Gen. Prod. Posting Group';
-                }
-                field(grossWeight; Rec."Gross Weight")
-                {
-                    Caption = 'Gross Weight';
-                }
-                field(icItemReferenceNo; Rec."IC Item Reference No.")
-                {
-                    Caption = 'IC Item Reference No.';
-                }
-                field(icPartnerRefType; Rec."IC Partner Ref. Type")
-                {
-                    Caption = 'IC Partner Ref. Type';
-                }
-                field(icPartnerReference; Rec."IC Partner Reference")
-                {
-                    Caption = 'IC Partner Reference';
-                }
-                field(itemCategoryCode; Rec."Item Category Code")
-                {
-                    Caption = 'Item Category Code';
-                }
-                field(itemChargeBaseAmount; Rec."Item Charge Base Amount")
-                {
-                    Caption = 'Item Charge Base Amount';
-                }
-                field(itemReferenceNo; Rec."Item Reference No.")
-                {
-                    Caption = 'Item Reference No.';
-                }
-                field(itemReferenceType; Rec."Item Reference Type")
-                {
-                    Caption = 'Item Reference Type';
-                }
-                field(itemReferenceTypeNo; Rec."Item Reference Type No.")
-                {
-                    Caption = 'Item Reference Type No.';
-                }
-                field(itemReferenceUnitOfMeasure; Rec."Item Reference Unit of Measure")
-                {
-                    Caption = 'Unit of Measure (Item Ref.)';
-                }
-                field(itemShptEntryNo; Rec."Item Shpt. Entry No.")
-                {
-                    Caption = 'Item Shpt. Entry No.';
-                }
-                field(jobContractEntryNo; Rec."Job Contract Entry No.")
-                {
-                    Caption = 'Job Contract Entry No.';
-                }
-                field(jobNo; Rec."Job No.")
-                {
-                    Caption = 'Job No.';
-                }
-                field(jobTaskNo; Rec."Job Task No.")
-                {
-                    Caption = 'Job Task No.';
-                }
-                field(lineDiscount; Rec."Line Discount %")
-                {
-                    Caption = 'Line Discount %';
-                }
-                field(lineNo; Rec."Line No.")
-                {
-                    Caption = 'Line No.';
-                }
-                field(locationCode; Rec."Location Code")
-                {
-                    Caption = 'Location Code';
-                }
-                field(netWeight; Rec."Net Weight")
-                {
-                    Caption = 'Net Weight';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(nonstock; Rec.Nonstock)
-                {
-                    Caption = 'Catalog';
-                }
-                field(orderLineNo; Rec."Order Line No.")
-                {
-                    Caption = 'Order Line No.';
-                }
-                field(orderNo; Rec."Order No.")
-                {
-                    Caption = 'Order No.';
-                }
-                field(outboundWhseHandlingTime; Rec."Outbound Whse. Handling Time")
-                {
-                    Caption = 'Outbound Whse. Handling Time';
-                }
-                field(packageTrackingNo; Rec."Package Tracking No.")
-                {
-                    Caption = 'Package Tracking No.';
-                }
-                field(plannedDeliveryDate; Rec."Planned Delivery Date")
-                {
-                    Caption = 'Planned Delivery Date';
-                }
-                field(plannedShipmentDate; Rec."Planned Shipment Date")
-                {
-                    Caption = 'Planned Shipment Date';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(postingGroup; Rec."Posting Group")
-                {
-                    Caption = 'Posting Group';
-                }
-                field(priceCalculationMethod; Rec."Price Calculation Method")
-                {
-                    Caption = 'Price Calculation Method';
-                }
-                field(promisedDeliveryDate; Rec."Promised Delivery Date")
-                {
-                    Caption = 'Promised Delivery Date';
-                }
-                field(purchOrderLineNo; Rec."Purch. Order Line No.")
-                {
-                    Caption = 'Purch. Order Line No.';
-                }
-                field(purchaseOrderNo; Rec."Purchase Order No.")
-                {
-                    Caption = 'Purchase Order No.';
-                }
-                field(purchasingCode; Rec."Purchasing Code")
-                {
-                    Caption = 'Purchasing Code';
-                }
-                field(qtyInvoicedBase; Rec."Qty. Invoiced (Base)")
-                {
-                    Caption = 'Qty. Invoiced (Base)';
-                }
-                field(qtyShippedNotInvoiced; Rec."Qty. Shipped Not Invoiced")
-                {
-                    Caption = 'Qty. Shipped Not Invoiced';
-                }
-                field(qtyPerUnitOfMeasure; Rec."Qty. per Unit of Measure")
-                {
-                    Caption = 'Qty. per Unit of Measure';
-                }
-                field(quantity; Rec.Quantity)
-                {
-                    Caption = 'Quantity';
-                }
-                field(quantityBase; Rec."Quantity (Base)")
-                {
-                    Caption = 'Quantity (Base)';
-                }
-                field(quantityInvoiced; Rec."Quantity Invoiced")
-                {
-                    Caption = 'Quantity Invoiced';
-                }
-                field(requestedDeliveryDate; Rec."Requested Delivery Date")
-                {
-                    Caption = 'Requested Delivery Date';
-                }
-                field(responsibilityCenter; Rec."Responsibility Center")
-                {
-                    Caption = 'Responsibility Center';
-                }
-                field(returnReasonCode; Rec."Return Reason Code")
-                {
-                    Caption = 'Return Reason Code';
-                }
-                field(sellToCustomerNo; Rec."Sell-to Customer No.")
-                {
-                    Caption = 'Sell-to Customer No.';
-                }
-                field(shipmentDate; Rec."Shipment Date")
-                {
-                    Caption = 'Shipment Date';
-                }
-                field(shippingTime; Rec."Shipping Time")
-                {
-                    Caption = 'Shipping Time';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAreaCode; Rec."Tax Area Code")
-                {
-                    Caption = 'Tax Area Code';
-                }
-                field(taxGroupCode; Rec."Tax Group Code")
-                {
-                    Caption = 'Tax Group Code';
-                }
-                field(taxLiable; Rec."Tax Liable")
-                {
-                    Caption = 'Tax Liable';
-                }
-                field(transactionSpecification; Rec."Transaction Specification")
-                {
-                    Caption = 'Transaction Specification';
-                }
-                field("transactionType"; Rec."Transaction Type")
-                {
-                    Caption = 'Transaction Type';
-                }
-                field(transportMethod; Rec."Transport Method")
-                {
-                    Caption = 'Transport Method';
-                }
-                field("type"; Rec."Type")
-                {
-                    Caption = 'Type';
-                }
-                field(unitCost; Rec."Unit Cost")
-                {
-                    Caption = 'Unit Cost';
-                }
-                field(unitCostLCY; Rec."Unit Cost (LCY)")
-                {
-                    Caption = 'Unit Cost (LCY)';
-                }
-                field(unitPrice; Rec."Unit Price")
-                {
-                    Caption = 'Unit Price';
-                }
-                field(unitVolume; Rec."Unit Volume")
-                {
-                    Caption = 'Unit Volume';
-                }
-                field(unitOfMeasure; Rec."Unit of Measure")
-                {
-                    Caption = 'Unit of Measure';
-                }
-                field(unitOfMeasureCode; Rec."Unit of Measure Code")
-                {
-                    Caption = 'Unit of Measure Code';
-                }
-                field(unitsPerParcel; Rec."Units per Parcel")
-                {
-                    Caption = 'Units per Parcel';
-                }
-                field(useDuplicationList; Rec."Use Duplication List")
-                {
-                    Caption = 'Use Duplication List';
-                }
-                field(vat; Rec."VAT %")
-                {
-                    Caption = 'VAT %';
-                }
-                field(vatBaseAmount; Rec."VAT Base Amount")
-                {
-                    Caption = 'VAT Base Amount';
-                }
-                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
-                {
-                    Caption = 'VAT Bus. Posting Group';
-                }
-                field(vatCalculationType; Rec."VAT Calculation Type")
-                {
-                    Caption = 'VAT Calculation Type';
-                }
-                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
-                {
-                    Caption = 'VAT Prod. Posting Group';
-                }
-                field(variantCode; Rec."Variant Code")
-                {
-                    Caption = 'Variant Code';
-                }
-                field(workTypeCode; Rec."Work Type Code")
-                {
-                    Caption = 'Work Type Code';
-                }
-            }
-        }
-    }
-}
-
-page 90045 "Sales Shipment Header"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Sales Shipment Header';
-    EntitySetCaption = 'Sales Shipment Headers';
-    ODataKeyFields = SystemId;
-    EntityName = 'salesShipmentHeader';
-    EntitySetName = 'salesShipmentHeaders';
-    SourceTable = "Sales Shipment Header";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(allowLineDisc; Rec."Allow Line Disc.")
-                {
-                    Caption = 'Allow Line Disc.';
-                }
-                field(appliesToDocNo; Rec."Applies-to Doc. No.")
-                {
-                    Caption = 'Applies-to Doc. No.';
-                }
-                field(appliesToDocType; Rec."Applies-to Doc. Type")
-                {
-                    Caption = 'Applies-to Doc. Type';
-                }
-                field("area"; Rec."Area")
-                {
-                    Caption = 'Area';
-                }
-                field(balAccountNo; Rec."Bal. Account No.")
-                {
-                    Caption = 'Bal. Account No.';
-                }
-                field(balAccountType; Rec."Bal. Account Type")
-                {
-                    Caption = 'Bal. Account Type';
+                    Caption = 'Apply Usage Link';
                 }
                 field(billToAddress; Rec."Bill-to Address")
                 {
@@ -12103,225 +9523,125 @@ page 90045 "Sales Shipment Header"
                 {
                     Caption = 'Bill-to Post Code';
                 }
-                field(cfdiCancellationID; Rec."CFDI Cancellation ID")
+                field(blocked; Rec.Blocked)
                 {
-                    Caption = 'CFDI Cancellation ID';
+                    Caption = 'Blocked';
                 }
-                field(cfdiCancellationReasonCode; Rec."CFDI Cancellation Reason Code")
+                field(calcRecogCostsAmount; Rec."Calc. Recog. Costs Amount")
                 {
-                    Caption = 'CFDI Cancellation Reason';
+                    Caption = 'Calc. Recog. Costs Amount';
                 }
-                field(cfdiExportCode; Rec."CFDI Export Code")
+                field(calcRecogCostsGLAmount; Rec."Calc. Recog. Costs G/L Amount")
                 {
-                    Caption = 'CFDI Export Code';
+                    Caption = 'Calc. Recog. Costs G/L Amount';
                 }
-                field(campaignNo; Rec."Campaign No.")
+                field(calcRecogSalesAmount; Rec."Calc. Recog. Sales Amount")
                 {
-                    Caption = 'Campaign No.';
+                    Caption = 'Calc. Recog. Sales Amount';
                 }
-                field(certificateSerialNo; Rec."Certificate Serial No.")
+                field(calcRecogSalesGLAmount; Rec."Calc. Recog. Sales G/L Amount")
                 {
-                    Caption = 'Certificate Serial No.';
+                    Caption = 'Calc. Recog. Sales G/L Amount';
                 }
                 field(comment; Rec.Comment)
                 {
                     Caption = 'Comment';
                 }
-                field(companyBankAccountCode; Rec."Company Bank Account Code")
+                field(complete; Rec.Complete)
                 {
-                    Caption = 'Company Bank Account Code';
+                    Caption = 'Complete';
                 }
-                field(correction; Rec.Correction)
+                field(completelyPicked; Rec."Completely Picked")
                 {
-                    Caption = 'Correction';
+                    Caption = 'Completely Picked';
+                }
+                field(costCalculationMethod; Rec."Cost Calculation Method")
+                {
+                    Caption = 'Cost Calculation Method';
+                }
+                field(creationDate; Rec."Creation Date")
+                {
+                    Caption = 'Creation Date';
                 }
                 field(currencyCode; Rec."Currency Code")
                 {
                     Caption = 'Currency Code';
                 }
-                field(currencyFactor; Rec."Currency Factor")
-                {
-                    Caption = 'Currency Factor';
-                }
                 field(customerDiscGroup; Rec."Customer Disc. Group")
                 {
                     Caption = 'Customer Disc. Group';
-                }
-                field(customerPostingGroup; Rec."Customer Posting Group")
-                {
-                    Caption = 'Customer Posting Group';
                 }
                 field(customerPriceGroup; Rec."Customer Price Group")
                 {
                     Caption = 'Customer Price Group';
                 }
-                field(dateTimeCancelSent; Rec."Date/Time Cancel Sent")
+                field(description; Rec.Description)
                 {
-                    Caption = 'Date/Time Cancel Sent';
+                    Caption = 'Description';
                 }
-                field(dateTimeCanceled; Rec."Date/Time Canceled")
+                field(description2; Rec."Description 2")
                 {
-                    Caption = 'Date/Time Canceled';
+                    Caption = 'Description 2';
                 }
-                field(dateTimeFirstReqSent; Rec."Date/Time First Req. Sent")
+                field(endingDate; Rec."Ending Date")
                 {
-                    Caption = 'Date/Time First Req. Sent';
+                    Caption = 'Ending Date';
                 }
-                field(dateTimeStampReceived; Rec."Date/Time Stamp Received")
+                field(exchCalculationCost; Rec."Exch. Calculation (Cost)")
                 {
-                    Caption = 'Date/Time Stamp Received';
+                    Caption = 'Exch. Calculation (Cost)';
                 }
-                field(dateTimeStamped; Rec."Date/Time Stamped")
+                field(exchCalculationPrice; Rec."Exch. Calculation (Price)")
                 {
-                    Caption = 'Date/Time Stamped';
-                }
-                field(digitalStampPAC; Rec."Digital Stamp PAC")
-                {
-                    Caption = 'Digital Stamp PAC';
-                }
-                field(digitalStampSAT; Rec."Digital Stamp SAT")
-                {
-                    Caption = 'Digital Stamp SAT';
-                }
-                field(dimensionSetID; Rec."Dimension Set ID")
-                {
-                    Caption = 'Dimension Set ID';
-                }
-                field(documentDate; Rec."Document Date")
-                {
-                    Caption = 'Document Date';
-                }
-                field(dueDate; Rec."Due Date")
-                {
-                    Caption = 'Due Date';
-                }
-                field(eu3PartyTrade; Rec."EU 3-Party Trade")
-                {
-                    Caption = 'EU 3-Party Trade';
-                }
-                field(electronicDocumentStatus; Rec."Electronic Document Status")
-                {
-                    Caption = 'Electronic Document Status';
-                }
-                field(errorCode; Rec."Error Code")
-                {
-                    Caption = 'Error Code';
-                }
-                field(errorDescription; Rec."Error Description")
-                {
-                    Caption = 'Error Description';
-                }
-                field(exitPoint; Rec."Exit Point")
-                {
-                    Caption = 'Exit Point';
+                    Caption = 'Exch. Calculation (Price)';
                 }
                 field(externalDocumentNo; Rec."External Document No.")
                 {
                     Caption = 'External Document No.';
                 }
-                field(fiscalInvoiceNumberPAC; Rec."Fiscal Invoice Number PAC")
+                field(globalDimension1Code; Rec."Global Dimension 1 Code")
                 {
-                    Caption = 'Fiscal Invoice Number PAC';
+                    Caption = 'Global Dimension 1 Code';
                 }
-                field(foreignTrade; Rec."Foreign Trade")
+                field(globalDimension2Code; Rec."Global Dimension 2 Code")
                 {
-                    Caption = 'Foreign Trade';
+                    Caption = 'Global Dimension 2 Code';
                 }
-                field(formatRegion; Rec."Format Region")
+                field(image; Rec.Image)
                 {
-                    Caption = 'Format Region';
+                    Caption = 'Image';
                 }
-                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
+                field(invoiceCurrencyCode; Rec."Invoice Currency Code")
                 {
-                    Caption = 'Gen. Bus. Posting Group';
+                    Caption = 'Invoice Currency Code';
                 }
-                field(insurerName; Rec."Insurer Name")
+                field(jobPostingGroup; Rec."Job Posting Group")
                 {
-                    Caption = 'Insurer Name';
-                }
-                field(insurerPolicyNumber; Rec."Insurer Policy Number")
-                {
-                    Caption = 'Insurer Policy Number';
-                }
-                field(invoiceDiscCode; Rec."Invoice Disc. Code")
-                {
-                    Caption = 'Invoice Disc. Code';
+                    Caption = 'Job Posting Group';
                 }
                 field(languageCode; Rec."Language Code")
                 {
                     Caption = 'Language Code';
                 }
-                field(locationCode; Rec."Location Code")
+                field(lastDateModified; Rec."Last Date Modified")
                 {
-                    Caption = 'Location Code';
+                    Caption = 'Last Date Modified';
                 }
-                field(markedAsCanceled; Rec."Marked as Canceled")
+                field(nextInvoiceDate; Rec."Next Invoice Date")
                 {
-                    Caption = 'Marked as Canceled';
-                }
-                field(medicalInsPolicyNumber; Rec."Medical Ins. Policy Number")
-                {
-                    Caption = 'Medical Ins. Policy Number';
-                }
-                field(medicalInsurerName; Rec."Medical Insurer Name")
-                {
-                    Caption = 'Medical Insurer Name';
+                    Caption = 'Next Invoice Date';
                 }
                 field(no; Rec."No.")
                 {
                     Caption = 'No.';
                 }
-                field(noPrinted; Rec."No. Printed")
-                {
-                    Caption = 'No. Printed';
-                }
                 field(noSeries; Rec."No. Series")
                 {
                     Caption = 'No. Series';
                 }
-                field(onHold; Rec."On Hold")
+                field(overBudget; Rec."Over Budget")
                 {
-                    Caption = 'On Hold';
-                }
-                field(opportunityNo; Rec."Opportunity No.")
-                {
-                    Caption = 'Opportunity No.';
-                }
-                field(orderDate; Rec."Order Date")
-                {
-                    Caption = 'Order Date';
-                }
-                field(orderNo; Rec."Order No.")
-                {
-                    Caption = 'Order No.';
-                }
-                field(orderNoSeries; Rec."Order No. Series")
-                {
-                    Caption = 'Order No. Series';
-                }
-                field(originalDocumentXML; Rec."Original Document XML")
-                {
-                    Caption = 'Original Document XML';
-                }
-                field(originalString; Rec."Original String")
-                {
-                    Caption = 'Original String';
-                }
-                field(outboundWhseHandlingTime; Rec."Outbound Whse. Handling Time")
-                {
-                    Caption = 'Outbound Whse. Handling Time';
-                }
-                field(pacWebServiceName; Rec."PAC Web Service Name")
-                {
-                    Caption = 'PAC Web Service Name';
-                }
-                field(packageTrackingNo; Rec."Package Tracking No.")
-                {
-                    Caption = 'Package Tracking No.';
-                }
-                field(paymentDiscount; Rec."Payment Discount %")
-                {
-                    Caption = 'Payment Discount %';
+                    Caption = 'Over Budget';
                 }
                 field(paymentMethodCode; Rec."Payment Method Code")
                 {
@@ -12331,61 +9651,49 @@ page 90045 "Sales Shipment Header"
                 {
                     Caption = 'Payment Terms Code';
                 }
-                field(pmtDiscountDate; Rec."Pmt. Discount Date")
+                field(personResponsible; Rec."Person Responsible")
                 {
-                    Caption = 'Pmt. Discount Date';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(postingDescription; Rec."Posting Description")
-                {
-                    Caption = 'Posting Description';
+                    Caption = 'Person Responsible';
                 }
                 field(priceCalculationMethod; Rec."Price Calculation Method")
                 {
                     Caption = 'Price Calculation Method';
                 }
-                field(pricesIncludingVAT; Rec."Prices Including VAT")
+                field(projectManager; Rec."Project Manager")
                 {
-                    Caption = 'Prices Including VAT';
+                    Caption = 'Project Manager';
                 }
-                field(promisedDeliveryDate; Rec."Promised Delivery Date")
+                field(recogCostsAmount; Rec."Recog. Costs Amount")
                 {
-                    Caption = 'Promised Delivery Date';
+                    Caption = 'Recog. Costs Amount';
                 }
-                field(qrCode; Rec."QR Code")
+                field(recogCostsGLAmount; Rec."Recog. Costs G/L Amount")
                 {
-                    Caption = 'QR Code';
+                    Caption = 'Recog. Costs G/L Amount';
                 }
-                field(quoteNo; Rec."Quote No.")
+                field(recogSalesAmount; Rec."Recog. Sales Amount")
                 {
-                    Caption = 'Quote No.';
+                    Caption = 'Recog. Sales Amount';
                 }
-                field(reasonCode; Rec."Reason Code")
+                field(recogSalesGLAmount; Rec."Recog. Sales G/L Amount")
                 {
-                    Caption = 'Reason Code';
+                    Caption = 'Recog. Sales G/L Amount';
                 }
-                field(requestedDeliveryDate; Rec."Requested Delivery Date")
+                field(reserve; Rec.Reserve)
                 {
-                    Caption = 'Requested Delivery Date';
+                    Caption = 'Reserve';
                 }
-                field(responsibilityCenter; Rec."Responsibility Center")
+                field(scheduledResGrQty; Rec."Scheduled Res. Gr. Qty.")
                 {
-                    Caption = 'Responsibility Center';
+                    Caption = 'Scheduled Res. Gr. Qty.';
                 }
-                field(satAddressID; Rec."SAT Address ID")
+                field(scheduledResQty; Rec."Scheduled Res. Qty.")
                 {
-                    Caption = 'SAT Address ID';
+                    Caption = 'Scheduled Res. Qty.';
                 }
-                field(satWeightUnitOfMeasure; Rec."SAT Weight Unit Of Measure")
+                field(searchDescription; Rec."Search Description")
                 {
-                    Caption = 'SAT Weight Unit Of Measure';
-                }
-                field(salespersonCode; Rec."Salesperson Code")
-                {
-                    Caption = 'Salesperson Code';
+                    Caption = 'Search Description';
                 }
                 field(sellToAddress; Rec."Sell-to Address")
                 {
@@ -12479,413 +9787,9 @@ page 90045 "Sales Shipment Header"
                 {
                     Caption = 'Ship-to Post Code';
                 }
-                field(shipToUPSZone; Rec."Ship-to UPS Zone")
+                field(startingDate; Rec."Starting Date")
                 {
-                    Caption = 'Ship-to UPS Zone';
-                }
-                field(shipmentDate; Rec."Shipment Date")
-                {
-                    Caption = 'Shipment Date';
-                }
-                field(shipmentMethodCode; Rec."Shipment Method Code")
-                {
-                    Caption = 'Shipment Method Code';
-                }
-                field(shippingAgentCode; Rec."Shipping Agent Code")
-                {
-                    Caption = 'Shipping Agent Code';
-                }
-                field(shippingAgentServiceCode; Rec."Shipping Agent Service Code")
-                {
-                    Caption = 'Shipping Agent Service Code';
-                }
-                field(shippingTime; Rec."Shipping Time")
-                {
-                    Caption = 'Shipping Time';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(signedDocumentXML; Rec."Signed Document XML")
-                {
-                    Caption = 'Signed Document XML';
-                }
-                field(sourceCode; Rec."Source Code")
-                {
-                    Caption = 'Source Code';
-                }
-                field(substitutionDocumentNo; Rec."Substitution Document No.")
-                {
-                    Caption = 'Substitution Document No.';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAreaCode; Rec."Tax Area Code")
-                {
-                    Caption = 'Tax Area Code';
-                }
-                field(taxLiable; Rec."Tax Liable")
-                {
-                    Caption = 'Tax Liable';
-                }
-                field(trailer1; Rec."Trailer 1")
-                {
-                    Caption = 'Trailer 1';
-                }
-                field(trailer2; Rec."Trailer 2")
-                {
-                    Caption = 'Trailer 2';
-                }
-                field(transactionSpecification; Rec."Transaction Specification")
-                {
-                    Caption = 'Transaction Specification';
-                }
-                field("transactionType"; Rec."Transaction Type")
-                {
-                    Caption = 'Transaction Type';
-                }
-                field(transitDistance; Rec."Transit Distance")
-                {
-                    Caption = 'Transit Distance';
-                }
-                field(transitHours; Rec."Transit Hours")
-                {
-                    Caption = 'Transit Hours';
-                }
-                field(transitFromDateTime; Rec."Transit-from Date/Time")
-                {
-                    Caption = 'Transit-from Date/Time';
-                }
-                field(transportMethod; Rec."Transport Method")
-                {
-                    Caption = 'Transport Method';
-                }
-                field(transportOperators; Rec."Transport Operators")
-                {
-                    Caption = 'Transport Operators';
-                }
-                field(userID; Rec."User ID")
-                {
-                    Caption = 'User ID';
-                }
-                field(vatBaseDiscount; Rec."VAT Base Discount %")
-                {
-                    Caption = 'VAT Base Discount %';
-                }
-                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
-                {
-                    Caption = 'VAT Bus. Posting Group';
-                }
-                field(vatCountryRegionCode; Rec."VAT Country/Region Code")
-                {
-                    Caption = 'VAT Country/Region Code';
-                }
-                field(vatRegistrationNo; Rec."VAT Registration No.")
-                {
-                    Caption = 'VAT Registration No.';
-                }
-                field(vehicleCode; Rec."Vehicle Code")
-                {
-                    Caption = 'Vehicle Code';
-                }
-                field(workDescription; Rec."Work Description")
-                {
-                    Caption = 'Work Description';
-                }
-                field(yourReference; Rec."Your Reference")
-                {
-                    Caption = 'Your Reference';
-                }
-            }
-        }
-    }
-}
-
-page 90046 "Shipment Method"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Shipment Method';
-    EntitySetCaption = 'Shipment Methods';
-    ODataKeyFields = SystemId;
-    EntityName = 'shipmentMethod';
-    EntitySetName = 'shipmentMethods';
-    SourceTable = "Shipment Method";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field("code"; Rec."Code")
-                {
-                    Caption = 'Code';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(lastModifiedDateTime; Rec."Last Modified Date Time")
-                {
-                    Caption = 'Last Modified Date Time';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-            }
-        }
-    }
-}
-
-page 90047 "Tax Area Buffer"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Tax Area Buffer';
-    EntitySetCaption = 'Tax Area Buffer';
-    ODataKeyFields = SystemId;
-    EntityName = 'taxAreaBuffer';
-    EntitySetName = 'taxAreaBuffer';
-    SourceTable = "Tax Area Buffer";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field("code"; Rec."Code")
-                {
-                    Caption = 'Code';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(lastModifiedDateTime; Rec."Last Modified Date Time")
-                {
-                    Caption = 'Last Modified Date Time';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field("type"; Rec."Type")
-                {
-                    Caption = 'Type';
-                }
-            }
-        }
-    }
-}
-
-page 90048 "Tax Group Buffer"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Tax Group Buffer';
-    EntitySetCaption = 'Tax Group Buffer';
-    ODataKeyFields = SystemId;
-    EntityName = 'taxGroupBuffer';
-    EntitySetName = 'taxGroupBuffer';
-    SourceTable = "Tax Group Buffer";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field("code"; Rec."Code")
-                {
-                    Caption = 'Code';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(lastModifiedDateTime; Rec."Last Modified DateTime")
-                {
-                    Caption = 'Last Modified DateTime';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field("type"; Rec."Type")
-                {
-                    Caption = 'Type';
-                }
-            }
-        }
-    }
-}
-
-page 90049 "Employee Time Reg Buffer"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Employee Time Reg Buffer';
-    EntitySetCaption = 'Employee Time Reg Buffer';
-    ODataKeyFields = SystemId;
-    EntityName = 'EmployeeTimeRegBuffer';
-    EntitySetName = 'EmployeeTimeRegBuffer';
-    SourceTable = "Employee Time Reg Buffer";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(causeOfAbsenceCode; Rec."Cause of Absence Code")
-                {
-                    Caption = 'Cause of Absence Code';
-                }
-                field("date"; Rec."Date")
-                {
-                    Caption = 'Date';
-                }
-                field(dimensionSetID; Rec."Dimension Set ID")
-                {
-                    Caption = 'Dimension Set ID';
-                }
-                field(employeeId; Rec."Employee Id")
-                {
-                    Caption = 'Employee Id';
-                }
-                field(employeeNo; Rec."Employee No")
-                {
-                    Caption = 'Employee No';
-                }
-                field(id; Rec.Id)
-                {
-                    Caption = 'Id';
-                }
-                field(jobId; Rec."Job Id")
-                {
-                    Caption = 'Job Id';
-                }
-                field(jobNo; Rec."Job No.")
-                {
-                    Caption = 'Job No.';
-                }
-                field(jobTaskNo; Rec."Job Task No.")
-                {
-                    Caption = 'Job Task No.';
-                }
-                field(lastModifiedDateTime; Rec."Last Modified Date Time")
-                {
-                    Caption = 'Last Modified Date Time';
-                }
-                field(lineNo; Rec."Line No")
-                {
-                    Caption = 'Line No';
-                }
-                field(quantity; Rec.Quantity)
-                {
-                    Caption = 'Quantity';
+                    Caption = 'Starting Date';
                 }
                 field(status; Rec.Status)
                 {
@@ -12911,34 +9815,94 @@ page 90049 "Employee Time Reg Buffer"
                 {
                     Caption = 'SystemModifiedBy';
                 }
-                field(unitOfMeasureCode; Rec."Unit of Measure Code")
+                field(totalWIPCostAmount; Rec."Total WIP Cost Amount")
                 {
-                    Caption = 'Unit of Measure Code';
+                    Caption = 'Total WIP Cost Amount';
                 }
-                field(unitOfMeasureId; Rec."Unit of Measure Id")
+                field(totalWIPCostGLAmount; Rec."Total WIP Cost G/L Amount")
                 {
-                    Caption = 'Unit of Measure Id';
+                    Caption = 'Total WIP Cost G/L Amount';
+                }
+                field(totalWIPSalesAmount; Rec."Total WIP Sales Amount")
+                {
+                    Caption = 'Total WIP Sales Amount';
+                }
+                field(totalWIPSalesGLAmount; Rec."Total WIP Sales G/L Amount")
+                {
+                    Caption = 'Total WIP Sales G/L Amount';
+                }
+                field(wipCompletionCalculated; Rec."WIP Completion Calculated")
+                {
+                    Caption = 'WIP Completion Calculated';
+                }
+                field(wipCompletionPosted; Rec."WIP Completion Posted")
+                {
+                    Caption = 'WIP Completion Posted';
+                }
+                field(wipEntriesExist; Rec."WIP Entries Exist")
+                {
+                    Caption = 'WIP Entries Exist';
+                }
+                field(wipGLPostingDate; Rec."WIP G/L Posting Date")
+                {
+                    Caption = 'WIP G/L Posting Date';
+                }
+                field(wipMethod; Rec."WIP Method")
+                {
+                    Caption = 'WIP Method';
+                }
+                field(wipPostingDate; Rec."WIP Posting Date")
+                {
+                    Caption = 'WIP Posting Date';
+                }
+                field(wipPostingMethod; Rec."WIP Posting Method")
+                {
+                    Caption = 'WIP Posting Method';
+                }
+                field(wipWarnings; Rec."WIP Warnings")
+                {
+                    Caption = 'WIP Warnings';
+                }
+                field(yourReference; Rec."Your Reference")
+                {
+                    Caption = 'Your Reference';
+                }
+                field(planningDateFilter; Rec."Planning Date Filter")
+                {
+                    Caption = 'Planning Date Filter';
+                }
+                field(postingDateFilter; Rec."Posting Date Filter")
+                {
+                    Caption = 'Posting Date Filter';
+                }
+                field(resourceFilter; Rec."Resource Filter")
+                {
+                    Caption = 'Resource Filter';
+                }
+                field(resourceGrFilter; Rec."Resource Gr. Filter")
+                {
+                    Caption = 'Resource Gr. Filter';
                 }
             }
         }
     }
 }
 
-page 90050 "Trial Balance Entity Buffer"
+page 90034 Company
 {
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
     APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'company';
+    DelayedInsert = true;
+    EntityName = 'rawCompany';
+    EntitySetName = 'rawCompanies';
+    PageType = API;
+    SourceTable = Company;
     Editable = false;
-    EntityCaption = 'Trial Balance Entity Buffer';
-    EntitySetCaption = 'Trial Balance Entity Buffer';
+    DataAccessIntent = ReadOnly;
     ODataKeyFields = SystemId;
-    EntityName = 'trialBalanceEntityBuffer';
-    EntitySetName = 'trialBalanceEntityBuffer';
-    SourceTable = "Trial Balance Entity Buffer";
 
     layout
     {
@@ -12946,129 +9910,26 @@ page 90050 "Trial Balance Entity Buffer"
         {
             repeater(General)
             {
-                field(accountId; Rec."Account Id")
+                field(businessProfileId; Rec."Business Profile Id")
                 {
-                    Caption = 'Account Id';
+                    Caption = 'Business Profile Id';
                 }
-                field(accountType; Rec."Account Type")
+                field(displayName; Rec."Display Name")
                 {
-                    Caption = 'Account Type';
+                    Caption = 'Display Name';
                 }
-                field(balanceAtDateCredit; Rec."Balance at Date Credit")
+                field(evaluationCompany; Rec."Evaluation Company")
                 {
-                    Caption = 'Balance at Date Credit';
+                    Caption = 'Evaluation Company';
                 }
-                field(balanceAtDateDebit; Rec."Balance at Date Debit")
+                field(id; Rec.Id)
                 {
-                    Caption = 'Balance at Date Debit';
-                }
-                field(dateFilter; Rec."Date Filter")
-                {
-                    Caption = 'Date Filter';
+                    Caption = 'Id';
                 }
                 field(name; Rec.Name)
                 {
                     Caption = 'Name';
                 }
-                field(netChangeCredit; Rec."Net Change Credit")
-                {
-                    Caption = 'Net Change Credit';
-                }
-                field(netChangeDebit; Rec."Net Change Debit")
-                {
-                    Caption = 'Net Change Debit';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(totalCredit; Rec."Total Credit")
-                {
-                    Caption = 'Total Credit';
-                }
-                field(totalDebit; Rec."Total Debit")
-                {
-                    Caption = 'Total Debit';
-                }
-            }
-        }
-    }
-}
-
-page 90051 "Unit of Measure"
-{
-    DelayedInsert = true;
-    PageType = API;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'standardEndpoints';
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    EntityCaption = 'Unit of Measure';
-    EntitySetCaption = 'Units of Measure';
-    ODataKeyFields = SystemId;
-    EntityName = 'unitOfMeasure';
-    EntitySetName = 'unitsOfMeasure';
-    SourceTable = "Unit of Measure";
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field("code"; Rec."Code")
-                {
-                    Caption = 'Code';
-                }
-                field(coupledToDataverse; Rec."Coupled to Dataverse")
-                {
-                    Caption = 'Coupled to Dynamics 365 Sales';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(internationalStandardCode; Rec."International Standard Code")
-                {
-                    Caption = 'International Standard Code';
-                }
-                field(lastModifiedDateTime; Rec."Last Modified Date Time")
-                {
-                    Caption = 'Last Modified Date Time';
-                }
-                field(satCustomsUnit; Rec."SAT Customs Unit")
-                {
-                    Caption = 'SAT Customs Unit';
-                }
-                field(satUofMClassification; Rec."SAT UofM Classification")
-                {
-                    Caption = 'SAT UofM Classification';
-                }
-                field(symbol; Rec.Symbol)
-                {
-                    Caption = 'Symbol';
-                }
                 field(systemCreatedAt; Rec.SystemCreatedAt)
                 {
                     Caption = 'SystemCreatedAt';
@@ -13094,3912 +9955,18 @@ page 90051 "Unit of Measure"
     }
 }
 
-table 90000 customSubscription
-{
-    DataClassification = ToBeClassified;
-    DataPerCompany = false;
-
-    fields
-    {
-        field(1; id; Guid) { }
-        field(2; url; Text[200]) { }
-        field(3; recordsDeleted; BigInteger) { }
-        field(4; companyId; Text[200]) { }
-        field(5; tableId; Integer) { }
-    }
-
-    trigger OnInsert()
-    begin
-        id := System.CreateGuid();
-    end;
-
-}
-
-page 90052 "API Custom Subscription"
-{
-    PageType = API;
-    ApplicationArea = All;
-    SourceTable = customSubscription;
-    APIVersion = 'v1.0';
-    APIPublisher = 'fivetran';
-    APIGroup = 'webhook';
-    EntityName = 'customSubscription';
-    EntitySetName = 'customSubscriptions';
-    DelayedInsert = true;
-
-    layout
-    {
-        area(Content)
-        {
-            group(GroupName)
-            {
-                field(id; Rec.id) { }
-                field(url; Rec.url) { }
-                field(recordsDeleted; Rec.recordsDeleted) { }
-                field(tableId; Rec.tableId) { }
-                field(companyId; Rec.companyId) { }
-                field(systemCreatedAt; Rec.SystemCreatedAt) { }
-                field(systemModifiedAt; Rec.SystemModifiedAt) { }
-                field(systemId; Rec.SystemId) { }
-
-            }
-        }
-    }
-}
-
-page 90053 "API Posted Gen. Journal Batch"
+page 90035 "Sales Credit Memo Header"
 {
     APIGroup = 'standardEndpoints';
     APIPublisher = 'fivetran';
     APIVersion = 'v1.0';
     ApplicationArea = All;
-    Caption = 'apiPostedGenJournalBatch';
+    Caption = 'salesCreditMemoHeader';
     DelayedInsert = true;
-    EntityName = 'postedGeneralJournalBatch';
-    EntitySetName = 'postedGeneralJournalBatch';
+    EntityName = 'salesCreditMemoHeader';
+    EntitySetName = 'salesCreditMemoHeaders';
     PageType = API;
-    SourceTable = "Posted Gen. Journal Batch";
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    ODataKeyFields = SystemId;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(allowPaymentExport; Rec."Allow Payment Export")
-                {
-                    Caption = 'Allow Payment Export';
-                }
-                field(allowVATDifference; Rec."Allow VAT Difference")
-                {
-                    Caption = 'Allow VAT Difference';
-                }
-                field(balAccountNo; Rec."Bal. Account No.")
-                {
-                    Caption = 'Bal. Account No.';
-                }
-                field(balAccountType; Rec."Bal. Account Type")
-                {
-                    Caption = 'Bal. Account Type';
-                }
-                field(bankStatementImportFormat; Rec."Bank Statement Import Format")
-                {
-                    Caption = 'Bank Statement Import Format';
-                }
-                field(copyVATSetupToJnlLines; Rec."Copy VAT Setup to Jnl. Lines")
-                {
-                    Caption = 'Copy VAT Setup to Jnl. Lines';
-                }
-                field(copyToPostedJnlLines; Rec."Copy to Posted Jnl. Lines")
-                {
-                    Caption = 'Copy to Posted Jnl. Lines';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(journalTemplateName; Rec."Journal Template Name")
-                {
-                    Caption = 'Journal Template Name';
-                }
-                field(name; Rec.Name)
-                {
-                    Caption = 'Name';
-                }
-                field(noSeries; Rec."No. Series")
-                {
-                    Caption = 'No. Series';
-                }
-                field(postingNoSeries; Rec."Posting No. Series")
-                {
-                    Caption = 'Posting No. Series';
-                }
-                field(reasonCode; Rec."Reason Code")
-                {
-                    Caption = 'Reason Code';
-                }
-                field(suggestBalancingAmount; Rec."Suggest Balancing Amount")
-                {
-                    Caption = 'Suggest Balancing Amount';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-            }
-        }
-    }
-}
-
-page 90054 "Posted General Journal Line"
-{
-    APIGroup = 'standardEndpoints';
-    APIPublisher = 'fivetran';
-    APIVersion = 'v1.0';
-    ApplicationArea = All;
-    Caption = 'postedGeneralJournalLine';
-    DelayedInsert = true;
-    EntityName = 'postedGeneralJournalLine';
-    EntitySetName = 'postedGeneralJournalLines';
-    PageType = API;
-    SourceTable = "Posted Gen. Journal Line";
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    ODataKeyFields = SystemId;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(accountId; Rec."Account Id")
-                {
-                    Caption = 'Account Id';
-                }
-                field(accountNo; Rec."Account No.")
-                {
-                    Caption = 'Account No.';
-                }
-                field(accountType; Rec."Account Type")
-                {
-                    Caption = 'Account Type';
-                }
-                field(additionalCurrencyPosting; Rec."Additional-Currency Posting")
-                {
-                    Caption = 'Additional-Currency Posting';
-                }
-                field(allowApplication; Rec."Allow Application")
-                {
-                    Caption = 'Allow Application';
-                }
-                field(allowZeroAmountPosting; Rec."Allow Zero-Amount Posting")
-                {
-                    Caption = 'Allow Zero-Amount Posting';
-                }
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountLCY; Rec."Amount (LCY)")
-                {
-                    Caption = 'Amount (LCY)';
-                }
-                field(appliedAutomatically; Rec."Applied Automatically")
-                {
-                    Caption = 'Applied Automatically';
-                }
-                field(appliesToDocNo; Rec."Applies-to Doc. No.")
-                {
-                    Caption = 'Applies-to Doc. No.';
-                }
-                field(appliesToDocType; Rec."Applies-to Doc. Type")
-                {
-                    Caption = 'Applies-to Doc. Type';
-                }
-                field(appliesToExtDocNo; Rec."Applies-to Ext. Doc. No.")
-                {
-                    Caption = 'Applies-to Ext. Doc. No.';
-                }
-                field(appliesToID; Rec."Applies-to ID")
-                {
-                    Caption = 'Applies-to ID';
-                }
-                field(appliesToInvoiceId; Rec."Applies-to Invoice Id")
-                {
-                    Caption = 'Applies-to Invoice Id';
-                }
-                field(balAccountNo; Rec."Bal. Account No.")
-                {
-                    Caption = 'Bal. Account No.';
-                }
-                field(balAccountType; Rec."Bal. Account Type")
-                {
-                    Caption = 'Bal. Account Type';
-                }
-                field(balGenBusPostingGroup; Rec."Bal. Gen. Bus. Posting Group")
-                {
-                    Caption = 'Bal. Gen. Bus. Posting Group';
-                }
-                field(balGenPostingType; Rec."Bal. Gen. Posting Type")
-                {
-                    Caption = 'Bal. Gen. Posting Type';
-                }
-                field(balGenProdPostingGroup; Rec."Bal. Gen. Prod. Posting Group")
-                {
-                    Caption = 'Bal. Gen. Prod. Posting Group';
-                }
-                field(balTaxAreaCode; Rec."Bal. Tax Area Code")
-                {
-                    Caption = 'Bal. Tax Area Code';
-                }
-                field(balTaxGroupCode; Rec."Bal. Tax Group Code")
-                {
-                    Caption = 'Bal. Tax Group Code';
-                }
-                field(balTaxLiable; Rec."Bal. Tax Liable")
-                {
-                    Caption = 'Bal. Tax Liable';
-                }
-                field(balUseTax; Rec."Bal. Use Tax")
-                {
-                    Caption = 'Bal. Use Tax';
-                }
-                field(balVAT; Rec."Bal. VAT %")
-                {
-                    Caption = 'Bal. VAT %';
-                }
-                field(balVATAmount; Rec."Bal. VAT Amount")
-                {
-                    Caption = 'Bal. VAT Amount';
-                }
-                field(balVATAmountLCY; Rec."Bal. VAT Amount (LCY)")
-                {
-                    Caption = 'Bal. VAT Amount (LCY)';
-                }
-                field(balVATBaseAmount; Rec."Bal. VAT Base Amount")
-                {
-                    Caption = 'Bal. VAT Base Amount';
-                }
-                field(balVATBaseAmountLCY; Rec."Bal. VAT Base Amount (LCY)")
-                {
-                    Caption = 'Bal. VAT Base Amount (LCY)';
-                }
-                field(balVATBusPostingGroup; Rec."Bal. VAT Bus. Posting Group")
-                {
-                    Caption = 'Bal. VAT Bus. Posting Group';
-                }
-                field(balVATCalculationType; Rec."Bal. VAT Calculation Type")
-                {
-                    Caption = 'Bal. VAT Calculation Type';
-                }
-                field(balVATDifference; Rec."Bal. VAT Difference")
-                {
-                    Caption = 'Bal. VAT Difference';
-                }
-                field(balVATProdPostingGroup; Rec."Bal. VAT Prod. Posting Group")
-                {
-                    Caption = 'Bal. VAT Prod. Posting Group';
-                }
-                field(balanceLCY; Rec."Balance (LCY)")
-                {
-                    Caption = 'Balance (LCY)';
-                }
-                field(bankPaymentType; Rec."Bank Payment Type")
-                {
-                    Caption = 'Bank Payment Type';
-                }
-                field(billToPayToNo; Rec."Bill-to/Pay-to No.")
-                {
-                    Caption = 'Bill-to/Pay-to No.';
-                }
-                field(budgetedFANo; Rec."Budgeted FA No.")
-                {
-                    Caption = 'Budgeted FA No.';
-                }
-                field(businessUnitCode; Rec."Business Unit Code")
-                {
-                    Caption = 'Business Unit Code';
-                }
-                field(campaignNo; Rec."Campaign No.")
-                {
-                    Caption = 'Campaign No.';
-                }
-                field(checkExported; Rec."Check Exported")
-                {
-                    Caption = 'Check Exported';
-                }
-                field(checkPrinted; Rec."Check Printed")
-                {
-                    Caption = 'Check Printed';
-                }
-                field(checkTransmitted; Rec."Check Transmitted")
-                {
-                    Caption = 'Check Transmitted';
-                }
-                field(comment; Rec.Comment)
-                {
-                    Caption = 'Comment';
-                }
-                field(companyEntryDescription; Rec."Company Entry Description")
-                {
-                    Caption = 'Company Entry Description';
-                }
-                field(contactGraphId; Rec."Contact Graph Id")
-                {
-                    Caption = 'Contact Graph Id';
-                }
-                field(copyVATSetupToJnlLines; Rec."Copy VAT Setup to Jnl. Lines")
-                {
-                    Caption = 'Copy VAT Setup to Jnl. Lines';
-                }
-                field(correction; Rec.Correction)
-                {
-                    Caption = 'Correction';
-                }
-                field(countryRegionCode; Rec."Country/Region Code")
-                {
-                    Caption = 'Country/Region Code';
-                }
-                field(creditAmount; Rec."Credit Amount")
-                {
-                    Caption = 'Credit Amount';
-                }
-                field(creditorNo; Rec."Creditor No.")
-                {
-                    Caption = 'Creditor No.';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(currencyFactor; Rec."Currency Factor")
-                {
-                    Caption = 'Currency Factor';
-                }
-                field(customerId; Rec."Customer Id")
-                {
-                    Caption = 'Customer Id';
-                }
-                field(dataExchEntryNo; Rec."Data Exch. Entry No.")
-                {
-                    Caption = 'Data Exch. Entry No.';
-                }
-                field(dataExchLineNo; Rec."Data Exch. Line No.")
-                {
-                    Caption = 'Data Exch. Line No.';
-                }
-                field(debitAmount; Rec."Debit Amount")
-                {
-                    Caption = 'Debit Amount';
-                }
-                field(deferralCode; Rec."Deferral Code")
-                {
-                    Caption = 'Deferral Code';
-                }
-                field(deferralLineNo; Rec."Deferral Line No.")
-                {
-                    Caption = 'Deferral Line No.';
-                }
-                field(deprAcquisitionCost; Rec."Depr. Acquisition Cost")
-                {
-                    Caption = 'Depr. Acquisition Cost';
-                }
-                field(deprUntilFAPostingDate; Rec."Depr. until FA Posting Date")
-                {
-                    Caption = 'Depr. until FA Posting Date';
-                }
-                field(depreciationBookCode; Rec."Depreciation Book Code")
-                {
-                    Caption = 'Depreciation Book Code';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(dimensionSetID; Rec."Dimension Set ID")
-                {
-                    Caption = 'Dimension Set ID';
-                }
-                field(directDebitMandateID; Rec."Direct Debit Mandate ID")
-                {
-                    Caption = 'Direct Debit Mandate ID';
-                }
-                field(documentDate; Rec."Document Date")
-                {
-                    Caption = 'Document Date';
-                }
-                field(documentNo; Rec."Document No.")
-                {
-                    Caption = 'Document No.';
-                }
-                field(documentType; Rec."Document Type")
-                {
-                    Caption = 'Document Type';
-                }
-                field(dueDate; Rec."Due Date")
-                {
-                    Caption = 'Due Date';
-                }
-                field(duplicateInDepreciationBook; Rec."Duplicate in Depreciation Book")
-                {
-                    Caption = 'Duplicate in Depreciation Book';
-                }
-                field(eftExportSequenceNo; Rec."EFT Export Sequence No.")
-                {
-                    Caption = 'EFT Export Sequence No.';
-                }
-                field(eu3PartyTrade; Rec."EU 3-Party Trade")
-                {
-                    Caption = 'EU 3-Party Trade';
-                }
-                field(expirationDate; Rec."Expiration Date")
-                {
-                    Caption = 'Expiration Date';
-                }
-                field(exportFileName; Rec."Export File Name")
-                {
-                    Caption = 'Export File Name';
-                }
-                field(exportedToPaymentFile; Rec."Exported to Payment File")
-                {
-                    Caption = 'Exported to Payment File';
-                }
-                field(externalDocumentNo; Rec."External Document No.")
-                {
-                    Caption = 'External Document No.';
-                }
-                field(faAddCurrencyFactor; Rec."FA Add.-Currency Factor")
-                {
-                    Caption = 'FA Add.-Currency Factor';
-                }
-                field(faErrorEntryNo; Rec."FA Error Entry No.")
-                {
-                    Caption = 'FA Error Entry No.';
-                }
-                field(faPostingDate; Rec."FA Posting Date")
-                {
-                    Caption = 'FA Posting Date';
-                }
-                field(faPostingType; Rec."FA Posting Type")
-                {
-                    Caption = 'FA Posting Type';
-                }
-                field(faReclassificationEntry; Rec."FA Reclassification Entry")
-                {
-                    Caption = 'FA Reclassification Entry';
-                }
-                field(financialVoid; Rec."Financial Void")
-                {
-                    Caption = 'Financial Void';
-                }
-                field(foreignExchangeIndicator; Rec."Foreign Exchange Indicator")
-                {
-                    Caption = 'Foreign Exchange Indicator';
-                }
-                field(foreignExchangeRefIndicator; Rec."Foreign Exchange Ref.Indicator")
-                {
-                    Caption = 'Foreign Exchange Ref.Indicator';
-                }
-                field(foreignExchangeReference; Rec."Foreign Exchange Reference")
-                {
-                    Caption = 'Foreign Exchange Reference';
-                }
-                field(gLRegisterNo; Rec."G/L Register No.")
-                {
-                    Caption = 'G/L Register No.';
-                }
-                field(gstHST; Rec."GST/HST")
-                {
-                    Caption = 'GST/HST';
-                }
-                field(gatewayOperatorOFACScrInc; Rec."Gateway Operator OFAC Scr.Inc")
-                {
-                    Caption = 'Gateway Operator OFAC Scr.Inc';
-                }
-                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
-                {
-                    Caption = 'Gen. Bus. Posting Group';
-                }
-                field(genPostingType; Rec."Gen. Posting Type")
-                {
-                    Caption = 'Gen. Posting Type';
-                }
-                field(genProdPostingGroup; Rec."Gen. Prod. Posting Group")
-                {
-                    Caption = 'Gen. Prod. Posting Group';
-                }
-                field(icAccountNo; Rec."IC Account No.")
-                {
-                    Caption = 'IC Account No.';
-                }
-                field(icAccountType; Rec."IC Account Type")
-                {
-                    Caption = 'IC Account Type';
-                }
-                field(icDirection; Rec."IC Direction")
-                {
-                    Caption = 'IC Direction';
-                }
-                field(icPartnerCode; Rec."IC Partner Code")
-                {
-                    Caption = 'IC Partner Code';
-                }
-                field(icPartnerTransactionNo; Rec."IC Partner Transaction No.")
-                {
-                    Caption = 'IC Partner Transaction No.';
-                }
-                field(irs1099Amount; Rec."IRS 1099 Amount")
-                {
-                    Caption = 'IRS 1099 Amount';
-                }
-                field(irs1099Code; Rec."IRS 1099 Code")
-                {
-                    Caption = 'IRS 1099 Code';
-                }
-                field(incomingDocumentEntryNo; Rec."Incoming Document Entry No.")
-                {
-                    Caption = 'Incoming Document Entry No.';
-                }
-                field(indentation; Rec.Indentation)
-                {
-                    Caption = 'Indentation';
-                }
-                field(indexEntry; Rec."Index Entry")
-                {
-                    Caption = 'Index Entry';
-                }
-                field(insuranceNo; Rec."Insurance No.")
-                {
-                    Caption = 'Insurance No.';
-                }
-                field(invDiscountLCY; Rec."Inv. Discount (LCY)")
-                {
-                    Caption = 'Inv. Discount (LCY)';
-                }
-                field(invoiceReceivedDate; Rec."Invoice Received Date")
-                {
-                    Caption = 'Invoice Received Date';
-                }
-                field(jobCurrencyCode; Rec."Job Currency Code")
-                {
-                    Caption = 'Job Currency Code';
-                }
-                field(jobCurrencyFactor; Rec."Job Currency Factor")
-                {
-                    Caption = 'Job Currency Factor';
-                }
-                field(jobLineAmount; Rec."Job Line Amount")
-                {
-                    Caption = 'Job Line Amount';
-                }
-                field(jobLineAmountLCY; Rec."Job Line Amount (LCY)")
-                {
-                    Caption = 'Job Line Amount (LCY)';
-                }
-                field(jobLineDiscAmountLCY; Rec."Job Line Disc. Amount (LCY)")
-                {
-                    Caption = 'Job Line Disc. Amount (LCY)';
-                }
-                field(jobLineDiscount; Rec."Job Line Discount %")
-                {
-                    Caption = 'Job Line Discount %';
-                }
-                field(jobLineDiscountAmount; Rec."Job Line Discount Amount")
-                {
-                    Caption = 'Job Line Discount Amount';
-                }
-                field(jobLineType; Rec."Job Line Type")
-                {
-                    Caption = 'Job Line Type';
-                }
-                field(jobNo; Rec."Job No.")
-                {
-                    Caption = 'Job No.';
-                }
-                field(jobPlanningLineNo; Rec."Job Planning Line No.")
-                {
-                    Caption = 'Job Planning Line No.';
-                }
-                field(jobQuantity; Rec."Job Quantity")
-                {
-                    Caption = 'Job Quantity';
-                }
-                field(jobQueueEntryID; Rec."Job Queue Entry ID")
-                {
-                    Caption = 'Job Queue Entry ID';
-                }
-                field(jobQueueStatus; Rec."Job Queue Status")
-                {
-                    Caption = 'Job Queue Status';
-                }
-                field(jobRemainingQty; Rec."Job Remaining Qty.")
-                {
-                    Caption = 'Job Remaining Qty.';
-                }
-                field(jobTaskNo; Rec."Job Task No.")
-                {
-                    Caption = 'Job Task No.';
-                }
-                field(jobTotalCost; Rec."Job Total Cost")
-                {
-                    Caption = 'Job Total Cost';
-                }
-                field(jobTotalCostLCY; Rec."Job Total Cost (LCY)")
-                {
-                    Caption = 'Job Total Cost (LCY)';
-                }
-                field(jobTotalPrice; Rec."Job Total Price")
-                {
-                    Caption = 'Job Total Price';
-                }
-                field(jobTotalPriceLCY; Rec."Job Total Price (LCY)")
-                {
-                    Caption = 'Job Total Price (LCY)';
-                }
-                field(jobUnitCost; Rec."Job Unit Cost")
-                {
-                    Caption = 'Job Unit Cost';
-                }
-                field(jobUnitCostLCY; Rec."Job Unit Cost (LCY)")
-                {
-                    Caption = 'Job Unit Cost (LCY)';
-                }
-                field(jobUnitOfMeasureCode; Rec."Job Unit Of Measure Code")
-                {
-                    Caption = 'Job Unit Of Measure Code';
-                }
-                field(jobUnitPrice; Rec."Job Unit Price")
-                {
-                    Caption = 'Job Unit Price';
-                }
-                field(jobUnitPriceLCY; Rec."Job Unit Price (LCY)")
-                {
-                    Caption = 'Job Unit Price (LCY)';
-                }
-                field(journalBatchId; Rec."Journal Batch Id")
-                {
-                    Caption = 'Journal Batch Id';
-                }
-                field(journalBatchName; Rec."Journal Batch Name")
-                {
-                    Caption = 'Journal Batch Name';
-                }
-                field(journalTemplateName; Rec."Journal Template Name")
-                {
-                    Caption = 'Journal Template Name';
-                }
-                field(lastModifiedDateTime; Rec."Last Modified DateTime")
-                {
-                    Caption = 'Last Modified DateTime';
-                }
-                field(lineNo; Rec."Line No.")
-                {
-                    Caption = 'Line No.';
-                }
-                field(maintenanceCode; Rec."Maintenance Code")
-                {
-                    Caption = 'Maintenance Code';
-                }
-                field(messageToRecipient; Rec."Message to Recipient")
-                {
-                    Caption = 'Message to Recipient';
-                }
-                field(noOfDepreciationDays; Rec."No. of Depreciation Days")
-                {
-                    Caption = 'No. of Depreciation Days';
-                }
-                field(nonDeductibleVAT; Rec."Non-Deductible VAT %")
-                {
-                    Caption = 'Non-Deductible VAT %';
-                }
-                field(nonDeductibleVATAmount; Rec."Non-Deductible VAT Amount")
-                {
-                    Caption = 'Non-Deductible VAT Amount';
-                }
-                field(nonDeductibleVATAmountACY; Rec."Non-Deductible VAT Amount ACY")
-                {
-                    Caption = 'Non-Deductible VAT Amount ACY';
-                }
-                field(nonDeductibleVATAmountLCY; Rec."Non-Deductible VAT Amount LCY")
-                {
-                    Caption = 'Non-Deductible VAT Amount LCY';
-                }
-                field(nonDeductibleVATBase; Rec."Non-Deductible VAT Base")
-                {
-                    Caption = 'Non-Deductible VAT Base';
-                }
-                field(nonDeductibleVATBaseACY; Rec."Non-Deductible VAT Base ACY")
-                {
-                    Caption = 'Non-Deductible VAT Base ACY';
-                }
-                field(nonDeductibleVATBaseLCY; Rec."Non-Deductible VAT Base LCY")
-                {
-                    Caption = 'Non-Deductible VAT Base LCY';
-                }
-                field(nonDeductibleVATDiff; Rec."Non-Deductible VAT Diff.")
-                {
-                    Caption = 'Non-Deductible VAT Difference';
-                }
-                field(onHold; Rec."On Hold")
-                {
-                    Caption = 'On Hold';
-                }
-                field(origPmtDiscPossible; Rec."Orig. Pmt. Disc. Possible")
-                {
-                    Caption = 'Original Pmt. Disc. Possible';
-                }
-                field(origPmtDiscPossibleLCY; Rec."Orig. Pmt. Disc. Possible(LCY)")
-                {
-                    Caption = 'Orig. Pmt. Disc. Possible (LCY)';
-                }
-                field(originDFIIDQualifier; Rec."Origin. DFI ID Qualifier")
-                {
-                    Caption = 'Origin. DFI ID Qualifier';
-                }
-                field(payerInformation; Rec."Payer Information")
-                {
-                    Caption = 'Payer Information';
-                }
-                field(paymentDiscount; Rec."Payment Discount %")
-                {
-                    Caption = 'Payment Discount %';
-                }
-                field(paymentMethodCode; Rec."Payment Method Code")
-                {
-                    Caption = 'Payment Method Code';
-                }
-                field(paymentMethodId; Rec."Payment Method Id")
-                {
-                    Caption = 'Payment Method Id';
-                }
-                field(paymentReference; Rec."Payment Reference")
-                {
-                    Caption = 'Payment Reference';
-                }
-                field(paymentRelatedInformation1; Rec."Payment Related Information 1")
-                {
-                    Caption = 'Payment Related Information 1';
-                }
-                field(paymentRelatedInformation2; Rec."Payment Related Information 2")
-                {
-                    Caption = 'Payment Related Information 2';
-                }
-                field(paymentTermsCode; Rec."Payment Terms Code")
-                {
-                    Caption = 'Payment Terms Code';
-                }
-                field(pmtDiscountDate; Rec."Pmt. Discount Date")
-                {
-                    Caption = 'Pmt. Discount Date';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(postingGroup; Rec."Posting Group")
-                {
-                    Caption = 'Posting Group';
-                }
-                field(postingNoSeries; Rec."Posting No. Series")
-                {
-                    Caption = 'Posting No. Series';
-                }
-                field(prepayment; Rec.Prepayment)
-                {
-                    Caption = 'Prepayment';
-                }
-                field(printPostedDocuments; Rec."Print Posted Documents")
-                {
-                    Caption = 'Print Posted Documents';
-                }
-                field(prodOrderNo; Rec."Prod. Order No.")
-                {
-                    Caption = 'Prod. Order No.';
-                }
-                field(profitLCY; Rec."Profit (LCY)")
-                {
-                    Caption = 'Profit (LCY)';
-                }
-                field(quantity; Rec.Quantity)
-                {
-                    Caption = 'Quantity';
-                }
-                field(reasonCode; Rec."Reason Code")
-                {
-                    Caption = 'Reason Code';
-                }
-                field(receivDFIIDQualifier; Rec."Receiv. DFI ID Qualifier")
-                {
-                    Caption = 'Receiv. DFI ID Qualifier';
-                }
-                field(recipientBankAccount; Rec."Recipient Bank Account")
-                {
-                    Caption = 'Recipient Bank Account';
-                }
-                field(recurringFrequency; Rec."Recurring Frequency")
-                {
-                    Caption = 'Recurring Frequency';
-                }
-                field(recurringMethod; Rec."Recurring Method")
-                {
-                    Caption = 'Recurring Method';
-                }
-                field(reversingEntry; Rec."Reversing Entry")
-                {
-                    Caption = 'Reversing Entry';
-                }
-                field(steTransactionID; Rec."STE Transaction ID")
-                {
-                    Caption = 'STE Transaction ID';
-                }
-                field(salesPurchLCY; Rec."Sales/Purch. (LCY)")
-                {
-                    Caption = 'Sales/Purch. (LCY)';
-                }
-                field(salespersPurchCode; Rec."Salespers./Purch. Code")
-                {
-                    Caption = 'Salespers./Purch. Code';
-                }
-                field(salvageValue; Rec."Salvage Value")
-                {
-                    Caption = 'Salvage Value';
-                }
-                field(secondaryOFACScrIndicator; Rec."Secondary OFAC Scr.Indicator")
-                {
-                    Caption = 'Secondary OFAC Scr.Indicator';
-                }
-                field(sellToBuyFromNo; Rec."Sell-to/Buy-from No.")
-                {
-                    Caption = 'Sell-to/Buy-from No.';
-                }
-                field(shipToOrderAddressCode; Rec."Ship-to/Order Address Code")
-                {
-                    Caption = 'Ship-to/Order Address Code';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(sourceCode; Rec."Source Code")
-                {
-                    Caption = 'Source Code';
-                }
-                field(sourceCurrVATAmount; Rec."Source Curr. VAT Amount")
-                {
-                    Caption = 'Source Curr. VAT Amount';
-                }
-                field(sourceCurrVATBaseAmount; Rec."Source Curr. VAT Base Amount")
-                {
-                    Caption = 'Source Curr. VAT Base Amount';
-                }
-                field(sourceCurrencyAmount; Rec."Source Currency Amount")
-                {
-                    Caption = 'Source Currency Amount';
-                }
-                field(sourceCurrencyCode; Rec."Source Currency Code")
-                {
-                    Caption = 'Source Currency Code';
-                }
-                field(sourceLineNo; Rec."Source Line No.")
-                {
-                    Caption = 'Source Line No.';
-                }
-                field(sourceNo; Rec."Source No.")
-                {
-                    Caption = 'Source No.';
-                }
-                field(sourceType; Rec."Source Type")
-                {
-                    Caption = 'Source Type';
-                }
-                field(systemCreatedEntry; Rec."System-Created Entry")
-                {
-                    Caption = 'System-Created Entry';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAreaCode; Rec."Tax Area Code")
-                {
-                    Caption = 'Tax Area Code';
-                }
-                field(taxExemptionNo; Rec."Tax Exemption No.")
-                {
-                    Caption = 'Tax Exemption No.';
-                }
-                field(taxGroupCode; Rec."Tax Group Code")
-                {
-                    Caption = 'Tax Group Code';
-                }
-                field(taxJurisdictionCode; Rec."Tax Jurisdiction Code")
-                {
-                    Caption = 'Tax Jurisdiction Code';
-                }
-                field(taxLiable; Rec."Tax Liable")
-                {
-                    Caption = 'Tax Liable';
-                }
-                field(taxType; Rec."Tax Type")
-                {
-                    Caption = 'Tax Type';
-                }
-                field(transactionCode; Rec."Transaction Code")
-                {
-                    Caption = 'Transaction Code';
-                }
-                field(transactionInformation; Rec."Transaction Information")
-                {
-                    Caption = 'Transaction Information';
-                }
-                field(transactionTypeCode; Rec."Transaction Type Code")
-                {
-                    Caption = 'Transaction Type Code';
-                }
-                field(useDuplicationList; Rec."Use Duplication List")
-                {
-                    Caption = 'Use Duplication List';
-                }
-                field(useTax; Rec."Use Tax")
-                {
-                    Caption = 'Use Tax';
-                }
-                field(vat; Rec."VAT %")
-                {
-                    Caption = 'VAT %';
-                }
-                field(vatAmount; Rec."VAT Amount")
-                {
-                    Caption = 'VAT Amount';
-                }
-                field(vatAmountLCY; Rec."VAT Amount (LCY)")
-                {
-                    Caption = 'VAT Amount (LCY)';
-                }
-                field(vatBaseAmount; Rec."VAT Base Amount")
-                {
-                    Caption = 'VAT Base Amount';
-                }
-                field(vatBaseAmountLCY; Rec."VAT Base Amount (LCY)")
-                {
-                    Caption = 'VAT Base Amount (LCY)';
-                }
-                field(vatBaseBeforePmtDisc; Rec."VAT Base Before Pmt. Disc.")
-                {
-                    Caption = 'VAT Base Before Pmt. Disc.';
-                }
-                field(vatBaseDiscount; Rec."VAT Base Discount %")
-                {
-                    Caption = 'VAT Base Discount %';
-                }
-                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
-                {
-                    Caption = 'VAT Bus. Posting Group';
-                }
-                field(vatCalculationType; Rec."VAT Calculation Type")
-                {
-                    Caption = 'VAT Calculation Type';
-                }
-                field(vatDifference; Rec."VAT Difference")
-                {
-                    Caption = 'VAT Difference';
-                }
-                field(vatPosting; Rec."VAT Posting")
-                {
-                    Caption = 'VAT Posting';
-                }
-                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
-                {
-                    Caption = 'VAT Prod. Posting Group';
-                }
-                field(vatRegistrationNo; Rec."VAT Registration No.")
-                {
-                    Caption = 'VAT Registration No.';
-                }
-            }
-        }
-    }
-}
-
-page 90055 "Purchase Invoice Header"
-{
-    APIGroup = 'standardEndpoints';
-    APIPublisher = 'fivetran';
-    APIVersion = 'v1.0';
-    ApplicationArea = All;
-    Caption = 'purchaseInvoiceHeader';
-    DelayedInsert = true;
-    EntityName = 'purchaseInvoiceHeader';
-    EntitySetName = 'purchaseInvoiceHeaders';
-    PageType = API;
-    SourceTable = "Purch. Inv. Header";
-    ODataKeyFields = SystemId;
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(appliesToDocNo; Rec."Applies-to Doc. No.")
-                {
-                    Caption = 'Applies-to Doc. No.';
-                }
-                field(appliesToDocType; Rec."Applies-to Doc. Type")
-                {
-                    Caption = 'Applies-to Doc. Type';
-                }
-                field("area"; Rec."Area")
-                {
-                    Caption = 'Area';
-                }
-                field(balAccountNo; Rec."Bal. Account No.")
-                {
-                    Caption = 'Bal. Account No.';
-                }
-                field(balAccountType; Rec."Bal. Account Type")
-                {
-                    Caption = 'Bal. Account Type';
-                }
-                field(buyFromAddress; Rec."Buy-from Address")
-                {
-                    Caption = 'Buy-from Address';
-                }
-                field(buyFromAddress2; Rec."Buy-from Address 2")
-                {
-                    Caption = 'Buy-from Address 2';
-                }
-                field(buyFromCity; Rec."Buy-from City")
-                {
-                    Caption = 'Buy-from City';
-                }
-                field(buyFromContact; Rec."Buy-from Contact")
-                {
-                    Caption = 'Buy-from Contact';
-                }
-                field(buyFromContactNo; Rec."Buy-from Contact No.")
-                {
-                    Caption = 'Buy-from Contact No.';
-                }
-                field(buyFromCountryRegionCode; Rec."Buy-from Country/Region Code")
-                {
-                    Caption = 'Buy-from Country/Region Code';
-                }
-                field(buyFromCounty; Rec."Buy-from County")
-                {
-                    Caption = 'Buy-from County';
-                }
-                field(buyFromPostCode; Rec."Buy-from Post Code")
-                {
-                    Caption = 'Buy-from Post Code';
-                }
-                field(buyFromVendorName; Rec."Buy-from Vendor Name")
-                {
-                    Caption = 'Buy-from Vendor Name';
-                }
-                field(buyFromVendorName2; Rec."Buy-from Vendor Name 2")
-                {
-                    Caption = 'Buy-from Vendor Name 2';
-                }
-                field(buyFromVendorNo; Rec."Buy-from Vendor No.")
-                {
-                    Caption = 'Buy-from Vendor No.';
-                }
-                field(campaignNo; Rec."Campaign No.")
-                {
-                    Caption = 'Campaign No.';
-                }
-                field(cancelled; Rec.Cancelled)
-                {
-                    Caption = 'Cancelled';
-                }
-                field(closed; Rec.Closed)
-                {
-                    Caption = 'Closed';
-                }
-                field(comment; Rec.Comment)
-                {
-                    Caption = 'Comment';
-                }
-                field(correction; Rec.Correction)
-                {
-                    Caption = 'Correction';
-                }
-                field(corrective; Rec.Corrective)
-                {
-                    Caption = 'Corrective';
-                }
-                field(creditorNo; Rec."Creditor No.")
-                {
-                    Caption = 'Creditor No.';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(currencyFactor; Rec."Currency Factor")
-                {
-                    Caption = 'Currency Factor';
-                }
-                field(dimensionSetID; Rec."Dimension Set ID")
-                {
-                    Caption = 'Dimension Set ID';
-                }
-                field(documentDate; Rec."Document Date")
-                {
-                    Caption = 'Document Date';
-                }
-                field(draftInvoiceSystemId; Rec."Draft Invoice SystemId")
-                {
-                    Caption = 'Draft Invoice SystemId';
-                }
-                field(dueDate; Rec."Due Date")
-                {
-                    Caption = 'Due Date';
-                }
-                field(entryPoint; Rec."Entry Point")
-                {
-                    Caption = 'Entry Point';
-                }
-                field(expectedReceiptDate; Rec."Expected Receipt Date")
-                {
-                    Caption = 'Expected Receipt Date';
-                }
-                field(fiscalInvoiceNumberPAC; Rec."Fiscal Invoice Number PAC")
-                {
-                    Caption = 'Fiscal Invoice Number PAC';
-                }
-                field(formatRegion; Rec."Format Region")
-                {
-                    Caption = 'Format Region';
-                }
-                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
-                {
-                    Caption = 'Gen. Bus. Posting Group';
-                }
-                field(irs1099Code; Rec."IRS 1099 Code")
-                {
-                    Caption = 'IRS 1099 Code';
-                }
-                field(invoiceDiscCode; Rec."Invoice Disc. Code")
-                {
-                    Caption = 'Invoice Disc. Code';
-                }
-                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
-                {
-                    Caption = 'Invoice Discount Amount';
-                }
-                field(languageCode; Rec."Language Code")
-                {
-                    Caption = 'Language Code';
-                }
-                field(locationCode; Rec."Location Code")
-                {
-                    Caption = 'Location Code';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(noPrinted; Rec."No. Printed")
-                {
-                    Caption = 'No. Printed';
-                }
-                field(noSeries; Rec."No. Series")
-                {
-                    Caption = 'No. Series';
-                }
-                field(onHold; Rec."On Hold")
-                {
-                    Caption = 'On Hold';
-                }
-                field(orderAddressCode; Rec."Order Address Code")
-                {
-                    Caption = 'Order Address Code';
-                }
-                field(orderDate; Rec."Order Date")
-                {
-                    Caption = 'Order Date';
-                }
-                field(orderNo; Rec."Order No.")
-                {
-                    Caption = 'Order No.';
-                }
-                field(orderNoSeries; Rec."Order No. Series")
-                {
-                    Caption = 'Order No. Series';
-                }
-                field(payToAddress; Rec."Pay-to Address")
-                {
-                    Caption = 'Pay-to Address';
-                }
-                field(payToAddress2; Rec."Pay-to Address 2")
-                {
-                    Caption = 'Pay-to Address 2';
-                }
-                field(payToCity; Rec."Pay-to City")
-                {
-                    Caption = 'Pay-to City';
-                }
-                field(payToContact; Rec."Pay-to Contact")
-                {
-                    Caption = 'Pay-to Contact';
-                }
-                field(payToContactNo; Rec."Pay-to Contact No.")
-                {
-                    Caption = 'Pay-to Contact No.';
-                }
-                field(payToCountryRegionCode; Rec."Pay-to Country/Region Code")
-                {
-                    Caption = 'Pay-to Country/Region Code';
-                }
-                field(payToCounty; Rec."Pay-to County")
-                {
-                    Caption = 'Pay-to County';
-                }
-                field(payToName; Rec."Pay-to Name")
-                {
-                    Caption = 'Pay-to Name';
-                }
-                field(payToName2; Rec."Pay-to Name 2")
-                {
-                    Caption = 'Pay-to Name 2';
-                }
-                field(payToPostCode; Rec."Pay-to Post Code")
-                {
-                    Caption = 'Pay-to Post Code';
-                }
-                field(payToVendorNo; Rec."Pay-to Vendor No.")
-                {
-                    Caption = 'Pay-to Vendor No.';
-                }
-                field(paymentDiscount; Rec."Payment Discount %")
-                {
-                    Caption = 'Payment Discount %';
-                }
-                field(paymentMethodCode; Rec."Payment Method Code")
-                {
-                    Caption = 'Payment Method Code';
-                }
-                field(paymentReference; Rec."Payment Reference")
-                {
-                    Caption = 'Payment Reference';
-                }
-                field(paymentTermsCode; Rec."Payment Terms Code")
-                {
-                    Caption = 'Payment Terms Code';
-                }
-                field(pmtDiscountDate; Rec."Pmt. Discount Date")
-                {
-                    Caption = 'Pmt. Discount Date';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(postingDescription; Rec."Posting Description")
-                {
-                    Caption = 'Posting Description';
-                }
-                field(preAssignedNo; Rec."Pre-Assigned No.")
-                {
-                    Caption = 'Pre-Assigned No.';
-                }
-                field(preAssignedNoSeries; Rec."Pre-Assigned No. Series")
-                {
-                    Caption = 'Pre-Assigned No. Series';
-                }
-                field(prepaymentInvoice; Rec."Prepayment Invoice")
-                {
-                    Caption = 'Prepayment Invoice';
-                }
-                field(prepaymentNoSeries; Rec."Prepayment No. Series")
-                {
-                    Caption = 'Prepayment No. Series';
-                }
-                field(prepaymentOrderNo; Rec."Prepayment Order No.")
-                {
-                    Caption = 'Prepayment Order No.';
-                }
-                field(priceCalculationMethod; Rec."Price Calculation Method")
-                {
-                    Caption = 'Price Calculation Method';
-                }
-                field(pricesIncludingVAT; Rec."Prices Including VAT")
-                {
-                    Caption = 'Prices Including VAT';
-                }
-                field(provincialTaxAreaCode; Rec."Provincial Tax Area Code")
-                {
-                    Caption = 'Provincial Tax Area Code';
-                }
-                field(purchaserCode; Rec."Purchaser Code")
-                {
-                    Caption = 'Purchaser Code';
-                }
-                field(quoteNo; Rec."Quote No.")
-                {
-                    Caption = 'Quote No.';
-                }
-                field(reasonCode; Rec."Reason Code")
-                {
-                    Caption = 'Reason Code';
-                }
-                field(remainingAmount; Rec."Remaining Amount")
-                {
-                    Caption = 'Remaining Amount';
-                }
-                field(remitToCode; Rec."Remit-to Code")
-                {
-                    Caption = 'Remit-to Code';
-                }
-                field(responsibilityCenter; Rec."Responsibility Center")
-                {
-                    Caption = 'Responsibility Center';
-                }
-                field(steTransactionID; Rec."STE Transaction ID")
-                {
-                    Caption = 'STE Transaction ID';
-                }
-                field(sellToCustomerNo; Rec."Sell-to Customer No.")
-                {
-                    Caption = 'Sell-to Customer No.';
-                }
-                field(shipToAddress; Rec."Ship-to Address")
-                {
-                    Caption = 'Ship-to Address';
-                }
-                field(shipToAddress2; Rec."Ship-to Address 2")
-                {
-                    Caption = 'Ship-to Address 2';
-                }
-                field(shipToCity; Rec."Ship-to City")
-                {
-                    Caption = 'Ship-to City';
-                }
-                field(shipToCode; Rec."Ship-to Code")
-                {
-                    Caption = 'Ship-to Code';
-                }
-                field(shipToContact; Rec."Ship-to Contact")
-                {
-                    Caption = 'Ship-to Contact';
-                }
-                field(shipToCountryRegionCode; Rec."Ship-to Country/Region Code")
-                {
-                    Caption = 'Ship-to Country/Region Code';
-                }
-                field(shipToCounty; Rec."Ship-to County")
-                {
-                    Caption = 'Ship-to County';
-                }
-                field(shipToName; Rec."Ship-to Name")
-                {
-                    Caption = 'Ship-to Name';
-                }
-                field(shipToName2; Rec."Ship-to Name 2")
-                {
-                    Caption = 'Ship-to Name 2';
-                }
-                field(shipToPostCode; Rec."Ship-to Post Code")
-                {
-                    Caption = 'Ship-to Post Code';
-                }
-                field(shipToUPSZone; Rec."Ship-to UPS Zone")
-                {
-                    Caption = 'Ship-to UPS Zone';
-                }
-                field(shipmentMethodCode; Rec."Shipment Method Code")
-                {
-                    Caption = 'Shipment Method Code';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(sourceCode; Rec."Source Code")
-                {
-                    Caption = 'Source Code';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAreaCode; Rec."Tax Area Code")
-                {
-                    Caption = 'Tax Area Code';
-                }
-                field(taxExemptionNo; Rec."Tax Exemption No.")
-                {
-                    Caption = 'Tax Exemption No.';
-                }
-                field(taxLiable; Rec."Tax Liable")
-                {
-                    Caption = 'Tax Liable';
-                }
-                field(transactionSpecification; Rec."Transaction Specification")
-                {
-                    Caption = 'Transaction Specification';
-                }
-                field("transactionType"; Rec."Transaction Type")
-                {
-                    Caption = 'Transaction Type';
-                }
-                field(transportMethod; Rec."Transport Method")
-                {
-                    Caption = 'Transport Method';
-                }
-                field(userID; Rec."User ID")
-                {
-                    Caption = 'User ID';
-                }
-                field(vatBaseDiscount; Rec."VAT Base Discount %")
-                {
-                    Caption = 'VAT Base Discount %';
-                }
-                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
-                {
-                    Caption = 'VAT Bus. Posting Group';
-                }
-                field(vatCountryRegionCode; Rec."VAT Country/Region Code")
-                {
-                    Caption = 'VAT Country/Region Code';
-                }
-                field(vatRegistrationNo; Rec."VAT Registration No.")
-                {
-                    Caption = 'VAT Registration No.';
-                }
-                field(vatReportingDate; Rec."VAT Reporting Date")
-                {
-                    Caption = 'VAT Date';
-                }
-                field(vendorInvoiceNo; Rec."Vendor Invoice No.")
-                {
-                    Caption = 'Vendor Invoice No.';
-                }
-                field(vendorLedgerEntryNo; Rec."Vendor Ledger Entry No.")
-                {
-                    Caption = 'Vendor Ledger Entry No.';
-                }
-                field(vendorOrderNo; Rec."Vendor Order No.")
-                {
-                    Caption = 'Vendor Order No.';
-                }
-                field(vendorPostingGroup; Rec."Vendor Posting Group")
-                {
-                    Caption = 'Vendor Posting Group';
-                }
-                field(yourReference; Rec."Your Reference")
-                {
-                    Caption = 'Your Reference';
-                }
-            }
-        }
-    }
-}
-
-page 90056 "Purchase Invoice Line"
-{
-    APIGroup = 'standardEndpoints';
-    APIPublisher = 'fivetran';
-    APIVersion = 'v1.0';
-    ApplicationArea = All;
-    Caption = 'purchaseInvoiceLine';
-    DelayedInsert = true;
-    EntityName = 'purchaseInvoiceLine';
-    EntitySetName = 'purchaseInvoiceLines';
-    PageType = API;
-    SourceTable = "Purch. Inv. Line";
-    ODataKeyFields = SystemId;
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(allocationAccountNo; Rec."Allocation Account No.")
-                {
-                    Caption = 'Allocation Account No.';
-                }
-                field(allowInvoiceDisc; Rec."Allow Invoice Disc.")
-                {
-                    Caption = 'Allow Invoice Disc.';
-                }
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(applToItemEntry; Rec."Appl.-to Item Entry")
-                {
-                    Caption = 'Appl.-to Item Entry';
-                }
-                field("area"; Rec."Area")
-                {
-                    Caption = 'Area';
-                }
-                field(attachedToLineNo; Rec."Attached to Line No.")
-                {
-                    Caption = 'Attached to Line No.';
-                }
-                field(binCode; Rec."Bin Code")
-                {
-                    Caption = 'Bin Code';
-                }
-                field(blanketOrderLineNo; Rec."Blanket Order Line No.")
-                {
-                    Caption = 'Blanket Order Line No.';
-                }
-                field(blanketOrderNo; Rec."Blanket Order No.")
-                {
-                    Caption = 'Blanket Order No.';
-                }
-                field(budgetedFANo; Rec."Budgeted FA No.")
-                {
-                    Caption = 'Budgeted FA No.';
-                }
-                field(buyFromVendorNo; Rec."Buy-from Vendor No.")
-                {
-                    Caption = 'Buy-from Vendor No.';
-                }
-                field(deferralCode; Rec."Deferral Code")
-                {
-                    Caption = 'Deferral Code';
-                }
-                field(deprAcquisitionCost; Rec."Depr. Acquisition Cost")
-                {
-                    Caption = 'Depr. Acquisition Cost';
-                }
-                field(deprUntilFAPostingDate; Rec."Depr. until FA Posting Date")
-                {
-                    Caption = 'Depr. until FA Posting Date';
-                }
-                field(depreciationBookCode; Rec."Depreciation Book Code")
-                {
-                    Caption = 'Depreciation Book Code';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(description2; Rec."Description 2")
-                {
-                    Caption = 'Description 2';
-                }
-                field(dimensionSetID; Rec."Dimension Set ID")
-                {
-                    Caption = 'Dimension Set ID';
-                }
-                field(directUnitCost; Rec."Direct Unit Cost")
-                {
-                    Caption = 'Direct Unit Cost';
-                }
-                field(documentNo; Rec."Document No.")
-                {
-                    Caption = 'Document No.';
-                }
-                field(duplicateInDepreciationBook; Rec."Duplicate in Depreciation Book")
-                {
-                    Caption = 'Duplicate in Depreciation Book';
-                }
-                field(entryPoint; Rec."Entry Point")
-                {
-                    Caption = 'Entry Point';
-                }
-                field(expectedReceiptDate; Rec."Expected Receipt Date")
-                {
-                    Caption = 'Expected Receipt Date';
-                }
-                field(faPostingDate; Rec."FA Posting Date")
-                {
-                    Caption = 'FA Posting Date';
-                }
-                field(faPostingType; Rec."FA Posting Type")
-                {
-                    Caption = 'FA Posting Type';
-                }
-                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
-                {
-                    Caption = 'Gen. Bus. Posting Group';
-                }
-                field(genProdPostingGroup; Rec."Gen. Prod. Posting Group")
-                {
-                    Caption = 'Gen. Prod. Posting Group';
-                }
-                field(grossWeight; Rec."Gross Weight")
-                {
-                    Caption = 'Gross Weight';
-                }
-                field(icCrossReferenceNo; Rec."IC Cross-Reference No.")
-                {
-                    Caption = 'IC Item Reference No.';
-                }
-                field(icPartnerCode; Rec."IC Partner Code")
-                {
-                    Caption = 'IC Partner Code';
-                }
-                field(icPartnerRefType; Rec."IC Partner Ref. Type")
-                {
-                    Caption = 'IC Partner Ref. Type';
-                }
-                field(icPartnerReference; Rec."IC Partner Reference")
-                {
-                    Caption = 'IC Partner Reference';
-                }
-                field(irs1099Liable; Rec."IRS 1099 Liable")
-                {
-                    Caption = 'IRS 1099 Liable';
-                }
-                field(indirectCost; Rec."Indirect Cost %")
-                {
-                    Caption = 'Indirect Cost %';
-                }
-                field(insuranceNo; Rec."Insurance No.")
-                {
-                    Caption = 'Insurance No.';
-                }
-                field(invDiscountAmount; Rec."Inv. Discount Amount")
-                {
-                    Caption = 'Inv. Discount Amount';
-                }
-                field(itemCategoryCode; Rec."Item Category Code")
-                {
-                    Caption = 'Item Category Code';
-                }
-                field(itemReferenceNo; Rec."Item Reference No.")
-                {
-                    Caption = 'Item Reference No.';
-                }
-                field(itemReferenceType; Rec."Item Reference Type")
-                {
-                    Caption = 'Item Reference Type';
-                }
-                field(itemReferenceTypeNo; Rec."Item Reference Type No.")
-                {
-                    Caption = 'Item Reference Type No.';
-                }
-                field(itemReferenceUnitOfMeasure; Rec."Item Reference Unit of Measure")
-                {
-                    Caption = 'Unit of Measure (Item Ref.)';
-                }
-                field(jobCurrencyCode; Rec."Job Currency Code")
-                {
-                    Caption = 'Job Currency Code';
-                }
-                field(jobCurrencyFactor; Rec."Job Currency Factor")
-                {
-                    Caption = 'Job Currency Factor';
-                }
-                field(jobLineAmount; Rec."Job Line Amount")
-                {
-                    Caption = 'Job Line Amount';
-                }
-                field(jobLineAmountLCY; Rec."Job Line Amount (LCY)")
-                {
-                    Caption = 'Job Line Amount (LCY)';
-                }
-                field(jobLineDiscAmountLCY; Rec."Job Line Disc. Amount (LCY)")
-                {
-                    Caption = 'Job Line Disc. Amount (LCY)';
-                }
-                field(jobLineDiscount; Rec."Job Line Discount %")
-                {
-                    Caption = 'Job Line Discount %';
-                }
-                field(jobLineDiscountAmount; Rec."Job Line Discount Amount")
-                {
-                    Caption = 'Job Line Discount Amount';
-                }
-                field(jobLineType; Rec."Job Line Type")
-                {
-                    Caption = 'Job Line Type';
-                }
-                field(jobNo; Rec."Job No.")
-                {
-                    Caption = 'Job No.';
-                }
-                field(jobTaskNo; Rec."Job Task No.")
-                {
-                    Caption = 'Job Task No.';
-                }
-                field(jobTotalPrice; Rec."Job Total Price")
-                {
-                    Caption = 'Job Total Price';
-                }
-                field(jobTotalPriceLCY; Rec."Job Total Price (LCY)")
-                {
-                    Caption = 'Job Total Price (LCY)';
-                }
-                field(jobUnitPrice; Rec."Job Unit Price")
-                {
-                    Caption = 'Job Unit Price';
-                }
-                field(jobUnitPriceLCY; Rec."Job Unit Price (LCY)")
-                {
-                    Caption = 'Job Unit Price (LCY)';
-                }
-                field(lineAmount; Rec."Line Amount")
-                {
-                    Caption = 'Line Amount';
-                }
-                field(lineDiscount; Rec."Line Discount %")
-                {
-                    Caption = 'Line Discount %';
-                }
-                field(lineDiscountAmount; Rec."Line Discount Amount")
-                {
-                    Caption = 'Line Discount Amount';
-                }
-                field(lineNo; Rec."Line No.")
-                {
-                    Caption = 'Line No.';
-                }
-                field(locationCode; Rec."Location Code")
-                {
-                    Caption = 'Location Code';
-                }
-                field(maintenanceCode; Rec."Maintenance Code")
-                {
-                    Caption = 'Maintenance Code';
-                }
-                field(netWeight; Rec."Net Weight")
-                {
-                    Caption = 'Net Weight';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(nonDeductibleVAT; Rec."Non-Deductible VAT %")
-                {
-                    Caption = 'Non-Deductible VAT %';
-                }
-                field(nonDeductibleVATAmount; Rec."Non-Deductible VAT Amount")
-                {
-                    Caption = 'Non-Deductible VAT Amount';
-                }
-                field(nonDeductibleVATBase; Rec."Non-Deductible VAT Base")
-                {
-                    Caption = 'Non-Deductible VAT Base';
-                }
-                field(nonDeductibleVATDiff; Rec."Non-Deductible VAT Diff.")
-                {
-                    Caption = 'Non-Deductible VAT Difference';
-                }
-                field(nonstock; Rec.Nonstock)
-                {
-                    Caption = 'Catalog';
-                }
-                field(operationNo; Rec."Operation No.")
-                {
-                    Caption = 'Operation No.';
-                }
-                field(orderLineNo; Rec."Order Line No.")
-                {
-                    Caption = 'Order Line No.';
-                }
-                field(orderNo; Rec."Order No.")
-                {
-                    Caption = 'Order No.';
-                }
-                field(overheadRate; Rec."Overhead Rate")
-                {
-                    Caption = 'Overhead Rate';
-                }
-                field(payToVendorNo; Rec."Pay-to Vendor No.")
-                {
-                    Caption = 'Pay-to Vendor No.';
-                }
-                field(pmtDiscountAmount; Rec."Pmt. Discount Amount")
-                {
-                    Caption = 'Pmt. Discount Amount';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(postingGroup; Rec."Posting Group")
-                {
-                    Caption = 'Posting Group';
-                }
-                field(prepaymentLine; Rec."Prepayment Line")
-                {
-                    Caption = 'Prepayment Line';
-                }
-                field(priceCalculationMethod; Rec."Price Calculation Method")
-                {
-                    Caption = 'Price Calculation Method';
-                }
-                field(prodOrderLineNo; Rec."Prod. Order Line No.")
-                {
-                    Caption = 'Prod. Order Line No.';
-                }
-                field(prodOrderNo; Rec."Prod. Order No.")
-                {
-                    Caption = 'Prod. Order No.';
-                }
-                field(provincialTaxAreaCode; Rec."Provincial Tax Area Code")
-                {
-                    Caption = 'Provincial Tax Area Code';
-                }
-                field(purchasingCode; Rec."Purchasing Code")
-                {
-                    Caption = 'Purchasing Code';
-                }
-                field(qtyPerUnitOfMeasure; Rec."Qty. per Unit of Measure")
-                {
-                    Caption = 'Qty. per Unit of Measure';
-                }
-                field(quantity; Rec.Quantity)
-                {
-                    Caption = 'Quantity';
-                }
-                field(quantityBase; Rec."Quantity (Base)")
-                {
-                    Caption = 'Quantity (Base)';
-                }
-                field(receiptLineNo; Rec."Receipt Line No.")
-                {
-                    Caption = 'Receipt Line No.';
-                }
-                field(receiptNo; Rec."Receipt No.")
-                {
-                    Caption = 'Receipt No.';
-                }
-                field(responsibilityCenter; Rec."Responsibility Center")
-                {
-                    Caption = 'Responsibility Center';
-                }
-                field(returnReasonCode; Rec."Return Reason Code")
-                {
-                    Caption = 'Return Reason Code';
-                }
-                field(routingNo; Rec."Routing No.")
-                {
-                    Caption = 'Routing No.';
-                }
-                field(routingReferenceNo; Rec."Routing Reference No.")
-                {
-                    Caption = 'Routing Reference No.';
-                }
-                field(salvageValue; Rec."Salvage Value")
-                {
-                    Caption = 'Salvage Value';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(systemCreatedEntry; Rec."System-Created Entry")
-                {
-                    Caption = 'System-Created Entry';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAreaCode; Rec."Tax Area Code")
-                {
-                    Caption = 'Tax Area Code';
-                }
-                field(taxGroupCode; Rec."Tax Group Code")
-                {
-                    Caption = 'Tax Group Code';
-                }
-                field(taxLiable; Rec."Tax Liable")
-                {
-                    Caption = 'Tax Liable';
-                }
-                field(transactionSpecification; Rec."Transaction Specification")
-                {
-                    Caption = 'Transaction Specification';
-                }
-                field("transactionType"; Rec."Transaction Type")
-                {
-                    Caption = 'Transaction Type';
-                }
-                field(transportMethod; Rec."Transport Method")
-                {
-                    Caption = 'Transport Method';
-                }
-                field("type"; Rec."Type")
-                {
-                    Caption = 'Type';
-                }
-                field(unitCost; Rec."Unit Cost")
-                {
-                    Caption = 'Unit Cost';
-                }
-                field(unitCostLCY; Rec."Unit Cost (LCY)")
-                {
-                    Caption = 'Unit Cost (LCY)';
-                }
-                field(unitPriceLCY; Rec."Unit Price (LCY)")
-                {
-                    Caption = 'Unit Price (LCY)';
-                }
-                field(unitVolume; Rec."Unit Volume")
-                {
-                    Caption = 'Unit Volume';
-                }
-                field(unitOfMeasure; Rec."Unit of Measure")
-                {
-                    Caption = 'Unit of Measure';
-                }
-                field(unitOfMeasureCode; Rec."Unit of Measure Code")
-                {
-                    Caption = 'Unit of Measure Code';
-                }
-                field(unitsPerParcel; Rec."Units per Parcel")
-                {
-                    Caption = 'Units per Parcel';
-                }
-                field(useDuplicationList; Rec."Use Duplication List")
-                {
-                    Caption = 'Use Duplication List';
-                }
-                field(useTax; Rec."Use Tax")
-                {
-                    Caption = 'Use Tax';
-                }
-                field(vat; Rec."VAT %")
-                {
-                    Caption = 'VAT %';
-                }
-                field(vatBaseAmount; Rec."VAT Base Amount")
-                {
-                    Caption = 'VAT Base Amount';
-                }
-                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
-                {
-                    Caption = 'VAT Bus. Posting Group';
-                }
-                field(vatCalculationType; Rec."VAT Calculation Type")
-                {
-                    Caption = 'VAT Calculation Type';
-                }
-                field(vatDifference; Rec."VAT Difference")
-                {
-                    Caption = 'VAT Difference';
-                }
-                field(vatIdentifier; Rec."VAT Identifier")
-                {
-                    Caption = 'VAT Identifier';
-                }
-                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
-                {
-                    Caption = 'VAT Prod. Posting Group';
-                }
-                field(variantCode; Rec."Variant Code")
-                {
-                    Caption = 'Variant Code';
-                }
-                field(vendorItemNo; Rec."Vendor Item No.")
-                {
-                    Caption = 'Vendor Item No.';
-                }
-                field(workCenterNo; Rec."Work Center No.")
-                {
-                    Caption = 'Work Center No.';
-                }
-            }
-        }
-    }
-}
-
-page 90057 "Time Sheet Detail"
-{
-    APIGroup = 'standardEndpoints';
-    APIPublisher = 'fivetran';
-    APIVersion = 'v1.0';
-    ApplicationArea = All;
-    Caption = 'timeSheetDetail';
-    DelayedInsert = true;
-    EntityName = 'timeSheetDetail';
-    EntitySetName = 'timeSheetDetails';
-    PageType = API;
-    SourceTable = "Time Sheet Detail";
-
-    ODataKeyFields = SystemId;
-    Editable = false;
-    DataAccessIntent = ReadOnly;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(assemblyOrderLineNo; Rec."Assembly Order Line No.")
-                {
-                    Caption = 'Assembly Order Line No.';
-                }
-                field(assemblyOrderNo; Rec."Assembly Order No.")
-                {
-                    Caption = 'Assembly Order No.';
-                }
-                field(causeOfAbsenceCode; Rec."Cause of Absence Code")
-                {
-                    Caption = 'Cause of Absence Code';
-                }
-                field("date"; Rec."Date")
-                {
-                    Caption = 'Date';
-                }
-                field(dimensionSetID; Rec."Dimension Set ID")
-                {
-                    Caption = 'Dimension Set ID';
-                }
-                field(jobId; Rec."Job Id")
-                {
-                    Caption = 'Job Id';
-                }
-                field(jobNo; Rec."Job No.")
-                {
-                    Caption = 'Job No.';
-                }
-                field(jobTaskNo; Rec."Job Task No.")
-                {
-                    Caption = 'Job Task No.';
-                }
-                field(lastModifiedDateTime; Rec."Last Modified DateTime")
-                {
-                    Caption = 'Last Modified DateTime';
-                }
-                field(posted; Rec.Posted)
-                {
-                    Caption = 'Posted';
-                }
-                field(postedQuantity; Rec."Posted Quantity")
-                {
-                    Caption = 'Posted Quantity';
-                }
-                field(quantity; Rec.Quantity)
-                {
-                    Caption = 'Quantity';
-                }
-                field(resourceNo; Rec."Resource No.")
-                {
-                    Caption = 'Resource No.';
-                }
-                field(serviceOrderLineNo; Rec."Service Order Line No.")
-                {
-                    Caption = 'Service Order Line No.';
-                }
-                field(serviceOrderNo; Rec."Service Order No.")
-                {
-                    Caption = 'Service Order No.';
-                }
-                field(status; Rec.Status)
-                {
-                    Caption = 'Status';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(timeSheetLineNo; Rec."Time Sheet Line No.")
-                {
-                    Caption = 'Time Sheet Line No.';
-                }
-                field(timeSheetNo; Rec."Time Sheet No.")
-                {
-                    Caption = 'Time Sheet No.';
-                }
-                field("type"; Rec."Type")
-                {
-                    Caption = 'Type';
-                }
-            }
-        }
-    }
-}
-
-page 90058 "Sales Header"
-{
-    APIGroup = 'standardEndpoints';
-    APIPublisher = 'fivetran';
-    APIVersion = 'v1.0';
-    ApplicationArea = All;
-    Caption = 'salesHeader';
-    DelayedInsert = true;
-    EntityName = 'salesHeader';
-    EntitySetName = 'salesHeaders';
-    PageType = API;
-    SourceTable = "Sales Header";
-    ODataKeyFields = SystemId;
-    Editable = false;
-    DataAccessIntent = ReadOnly;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(allowLineDisc; Rec."Allow Line Disc.")
-                {
-                    Caption = 'Allow Line Disc.';
-                }
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(amtShipNotInvLCY; Rec."Amt. Ship. Not Inv. (LCY)")
-                {
-                    Caption = 'Amount Shipped Not Invoiced (LCY) Incl. VAT';
-                }
-                field(amtShipNotInvLCYBase; Rec."Amt. Ship. Not Inv. (LCY) Base")
-                {
-                    Caption = 'Amount Shipped Not Invoiced (LCY)';
-                }
-                field(appliesToDocNo; Rec."Applies-to Doc. No.")
-                {
-                    Caption = 'Applies-to Doc. No.';
-                }
-                field(appliesToDocType; Rec."Applies-to Doc. Type")
-                {
-                    Caption = 'Applies-to Doc. Type';
-                }
-                field(appliesToID; Rec."Applies-to ID")
-                {
-                    Caption = 'Applies-to ID';
-                }
-                field("area"; Rec."Area")
-                {
-                    Caption = 'Area';
-                }
-                field(assignedUserID; Rec."Assigned User ID")
-                {
-                    Caption = 'Assigned User ID';
-                }
-                field(balAccountNo; Rec."Bal. Account No.")
-                {
-                    Caption = 'Bal. Account No.';
-                }
-                field(balAccountType; Rec."Bal. Account Type")
-                {
-                    Caption = 'Bal. Account Type';
-                }
-                field(billToAddress; Rec."Bill-to Address")
-                {
-                    Caption = 'Bill-to Address';
-                }
-                field(billToAddress2; Rec."Bill-to Address 2")
-                {
-                    Caption = 'Bill-to Address 2';
-                }
-                field(billToCity; Rec."Bill-to City")
-                {
-                    Caption = 'Bill-to City';
-                }
-                field(billToContact; Rec."Bill-to Contact")
-                {
-                    Caption = 'Bill-to Contact';
-                }
-                field(billToContactNo; Rec."Bill-to Contact No.")
-                {
-                    Caption = 'Bill-to Contact No.';
-                }
-                field(billToCountryRegionCode; Rec."Bill-to Country/Region Code")
-                {
-                    Caption = 'Bill-to Country/Region Code';
-                }
-                field(billToCounty; Rec."Bill-to County")
-                {
-                    Caption = 'Bill-to County';
-                }
-                field(billToCustomerNo; Rec."Bill-to Customer No.")
-                {
-                    Caption = 'Bill-to Customer No.';
-                }
-                field(billToCustomerTemplCode; Rec."Bill-to Customer Templ. Code")
-                {
-                    Caption = 'Bill-to Customer Template Code';
-                }
-                field(billToICPartnerCode; Rec."Bill-to IC Partner Code")
-                {
-                    Caption = 'Bill-to IC Partner Code';
-                }
-                field(billToName; Rec."Bill-to Name")
-                {
-                    Caption = 'Bill-to Name';
-                }
-                field(billToName2; Rec."Bill-to Name 2")
-                {
-                    Caption = 'Bill-to Name 2';
-                }
-                field(billToPostCode; Rec."Bill-to Post Code")
-                {
-                    Caption = 'Bill-to Post Code';
-                }
-                field(cfdiExportCode; Rec."CFDI Export Code")
-                {
-                    Caption = 'CFDI Export Code';
-                }
-                field(cfdiPeriod; Rec."CFDI Period")
-                {
-                    Caption = 'CFDI Period';
-                }
-                field(cfdiPurpose; Rec."CFDI Purpose")
-                {
-                    Caption = 'CFDI Purpose';
-                }
-                field(cfdiRelation; Rec."CFDI Relation")
-                {
-                    Caption = 'CFDI Relation';
-                }
-                field(campaignNo; Rec."Campaign No.")
-                {
-                    Caption = 'Campaign No.';
-                }
-                field(combineShipments; Rec."Combine Shipments")
-                {
-                    Caption = 'Combine Shipments';
-                }
-                field(comment; Rec.Comment)
-                {
-                    Caption = 'Comment';
-                }
-                field(companyBankAccountCode; Rec."Company Bank Account Code")
-                {
-                    Caption = 'Company Bank Account Code';
-                }
-                field(completelyShipped; Rec."Completely Shipped")
-                {
-                    Caption = 'Completely Shipped';
-                }
-                field(compressPrepayment; Rec."Compress Prepayment")
-                {
-                    Caption = 'Compress Prepayment';
-                }
-                field(correction; Rec.Correction)
-                {
-                    Caption = 'Correction';
-                }
-                field(coupledToDataverse; Rec."Coupled to Dataverse")
-                {
-                    Caption = 'Coupled to Dynamics 365 Sales';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(currencyFactor; Rec."Currency Factor")
-                {
-                    Caption = 'Currency Factor';
-                }
-                field(customerDiscGroup; Rec."Customer Disc. Group")
-                {
-                    Caption = 'Customer Disc. Group';
-                }
-                field(customerPostingGroup; Rec."Customer Posting Group")
-                {
-                    Caption = 'Customer Posting Group';
-                }
-                field(customerPriceGroup; Rec."Customer Price Group")
-                {
-                    Caption = 'Customer Price Group';
-                }
-                field(dimensionSetID; Rec."Dimension Set ID")
-                {
-                    Caption = 'Dimension Set ID';
-                }
-                field(directDebitMandateID; Rec."Direct Debit Mandate ID")
-                {
-                    Caption = 'Direct Debit Mandate ID';
-                }
-                field(docNoOccurrence; Rec."Doc. No. Occurrence")
-                {
-                    Caption = 'Doc. No. Occurrence';
-                }
-                field(documentDate; Rec."Document Date")
-                {
-                    Caption = 'Document Date';
-                }
-                field(documentType; Rec."Document Type")
-                {
-                    Caption = 'Document Type';
-                }
-                field(dueDate; Rec."Due Date")
-                {
-                    Caption = 'Due Date';
-                }
-                field(eu3PartyTrade; Rec."EU 3-Party Trade")
-                {
-                    Caption = 'EU 3-Party Trade';
-                }
-                field(exchangeRateUSD; Rec."Exchange Rate USD")
-                {
-                    Caption = 'Exchange Rate USD';
-                }
-                field(exitPoint; Rec."Exit Point")
-                {
-                    Caption = 'Exit Point';
-                }
-                field(externalDocumentNo; Rec."External Document No.")
-                {
-                    Caption = 'External Document No.';
-                }
-                field(foreignTrade; Rec."Foreign Trade")
-                {
-                    Caption = 'Foreign Trade';
-                }
-                field(formatRegion; Rec."Format Region")
-                {
-                    Caption = 'Format Region';
-                }
-                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
-                {
-                    Caption = 'Gen. Bus. Posting Group';
-                }
-                field(getShipmentUsed; Rec."Get Shipment Used")
-                {
-                    Caption = 'Get Shipment Used';
-                }
-                field(icDirection; Rec."IC Direction")
-                {
-                    Caption = 'IC Direction';
-                }
-                field(icReferenceDocumentNo; Rec."IC Reference Document No.")
-                {
-                    Caption = 'IC Reference Document No.';
-                }
-                field(icStatus; Rec."IC Status")
-                {
-                    Caption = 'IC Status';
-                }
-                field(incomingDocumentEntryNo; Rec."Incoming Document Entry No.")
-                {
-                    Caption = 'Incoming Document Entry No.';
-                }
-                field(insurerName; Rec."Insurer Name")
-                {
-                    Caption = 'Insurer Name';
-                }
-                field(insurerPolicyNumber; Rec."Insurer Policy Number")
-                {
-                    Caption = 'Insurer Policy Number';
-                }
-                field(invoice; Rec.Invoice)
-                {
-                    Caption = 'Invoice';
-                }
-                field(invoiceDiscCode; Rec."Invoice Disc. Code")
-                {
-                    Caption = 'Invoice Disc. Code';
-                }
-                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
-                {
-                    Caption = 'Invoice Discount Amount';
-                }
-                field(invoiceDiscountCalculation; Rec."Invoice Discount Calculation")
-                {
-                    Caption = 'Invoice Discount Calculation';
-                }
-                field(invoiceDiscountValue; Rec."Invoice Discount Value")
-                {
-                    Caption = 'Invoice Discount Value';
-                }
-                field(isTest; Rec.IsTest)
-                {
-                    Caption = 'IsTest';
-                }
-                field(jobQueueEntryID; Rec."Job Queue Entry ID")
-                {
-                    Caption = 'Job Queue Entry ID';
-                }
-                field(jobQueueStatus; Rec."Job Queue Status")
-                {
-                    Caption = 'Job Queue Status';
-                }
-                field(journalTemplName; Rec."Journal Templ. Name")
-                {
-                    Caption = 'Journal Template Name';
-                }
-                field(languageCode; Rec."Language Code")
-                {
-                    Caption = 'Language Code';
-                }
-                field(lastPostingNo; Rec."Last Posting No.")
-                {
-                    Caption = 'Last Posting No.';
-                }
-                field(lastPrepaymentNo; Rec."Last Prepayment No.")
-                {
-                    Caption = 'Last Prepayment No.';
-                }
-                field(lastPrepmtCrMemoNo; Rec."Last Prepmt. Cr. Memo No.")
-                {
-                    Caption = 'Last Prepmt. Cr. Memo No.';
-                }
-                field(lastReturnReceiptNo; Rec."Last Return Receipt No.")
-                {
-                    Caption = 'Last Return Receipt No.';
-                }
-                field(lastShipmentDate; Rec."Last Shipment Date")
-                {
-                    Caption = 'Last Shipment Date';
-                }
-                field(lastShippingNo; Rec."Last Shipping No.")
-                {
-                    Caption = 'Last Shipping No.';
-                }
-                field(lateOrderShipping; Rec."Late Order Shipping")
-                {
-                    Caption = 'Late Order Shipping';
-                }
-                field(locationCode; Rec."Location Code")
-                {
-                    Caption = 'Location Code';
-                }
-                field(medicalInsPolicyNumber; Rec."Medical Ins. Policy Number")
-                {
-                    Caption = 'Medical Ins. Policy Number';
-                }
-                field(medicalInsurerName; Rec."Medical Insurer Name")
-                {
-                    Caption = 'Medical Insurer Name';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(noPrinted; Rec."No. Printed")
-                {
-                    Caption = 'No. Printed';
-                }
-                field(noSeries; Rec."No. Series")
-                {
-                    Caption = 'No. Series';
-                }
-                field(noOfArchivedVersions; Rec."No. of Archived Versions")
-                {
-                    Caption = 'No. of Archived Versions';
-                }
-                field(onHold; Rec."On Hold")
-                {
-                    Caption = 'On Hold';
-                }
-                field(opportunityNo; Rec."Opportunity No.")
-                {
-                    Caption = 'Opportunity No.';
-                }
-                field(orderClass; Rec."Order Class")
-                {
-                    Caption = 'Order Class';
-                }
-                field(orderDate; Rec."Order Date")
-                {
-                    Caption = 'Order Date';
-                }
-                field(outboundWhseHandlingTime; Rec."Outbound Whse. Handling Time")
-                {
-                    Caption = 'Outbound Whse. Handling Time';
-                }
-                field(outstandingAmount; Rec."Outstanding Amount ($)")
-                {
-                    Caption = 'Outstanding Amount ($)';
-                }
-                field(packageTrackingNo; Rec."Package Tracking No.")
-                {
-                    Caption = 'Package Tracking No.';
-                }
-                field(paymentDiscount; Rec."Payment Discount %")
-                {
-                    Caption = 'Payment Discount %';
-                }
-                field(paymentMethodCode; Rec."Payment Method Code")
-                {
-                    Caption = 'Payment Method Code';
-                }
-                field(paymentServiceSetID; Rec."Payment Service Set ID")
-                {
-                    Caption = 'Payment Service Set ID';
-                }
-                field(paymentTermsCode; Rec."Payment Terms Code")
-                {
-                    Caption = 'Payment Terms Code';
-                }
-                field(pmtDiscountDate; Rec."Pmt. Discount Date")
-                {
-                    Caption = 'Pmt. Discount Date';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(postingDescription; Rec."Posting Description")
-                {
-                    Caption = 'Posting Description';
-                }
-                field(postingNo; Rec."Posting No.")
-                {
-                    Caption = 'Posting No.';
-                }
-                field(postingNoSeries; Rec."Posting No. Series")
-                {
-                    Caption = 'Posting No. Series';
-                }
-                field(postingFromWhseRef; Rec."Posting from Whse. Ref.")
-                {
-                    Caption = 'Posting from Whse. Ref.';
-                }
-                field(prepayment; Rec."Prepayment %")
-                {
-                    Caption = 'Prepayment %';
-                }
-                field(prepaymentDueDate; Rec."Prepayment Due Date")
-                {
-                    Caption = 'Prepayment Due Date';
-                }
-                field(prepaymentNo; Rec."Prepayment No.")
-                {
-                    Caption = 'Prepayment No.';
-                }
-                field(prepaymentNoSeries; Rec."Prepayment No. Series")
-                {
-                    Caption = 'Prepayment No. Series';
-                }
-                field(prepmtCrMemoNo; Rec."Prepmt. Cr. Memo No.")
-                {
-                    Caption = 'Prepmt. Cr. Memo No.';
-                }
-                field(prepmtCrMemoNoSeries; Rec."Prepmt. Cr. Memo No. Series")
-                {
-                    Caption = 'Prepmt. Cr. Memo No. Series';
-                }
-                field(prepmtIncludeTax; Rec."Prepmt. Include Tax")
-                {
-                    Caption = 'Prepmt. Include Tax';
-                }
-                field(prepmtPaymentDiscount; Rec."Prepmt. Payment Discount %")
-                {
-                    Caption = 'Prepmt. Payment Discount %';
-                }
-                field(prepmtPaymentTermsCode; Rec."Prepmt. Payment Terms Code")
-                {
-                    Caption = 'Prepmt. Payment Terms Code';
-                }
-                field(prepmtPmtDiscountDate; Rec."Prepmt. Pmt. Discount Date")
-                {
-                    Caption = 'Prepmt. Pmt. Discount Date';
-                }
-                field(prepmtPostingDescription; Rec."Prepmt. Posting Description")
-                {
-                    Caption = 'Prepmt. Posting Description';
-                }
-                field(prepmtSalesTaxRoundingAmt; Rec."Prepmt. Sales Tax Rounding Amt")
-                {
-                    Caption = 'Prepayment Sales Tax Rounding Amount';
-                }
-                field(priceCalculationMethod; Rec."Price Calculation Method")
-                {
-                    Caption = 'Price Calculation Method';
-                }
-                field(pricesIncludingVAT; Rec."Prices Including VAT")
-                {
-                    Caption = 'Prices Including VAT';
-                }
-                field(printPostedDocuments; Rec."Print Posted Documents")
-                {
-                    Caption = 'Print Posted Documents';
-                }
-                field(promisedDeliveryDate; Rec."Promised Delivery Date")
-                {
-                    Caption = 'Promised Delivery Date';
-                }
-                field(quoteAccepted; Rec."Quote Accepted")
-                {
-                    Caption = 'Quote Accepted';
-                }
-                field(quoteAcceptedDate; Rec."Quote Accepted Date")
-                {
-                    Caption = 'Quote Accepted Date';
-                }
-                field(quoteNo; Rec."Quote No.")
-                {
-                    Caption = 'Quote No.';
-                }
-                field(quoteSentToCustomer; Rec."Quote Sent to Customer")
-                {
-                    Caption = 'Quote Sent to Customer';
-                }
-                field(quoteValidUntilDate; Rec."Quote Valid Until Date")
-                {
-                    Caption = 'Quote Valid To Date';
-                }
-                field(rcvdFromCountRegionCode; Rec."Rcvd.-from Count./Region Code")
-                {
-                    Caption = 'Received-from Country/Region Code';
-                }
-                field(reasonCode; Rec."Reason Code")
-                {
-                    Caption = 'Reason Code';
-                }
-                field(recalculateInvoiceDisc; Rec."Recalculate Invoice Disc.")
-                {
-                    Caption = 'Recalculate Invoice Disc.';
-                }
-                field(receive; Rec.Receive)
-                {
-                    Caption = 'Receive';
-                }
-                field(requestedDeliveryDate; Rec."Requested Delivery Date")
-                {
-                    Caption = 'Requested Delivery Date';
-                }
-                field(reserve; Rec.Reserve)
-                {
-                    Caption = 'Reserve';
-                }
-                field(responsibilityCenter; Rec."Responsibility Center")
-                {
-                    Caption = 'Responsibility Center';
-                }
-                field(returnReceiptNo; Rec."Return Receipt No.")
-                {
-                    Caption = 'Return Receipt No.';
-                }
-                field(returnReceiptNoSeries; Rec."Return Receipt No. Series")
-                {
-                    Caption = 'Return Receipt No. Series';
-                }
-                field(satAddressID; Rec."SAT Address ID")
-                {
-                    Caption = 'SAT Address ID';
-                }
-                field(satInternationalTradeTerm; Rec."SAT International Trade Term")
-                {
-                    Caption = 'SAT International Trade Term';
-                }
-                field(satWeightUnitOfMeasure; Rec."SAT Weight Unit Of Measure")
-                {
-                    Caption = 'SAT Weight Unit Of Measure';
-                }
-                field(steTransactionID; Rec."STE Transaction ID")
-                {
-                    Caption = 'STE Transaction ID';
-                }
-                field(salesTaxAmountRounding; Rec."Sales Tax Amount Rounding")
-                {
-                    Caption = 'Sales Tax Amount Rounding';
-                }
-                field(salespersonCode; Rec."Salesperson Code")
-                {
-                    Caption = 'Salesperson Code';
-                }
-                field(sellToAddress; Rec."Sell-to Address")
-                {
-                    Caption = 'Sell-to Address';
-                }
-                field(sellToAddress2; Rec."Sell-to Address 2")
-                {
-                    Caption = 'Sell-to Address 2';
-                }
-                field(sellToCity; Rec."Sell-to City")
-                {
-                    Caption = 'Sell-to City';
-                }
-                field(sellToContact; Rec."Sell-to Contact")
-                {
-                    Caption = 'Sell-to Contact';
-                }
-                field(sellToContactNo; Rec."Sell-to Contact No.")
-                {
-                    Caption = 'Sell-to Contact No.';
-                }
-                field(sellToCountryRegionCode; Rec."Sell-to Country/Region Code")
-                {
-                    Caption = 'Sell-to Country/Region Code';
-                }
-                field(sellToCounty; Rec."Sell-to County")
-                {
-                    Caption = 'Sell-to County';
-                }
-                field(sellToCustomerName; Rec."Sell-to Customer Name")
-                {
-                    Caption = 'Sell-to Customer Name';
-                }
-                field(sellToCustomerName2; Rec."Sell-to Customer Name 2")
-                {
-                    Caption = 'Sell-to Customer Name 2';
-                }
-                field(sellToCustomerNo; Rec."Sell-to Customer No.")
-                {
-                    Caption = 'Sell-to Customer No.';
-                }
-                field(sellToCustomerTemplCode; Rec."Sell-to Customer Templ. Code")
-                {
-                    Caption = 'Sell-to Customer Template Code';
-                }
-                field(sellToEMail; Rec."Sell-to E-Mail")
-                {
-                    Caption = 'Email';
-                }
-                field(sellToICPartnerCode; Rec."Sell-to IC Partner Code")
-                {
-                    Caption = 'Sell-to IC Partner Code';
-                }
-                field(sellToPhoneNo; Rec."Sell-to Phone No.")
-                {
-                    Caption = 'Sell-to Phone No.';
-                }
-                field(sellToPostCode; Rec."Sell-to Post Code")
-                {
-                    Caption = 'Sell-to Post Code';
-                }
-                field(sendICDocument; Rec."Send IC Document")
-                {
-                    Caption = 'Send IC Document';
-                }
-                field(ship; Rec.Ship)
-                {
-                    Caption = 'Ship';
-                }
-                field(shipToAddress; Rec."Ship-to Address")
-                {
-                    Caption = 'Ship-to Address';
-                }
-                field(shipToAddress2; Rec."Ship-to Address 2")
-                {
-                    Caption = 'Ship-to Address 2';
-                }
-                field(shipToCity; Rec."Ship-to City")
-                {
-                    Caption = 'Ship-to City';
-                }
-                field(shipToCode; Rec."Ship-to Code")
-                {
-                    Caption = 'Ship-to Code';
-                }
-                field(shipToContact; Rec."Ship-to Contact")
-                {
-                    Caption = 'Ship-to Contact';
-                }
-                field(shipToCountryRegionCode; Rec."Ship-to Country/Region Code")
-                {
-                    Caption = 'Ship-to Country/Region Code';
-                }
-                field(shipToCounty; Rec."Ship-to County")
-                {
-                    Caption = 'Ship-to County';
-                }
-                field(shipToName; Rec."Ship-to Name")
-                {
-                    Caption = 'Ship-to Name';
-                }
-                field(shipToName2; Rec."Ship-to Name 2")
-                {
-                    Caption = 'Ship-to Name 2';
-                }
-                field(shipToPostCode; Rec."Ship-to Post Code")
-                {
-                    Caption = 'Ship-to Post Code';
-                }
-                field(shipToUPSZone; Rec."Ship-to UPS Zone")
-                {
-                    Caption = 'Ship-to UPS Zone';
-                }
-                field(shipmentDate; Rec."Shipment Date")
-                {
-                    Caption = 'Shipment Date';
-                }
-                field(shipmentMethodCode; Rec."Shipment Method Code")
-                {
-                    Caption = 'Shipment Method Code';
-                }
-                field(shipped; Rec.Shipped)
-                {
-                    Caption = 'Shipped';
-                }
-                field(shippedNotInvoiced; Rec."Shipped Not Invoiced")
-                {
-                    Caption = 'Shipped Not Invoiced';
-                }
-                field(shippingAdvice; Rec."Shipping Advice")
-                {
-                    Caption = 'Shipping Advice';
-                }
-                field(shippingAgentCode; Rec."Shipping Agent Code")
-                {
-                    Caption = 'Shipping Agent Code';
-                }
-                field(shippingAgentServiceCode; Rec."Shipping Agent Service Code")
-                {
-                    Caption = 'Shipping Agent Service Code';
-                }
-                field(shippingNo; Rec."Shipping No.")
-                {
-                    Caption = 'Shipping No.';
-                }
-                field(shippingNoSeries; Rec."Shipping No. Series")
-                {
-                    Caption = 'Shipping No. Series';
-                }
-                field(shippingTime; Rec."Shipping Time")
-                {
-                    Caption = 'Shipping Time';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(status; Rec.Status)
-                {
-                    Caption = 'Status';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAreaCode; Rec."Tax Area Code")
-                {
-                    Caption = 'Tax Area Code';
-                }
-                field(taxExemptionNo; Rec."Tax Exemption No.")
-                {
-                    Caption = 'Tax Exemption No.';
-                }
-                field(taxLiable; Rec."Tax Liable")
-                {
-                    Caption = 'Tax Liable';
-                }
-                field(trailer1; Rec."Trailer 1")
-                {
-                    Caption = 'Trailer 1';
-                }
-                field(trailer2; Rec."Trailer 2")
-                {
-                    Caption = 'Trailer 2';
-                }
-                field(transactionSpecification; Rec."Transaction Specification")
-                {
-                    Caption = 'Transaction Specification';
-                }
-                field("transactionType"; Rec."Transaction Type")
-                {
-                    Caption = 'Transaction Type';
-                }
-                field(transitDistance; Rec."Transit Distance")
-                {
-                    Caption = 'Transit Distance';
-                }
-                field(transitHours; Rec."Transit Hours")
-                {
-                    Caption = 'Transit Hours';
-                }
-                field(transitFromDateTime; Rec."Transit-from Date/Time")
-                {
-                    Caption = 'Transit-from Date/Time';
-                }
-                field(transportMethod; Rec."Transport Method")
-                {
-                    Caption = 'Transport Method';
-                }
-                field(transportOperators; Rec."Transport Operators")
-                {
-                    Caption = 'Transport Operators';
-                }
-                field(vatBaseDiscount; Rec."VAT Base Discount %")
-                {
-                    Caption = 'VAT Base Discount %';
-                }
-                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
-                {
-                    Caption = 'VAT Bus. Posting Group';
-                }
-                field(vatCountryRegionCode; Rec."VAT Country/Region Code")
-                {
-                    Caption = 'VAT Country/Region Code';
-                }
-                field(vatRegistrationNo; Rec."VAT Registration No.")
-                {
-                    Caption = 'VAT Registration No.';
-                }
-                field(vatReportingDate; Rec."VAT Reporting Date")
-                {
-                    Caption = 'VAT Date';
-                }
-                field(vehicleCode; Rec."Vehicle Code")
-                {
-                    Caption = 'Vehicle Code';
-                }
-                field(workDescription; Rec."Work Description")
-                {
-                    Caption = 'Work Description';
-                }
-                field(yourReference; Rec."Your Reference")
-                {
-                    Caption = 'Your Reference';
-                }
-                field(dateFilter; Rec."Date Filter")
-                {
-                    Caption = 'Date Filter';
-                }
-                field(locationFilter; Rec."Location Filter")
-                {
-                    Caption = 'Location Filter';
-                }
-            }
-        }
-    }
-}
-
-page 90059 "Sales Line"
-{
-    APIGroup = 'standardEndpoints';
-    APIPublisher = 'fivetran';
-    APIVersion = 'v1.0';
-    ApplicationArea = All;
-    Caption = 'salesLine';
-    DelayedInsert = true;
-    EntityName = 'salesLine';
-    EntitySetName = 'salesLines';
-    PageType = API;
-    SourceTable = "Sales Line";
-    ODataKeyFields = SystemId;
-    Editable = false;
-    DataAccessIntent = ReadOnly;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(atoWhseOutstandingQty; Rec."ATO Whse. Outstanding Qty.")
-                {
-                    Caption = 'ATO Whse. Outstanding Qty.';
-                }
-                field(atoWhseOutstdQtyBase; Rec."ATO Whse. Outstd. Qty. (Base)")
-                {
-                    Caption = 'ATO Whse. Outstd. Qty. (Base)';
-                }
-                field(allocAccModifiedByUser; Rec."Alloc. Acc. Modified by User")
-                {
-                    Caption = 'Allocation Account Distributions Modified';
-                }
-                field(allocationAccountNo; Rec."Allocation Account No.")
-                {
-                    Caption = 'Posting Allocation Account No.';
-                }
-                field(allowInvoiceDisc; Rec."Allow Invoice Disc.")
-                {
-                    Caption = 'Allow Invoice Disc.';
-                }
-                field(allowItemChargeAssignment; Rec."Allow Item Charge Assignment")
-                {
-                    Caption = 'Allow Item Charge Assignment';
-                }
-                field(allowLineDisc; Rec."Allow Line Disc.")
-                {
-                    Caption = 'Allow Line Disc.';
-                }
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(applFromItemEntry; Rec."Appl.-from Item Entry")
-                {
-                    Caption = 'Appl.-from Item Entry';
-                }
-                field(applToItemEntry; Rec."Appl.-to Item Entry")
-                {
-                    Caption = 'Appl.-to Item Entry';
-                }
-                field("area"; Rec."Area")
-                {
-                    Caption = 'Area';
-                }
-                field(attachedDocCount; Rec."Attached Doc Count")
-                {
-                    Caption = 'Attached Doc Count';
-                }
-                field(attachedLinesCount; Rec."Attached Lines Count")
-                {
-                    Caption = 'Attached Lines Count';
-                }
-                field(attachedToLineNo; Rec."Attached to Line No.")
-                {
-                    Caption = 'Attached to Line No.';
-                }
-                field(bomItemNo; Rec."BOM Item No.")
-                {
-                    Caption = 'BOM Item No.';
-                }
-                field(billToCustomerNo; Rec."Bill-to Customer No.")
-                {
-                    Caption = 'Bill-to Customer No.';
-                }
-                field(binCode; Rec."Bin Code")
-                {
-                    Caption = 'Bin Code';
-                }
-                field(blanketOrderLineNo; Rec."Blanket Order Line No.")
-                {
-                    Caption = 'Blanket Order Line No.';
-                }
-                field(blanketOrderNo; Rec."Blanket Order No.")
-                {
-                    Caption = 'Blanket Order No.';
-                }
-                field(completelyShipped; Rec."Completely Shipped")
-                {
-                    Caption = 'Completely Shipped';
-                }
-                field(copiedFromPostedDoc; Rec."Copied From Posted Doc.")
-                {
-                    Caption = 'Copied From Posted Doc.';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(customTransitNumber; Rec."Custom Transit Number")
-                {
-                    Caption = 'Custom Transit Number';
-                }
-                field(customerDiscGroup; Rec."Customer Disc. Group")
-                {
-                    Caption = 'Customer Disc. Group';
-                }
-                field(customerPriceGroup; Rec."Customer Price Group")
-                {
-                    Caption = 'Customer Price Group';
-                }
-                field(deferralCode; Rec."Deferral Code")
-                {
-                    Caption = 'Deferral Code';
-                }
-                field(deprUntilFAPostingDate; Rec."Depr. until FA Posting Date")
-                {
-                    Caption = 'Depr. until FA Posting Date';
-                }
-                field(depreciationBookCode; Rec."Depreciation Book Code")
-                {
-                    Caption = 'Depreciation Book Code';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(description2; Rec."Description 2")
-                {
-                    Caption = 'Description 2';
-                }
-                field(dimensionSetID; Rec."Dimension Set ID")
-                {
-                    Caption = 'Dimension Set ID';
-                }
-                field(documentNo; Rec."Document No.")
-                {
-                    Caption = 'Document No.';
-                }
-                field(documentType; Rec."Document Type")
-                {
-                    Caption = 'Document Type';
-                }
-                field(dropShipment; Rec."Drop Shipment")
-                {
-                    Caption = 'Drop Shipment';
-                }
-                field(duplicateInDepreciationBook; Rec."Duplicate in Depreciation Book")
-                {
-                    Caption = 'Duplicate in Depreciation Book';
-                }
-                field(exitPoint; Rec."Exit Point")
-                {
-                    Caption = 'Exit Point';
-                }
-                field(faPostingDate; Rec."FA Posting Date")
-                {
-                    Caption = 'FA Posting Date';
-                }
-                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
-                {
-                    Caption = 'Gen. Bus. Posting Group';
-                }
-                field(genProdPostingGroup; Rec."Gen. Prod. Posting Group")
-                {
-                    Caption = 'Gen. Prod. Posting Group';
-                }
-                field(grossWeight; Rec."Gross Weight")
-                {
-                    Caption = 'Gross Weight';
-                }
-                field(icItemReferenceNo; Rec."IC Item Reference No.")
-                {
-                    Caption = 'IC Item Reference No.';
-                }
-                field(icPartnerCode; Rec."IC Partner Code")
-                {
-                    Caption = 'IC Partner Code';
-                }
-                field(icPartnerRefType; Rec."IC Partner Ref. Type")
-                {
-                    Caption = 'IC Partner Ref. Type';
-                }
-                field(icPartnerReference; Rec."IC Partner Reference")
-                {
-                    Caption = 'IC Partner Reference';
-                }
-                field(invDiscAmountToInvoice; Rec."Inv. Disc. Amount to Invoice")
-                {
-                    Caption = 'Inv. Disc. Amount to Invoice';
-                }
-                field(invDiscountAmount; Rec."Inv. Discount Amount")
-                {
-                    Caption = 'Inv. Discount Amount';
-                }
-                field(itemCategoryCode; Rec."Item Category Code")
-                {
-                    Caption = 'Item Category Code';
-                }
-                field(itemChargeQtyToHandle; Rec."Item Charge Qty. to Handle")
-                {
-                    Caption = 'Item Charge Qty. to Handle';
-                }
-                field(itemReferenceNo; Rec."Item Reference No.")
-                {
-                    Caption = 'Item Reference No.';
-                }
-                field(itemReferenceType; Rec."Item Reference Type")
-                {
-                    Caption = 'Item Reference Type';
-                }
-                field(itemReferenceTypeNo; Rec."Item Reference Type No.")
-                {
-                    Caption = 'Item Reference Type No.';
-                }
-                field(itemReferenceUnitOfMeasure; Rec."Item Reference Unit of Measure")
-                {
-                    Caption = 'Reference Unit of Measure';
-                }
-                field(jobContractEntryNo; Rec."Job Contract Entry No.")
-                {
-                    Caption = 'Job Contract Entry No.';
-                }
-                field(jobNo; Rec."Job No.")
-                {
-                    Caption = 'Job No.';
-                }
-                field(jobTaskNo; Rec."Job Task No.")
-                {
-                    Caption = 'Job Task No.';
-                }
-                field(lineAmount; Rec."Line Amount")
-                {
-                    Caption = 'Line Amount';
-                }
-                field(lineDiscount; Rec."Line Discount %")
-                {
-                    Caption = 'Line Discount %';
-                }
-                field(lineDiscountAmount; Rec."Line Discount Amount")
-                {
-                    Caption = 'Line Discount Amount';
-                }
-                field(lineDiscountCalculation; Rec."Line Discount Calculation")
-                {
-                    Caption = 'Line Discount Calculation';
-                }
-                field(lineNo; Rec."Line No.")
-                {
-                    Caption = 'Line No.';
-                }
-                field(locationCode; Rec."Location Code")
-                {
-                    Caption = 'Location Code';
-                }
-                field(netWeight; Rec."Net Weight")
-                {
-                    Caption = 'Net Weight';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(nonstock; Rec.Nonstock)
-                {
-                    Caption = 'Catalog';
-                }
-                field(originallyOrderedNo; Rec."Originally Ordered No.")
-                {
-                    Caption = 'Originally Ordered No.';
-                }
-                field(originallyOrderedVarCode; Rec."Originally Ordered Var. Code")
-                {
-                    Caption = 'Originally Ordered Var. Code';
-                }
-                field(outOfStockSubstitution; Rec."Out-of-Stock Substitution")
-                {
-                    Caption = 'Out-of-Stock Substitution';
-                }
-                field(outboundWhseHandlingTime; Rec."Outbound Whse. Handling Time")
-                {
-                    Caption = 'Outbound Whse. Handling Time';
-                }
-                field(outstandingAmount; Rec."Outstanding Amount")
-                {
-                    Caption = 'Outstanding Amount';
-                }
-                field(outstandingAmountLCY; Rec."Outstanding Amount (LCY)")
-                {
-                    Caption = 'Outstanding Amount (LCY)';
-                }
-                field(outstandingQtyBase; Rec."Outstanding Qty. (Base)")
-                {
-                    Caption = 'Outstanding Qty. (Base)';
-                }
-                field(outstandingQuantity; Rec."Outstanding Quantity")
-                {
-                    Caption = 'Outstanding Quantity';
-                }
-                field(packageTrackingNo; Rec."Package Tracking No.")
-                {
-                    Caption = 'Package Tracking No.';
-                }
-                field(planned; Rec.Planned)
-                {
-                    Caption = 'Planned';
-                }
-                field(plannedDeliveryDate; Rec."Planned Delivery Date")
-                {
-                    Caption = 'Planned Delivery Date';
-                }
-                field(plannedShipmentDate; Rec."Planned Shipment Date")
-                {
-                    Caption = 'Planned Shipment Date';
-                }
-                field(pmtDiscountAmount; Rec."Pmt. Discount Amount")
-                {
-                    Caption = 'Pmt. Discount Amount';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(postingGroup; Rec."Posting Group")
-                {
-                    Caption = 'Posting Group';
-                }
-                field(prepayment; Rec."Prepayment %")
-                {
-                    Caption = 'Prepayment %';
-                }
-                field(prepaymentAmount; Rec."Prepayment Amount")
-                {
-                    Caption = 'Prepayment Amount';
-                }
-                field(prepaymentLine; Rec."Prepayment Line")
-                {
-                    Caption = 'Prepayment Line';
-                }
-                field(prepaymentTaxAreaCode; Rec."Prepayment Tax Area Code")
-                {
-                    Caption = 'Prepayment Tax Area Code';
-                }
-                field(prepaymentTaxGroupCode; Rec."Prepayment Tax Group Code")
-                {
-                    Caption = 'Prepayment Tax Group Code';
-                }
-                field(prepaymentTaxLiable; Rec."Prepayment Tax Liable")
-                {
-                    Caption = 'Prepayment Tax Liable';
-                }
-                field(prepaymentVAT; Rec."Prepayment VAT %")
-                {
-                    Caption = 'Prepayment VAT %';
-                }
-                field(prepaymentVATDifference; Rec."Prepayment VAT Difference")
-                {
-                    Caption = 'Prepayment VAT Difference';
-                }
-                field(prepaymentVATIdentifier; Rec."Prepayment VAT Identifier")
-                {
-                    Caption = 'Prepayment VAT Identifier';
-                }
-                field(prepmtAmtDeducted; Rec."Prepmt Amt Deducted")
-                {
-                    Caption = 'Prepmt Amt Deducted';
-                }
-                field(prepmtAmtToDeduct; Rec."Prepmt Amt to Deduct")
-                {
-                    Caption = 'Prepmt Amt to Deduct';
-                }
-                field(prepmtVATDiffDeducted; Rec."Prepmt VAT Diff. Deducted")
-                {
-                    Caption = 'Prepmt VAT Diff. Deducted';
-                }
-                field(prepmtVATDiffToDeduct; Rec."Prepmt VAT Diff. to Deduct")
-                {
-                    Caption = 'Prepmt VAT Diff. to Deduct';
-                }
-                field(prepmtAmountInvLCY; Rec."Prepmt. Amount Inv. (LCY)")
-                {
-                    Caption = 'Prepmt. Amount Inv. (LCY)';
-                }
-                field(prepmtAmountInvInclVAT; Rec."Prepmt. Amount Inv. Incl. VAT")
-                {
-                    Caption = 'Prepmt. Amount Inv. Incl. VAT';
-                }
-                field(prepmtAmtInclVAT; Rec."Prepmt. Amt. Incl. VAT")
-                {
-                    Caption = 'Prepmt. Amt. Incl. VAT';
-                }
-                field(prepmtAmtInv; Rec."Prepmt. Amt. Inv.")
-                {
-                    Caption = 'Prepmt. Amt. Inv.';
-                }
-                field(prepmtLineAmount; Rec."Prepmt. Line Amount")
-                {
-                    Caption = 'Prepmt. Line Amount';
-                }
-                field(prepmtPmtDiscountAmount; Rec."Prepmt. Pmt. Discount Amount")
-                {
-                    Caption = 'Prepmt. Pmt. Discount Amount';
-                }
-                field(prepmtVATAmountInvLCY; Rec."Prepmt. VAT Amount Inv. (LCY)")
-                {
-                    Caption = 'Prepmt. VAT Amount Inv. (LCY)';
-                }
-                field(prepmtVATBaseAmt; Rec."Prepmt. VAT Base Amt.")
-                {
-                    Caption = 'Prepmt. VAT Base Amt.';
-                }
-                field(prepmtVATCalcType; Rec."Prepmt. VAT Calc. Type")
-                {
-                    Caption = 'Prepmt. VAT Calc. Type';
-                }
-                field(priceCalculationMethod; Rec."Price Calculation Method")
-                {
-                    Caption = 'Price Calculation Method';
-                }
-                field(priceDescription; Rec."Price description")
-                {
-                    Caption = 'Price description';
-                }
-                field(profit; Rec."Profit %")
-                {
-                    Caption = 'Profit %';
-                }
-                field(promisedDeliveryDate; Rec."Promised Delivery Date")
-                {
-                    Caption = 'Promised Delivery Date';
-                }
-                field(purchOrderLineNo; Rec."Purch. Order Line No.")
-                {
-                    Caption = 'Purch. Order Line No.';
-                }
-                field(purchaseOrderNo; Rec."Purchase Order No.")
-                {
-                    Caption = 'Purchase Order No.';
-                }
-                field(purchasingCode; Rec."Purchasing Code")
-                {
-                    Caption = 'Purchasing Code';
-                }
-                field(qtyAssigned; Rec."Qty. Assigned")
-                {
-                    Caption = 'Qty. Assigned';
-                }
-                field(qtyInvoicedBase; Rec."Qty. Invoiced (Base)")
-                {
-                    Caption = 'Qty. Invoiced (Base)';
-                }
-                field(qtyRoundingPrecision; Rec."Qty. Rounding Precision")
-                {
-                    Caption = 'Qty. Rounding Precision';
-                }
-                field(qtyRoundingPrecisionBase; Rec."Qty. Rounding Precision (Base)")
-                {
-                    Caption = 'Qty. Rounding Precision (Base)';
-                }
-                field(qtyShippedBase; Rec."Qty. Shipped (Base)")
-                {
-                    Caption = 'Qty. Shipped (Base)';
-                }
-                field(qtyShippedNotInvdBase; Rec."Qty. Shipped Not Invd. (Base)")
-                {
-                    Caption = 'Qty. Shipped Not Invd. (Base)';
-                }
-                field(qtyShippedNotInvoiced; Rec."Qty. Shipped Not Invoiced")
-                {
-                    Caption = 'Qty. Shipped Not Invoiced';
-                }
-                field(qtyPerUnitOfMeasure; Rec."Qty. per Unit of Measure")
-                {
-                    Caption = 'Qty. per Unit of Measure';
-                }
-                field(qtyToAsmToOrderBase; Rec."Qty. to Asm. to Order (Base)")
-                {
-                    Caption = 'Qty. to Asm. to Order (Base)';
-                }
-                field(qtyToAssembleToOrder; Rec."Qty. to Assemble to Order")
-                {
-                    Caption = 'Qty. to Assemble to Order';
-                }
-                field(qtyToAssign; Rec."Qty. to Assign")
-                {
-                    Caption = 'Qty. to Assign';
-                }
-                field(qtyToInvoice; Rec."Qty. to Invoice")
-                {
-                    Caption = 'Qty. to Invoice';
-                }
-                field(qtyToInvoiceBase; Rec."Qty. to Invoice (Base)")
-                {
-                    Caption = 'Qty. to Invoice (Base)';
-                }
-                field(qtyToShip; Rec."Qty. to Ship")
-                {
-                    Caption = 'Qty. to Ship';
-                }
-                field(qtyToShipBase; Rec."Qty. to Ship (Base)")
-                {
-                    Caption = 'Qty. to Ship (Base)';
-                }
-                field(quantity; Rec.Quantity)
-                {
-                    Caption = 'Quantity';
-                }
-                field(quantityBase; Rec."Quantity (Base)")
-                {
-                    Caption = 'Quantity (Base)';
-                }
-                field(quantityInvoiced; Rec."Quantity Invoiced")
-                {
-                    Caption = 'Quantity Invoiced';
-                }
-                field(quantityShipped; Rec."Quantity Shipped")
-                {
-                    Caption = 'Quantity Shipped';
-                }
-                field(recalculateInvoiceDisc; Rec."Recalculate Invoice Disc.")
-                {
-                    Caption = 'Recalculate Invoice Disc.';
-                }
-                field(requestedDeliveryDate; Rec."Requested Delivery Date")
-                {
-                    Caption = 'Requested Delivery Date';
-                }
-                field(reserve; Rec.Reserve)
-                {
-                    Caption = 'Reserve';
-                }
-                field(reservedQtyBase; Rec."Reserved Qty. (Base)")
-                {
-                    Caption = 'Reserved Qty. (Base)';
-                }
-                field(reservedQuantity; Rec."Reserved Quantity")
-                {
-                    Caption = 'Reserved Quantity';
-                }
-                field(responsibilityCenter; Rec."Responsibility Center")
-                {
-                    Caption = 'Responsibility Center';
-                }
-                field(retQtyRcdNotInvdBase; Rec."Ret. Qty. Rcd. Not Invd.(Base)")
-                {
-                    Caption = 'Ret. Qty. Rcd. Not Invd.(Base)';
-                }
-                field(retentionAttachedToLineNo; Rec."Retention Attached to Line No.")
-                {
-                    Caption = 'Retention Attached to Line No.';
-                }
-                field(retentionVAT; Rec."Retention VAT %")
-                {
-                    Caption = 'Retention VAT %';
-                }
-                field(returnQtyRcdNotInvd; Rec."Return Qty. Rcd. Not Invd.")
-                {
-                    Caption = 'Return Qty. Rcd. Not Invd.';
-                }
-                field(returnQtyReceived; Rec."Return Qty. Received")
-                {
-                    Caption = 'Return Qty. Received';
-                }
-                field(returnQtyReceivedBase; Rec."Return Qty. Received (Base)")
-                {
-                    Caption = 'Return Qty. Received (Base)';
-                }
-                field(returnQtyToReceive; Rec."Return Qty. to Receive")
-                {
-                    Caption = 'Return Qty. to Receive';
-                }
-                field(returnQtyToReceiveBase; Rec."Return Qty. to Receive (Base)")
-                {
-                    Caption = 'Return Qty. to Receive (Base)';
-                }
-                field(returnRcdNotInvd; Rec."Return Rcd. Not Invd.")
-                {
-                    Caption = 'Return Rcd. Not Invd.';
-                }
-                field(returnRcdNotInvdLCY; Rec."Return Rcd. Not Invd. (LCY)")
-                {
-                    Caption = 'Return Rcd. Not Invd. (LCY)';
-                }
-                field(returnReasonCode; Rec."Return Reason Code")
-                {
-                    Caption = 'Return Reason Code';
-                }
-                field(returnReceiptLineNo; Rec."Return Receipt Line No.")
-                {
-                    Caption = 'Return Receipt Line No.';
-                }
-                field(returnReceiptNo; Rec."Return Receipt No.")
-                {
-                    Caption = 'Return Receipt No.';
-                }
-                field(returnsDeferralStartDate; Rec."Returns Deferral Start Date")
-                {
-                    Caption = 'Returns Deferral Start Date';
-                }
-                field(selectedAllocAccountNo; Rec."Selected Alloc. Account No.")
-                {
-                    Caption = 'Allocation Account No.';
-                }
-                field(sellToCustomerNo; Rec."Sell-to Customer No.")
-                {
-                    Caption = 'Sell-to Customer No.';
-                }
-                field(shipmentDate; Rec."Shipment Date")
-                {
-                    Caption = 'Shipment Date';
-                }
-                field(shipmentLineNo; Rec."Shipment Line No.")
-                {
-                    Caption = 'Shipment Line No.';
-                }
-                field(shipmentNo; Rec."Shipment No.")
-                {
-                    Caption = 'Shipment No.';
-                }
-                field(shippedNotInvLCYNoVAT; Rec."Shipped Not Inv. (LCY) No VAT")
-                {
-                    Caption = 'Shipped Not Invoiced (LCY)';
-                }
-                field(shippedNotInvoiced; Rec."Shipped Not Invoiced")
-                {
-                    Caption = 'Shipped Not Invoiced';
-                }
-                field(shippedNotInvoicedLCY; Rec."Shipped Not Invoiced (LCY)")
-                {
-                    Caption = 'Shipped Not Invoiced (LCY) Incl. VAT';
-                }
-                field(shippingAgentCode; Rec."Shipping Agent Code")
-                {
-                    Caption = 'Shipping Agent Code';
-                }
-                field(shippingAgentServiceCode; Rec."Shipping Agent Service Code")
-                {
-                    Caption = 'Shipping Agent Service Code';
-                }
-                field(shippingTime; Rec."Shipping Time")
-                {
-                    Caption = 'Shipping Time';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(specialOrder; Rec."Special Order")
-                {
-                    Caption = 'Special Order';
-                }
-                field(specialOrderPurchLineNo; Rec."Special Order Purch. Line No.")
-                {
-                    Caption = 'Special Order Purch. Line No.';
-                }
-                field(specialOrderPurchaseNo; Rec."Special Order Purchase No.")
-                {
-                    Caption = 'Special Order Purchase No.';
-                }
-                field(substitutionAvailable; Rec."Substitution Available")
-                {
-                    Caption = 'Substitution Available';
-                }
-                field(subtype; Rec.Subtype)
-                {
-                    Caption = 'Subtype';
-                }
-                field(systemCreatedEntry; Rec."System-Created Entry")
-                {
-                    Caption = 'System-Created Entry';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAreaCode; Rec."Tax Area Code")
-                {
-                    Caption = 'Tax Area Code';
-                }
-                field(taxCategory; Rec."Tax Category")
-                {
-                    Caption = 'Tax Category';
-                }
-                field(taxGroupCode; Rec."Tax Group Code")
-                {
-                    Caption = 'Tax Group Code';
-                }
-                field(taxLiable; Rec."Tax Liable")
-                {
-                    Caption = 'Tax Liable';
-                }
-                field(transactionSpecification; Rec."Transaction Specification")
-                {
-                    Caption = 'Transaction Specification';
-                }
-                field("transactionType"; Rec."Transaction Type")
-                {
-                    Caption = 'Transaction Type';
-                }
-                field(transportMethod; Rec."Transport Method")
-                {
-                    Caption = 'Transport Method';
-                }
-                field("type"; Rec."Type")
-                {
-                    Caption = 'Type';
-                }
-                field(unitCost; Rec."Unit Cost")
-                {
-                    Caption = 'Unit Cost';
-                }
-                field(unitCostLCY; Rec."Unit Cost (LCY)")
-                {
-                    Caption = 'Unit Cost (LCY)';
-                }
-                field(unitPrice; Rec."Unit Price")
-                {
-                    Caption = 'Unit Price';
-                }
-                field(unitVolume; Rec."Unit Volume")
-                {
-                    Caption = 'Unit Volume';
-                }
-                field(unitOfMeasure; Rec."Unit of Measure")
-                {
-                    Caption = 'Unit of Measure';
-                }
-                field(unitOfMeasureCode; Rec."Unit of Measure Code")
-                {
-                    Caption = 'Unit of Measure Code';
-                }
-                field(unitsPerParcel; Rec."Units per Parcel")
-                {
-                    Caption = 'Units per Parcel';
-                }
-                field(useDuplicationList; Rec."Use Duplication List")
-                {
-                    Caption = 'Use Duplication List';
-                }
-                field(vat; Rec."VAT %")
-                {
-                    Caption = 'VAT %';
-                }
-                field(vatBaseAmount; Rec."VAT Base Amount")
-                {
-                    Caption = 'VAT Base Amount';
-                }
-                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
-                {
-                    Caption = 'VAT Bus. Posting Group';
-                }
-                field(vatCalculationType; Rec."VAT Calculation Type")
-                {
-                    Caption = 'VAT Calculation Type';
-                }
-                field(vatClauseCode; Rec."VAT Clause Code")
-                {
-                    Caption = 'VAT Clause Code';
-                }
-                field(vatDifference; Rec."VAT Difference")
-                {
-                    Caption = 'VAT Difference';
-                }
-                field(vatIdentifier; Rec."VAT Identifier")
-                {
-                    Caption = 'VAT Identifier';
-                }
-                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
-                {
-                    Caption = 'VAT Prod. Posting Group';
-                }
-                field(variantCode; Rec."Variant Code")
-                {
-                    Caption = 'Variant Code';
-                }
-                field(whseOutstandingQty; Rec."Whse. Outstanding Qty.")
-                {
-                    Caption = 'Whse. Outstanding Qty.';
-                }
-                field(whseOutstandingQtyBase; Rec."Whse. Outstanding Qty. (Base)")
-                {
-                    Caption = 'Whse. Outstanding Qty. (Base)';
-                }
-                field(workTypeCode; Rec."Work Type Code")
-                {
-                    Caption = 'Work Type Code';
-                }
-            }
-        }
-    }
-}
-page 90060 "Sales Invoice Header"
-{
-    APIGroup = 'standardEndpoints';
-    APIPublisher = 'fivetran';
-    APIVersion = 'v1.0';
-    ApplicationArea = All;
-    Caption = 'salesInvoiceHeader';
-    DelayedInsert = true;
-    EntityName = 'salesInvoiceHeader';
-    EntitySetName = 'salesInvoiceHeaders';
-    PageType = API;
-    SourceTable = "Sales Invoice Header";
+    SourceTable = "Sales Cr.Memo Header";
     ODataKeyFields = SystemId;
     DataAccessIntent = ReadOnly;
     Editable = false;
@@ -17098,10 +10065,6 @@ page 90060 "Sales Invoice Header"
                 {
                     Caption = 'CFDI Export Code';
                 }
-                field(cfdiPeriod; Rec."CFDI Period")
-                {
-                    Caption = 'CFDI Period';
-                }
                 field(cfdiPurpose; Rec."CFDI Purpose")
                 {
                     Caption = 'CFDI Purpose';
@@ -17122,10 +10085,6 @@ page 90060 "Sales Invoice Header"
                 {
                     Caption = 'Certificate Serial No.';
                 }
-                field(closed; Rec.Closed)
-                {
-                    Caption = 'Closed';
-                }
                 field(comment; Rec.Comment)
                 {
                     Caption = 'Comment';
@@ -17141,10 +10100,6 @@ page 90060 "Sales Invoice Header"
                 field(corrective; Rec.Corrective)
                 {
                     Caption = 'Corrective';
-                }
-                field(coupledToDataverse; Rec."Coupled to Dataverse")
-                {
-                    Caption = 'Coupled to Dynamics 365 Sales';
                 }
                 field(currencyCode; Rec."Currency Code")
                 {
@@ -17206,10 +10161,6 @@ page 90060 "Sales Invoice Header"
                 {
                     Caption = 'Dimension Set ID';
                 }
-                field(directDebitMandateID; Rec."Direct Debit Mandate ID")
-                {
-                    Caption = 'Direct Debit Mandate ID';
-                }
                 field(docExchOriginalIdentifier; Rec."Doc. Exch. Original Identifier")
                 {
                     Caption = 'Doc. Exch. Original Identifier';
@@ -17226,9 +10177,9 @@ page 90060 "Sales Invoice Header"
                 {
                     Caption = 'Document Exchange Status';
                 }
-                field(draftInvoiceSystemId; Rec."Draft Invoice SystemId")
+                field(draftCrMemoSystemId; Rec."Draft Cr. Memo SystemId")
                 {
-                    Caption = 'Draft Invoice SystemId';
+                    Caption = 'Draft Cr. Memo System Id';
                 }
                 field(dueDate; Rec."Due Date")
                 {
@@ -17282,9 +10233,9 @@ page 90060 "Sales Invoice Header"
                 {
                     Caption = 'Gen. Bus. Posting Group';
                 }
-                field(getShipmentUsed; Rec."Get Shipment Used")
+                field(getReturnReceiptUsed; Rec."Get Return Receipt Used")
                 {
-                    Caption = 'Get Shipment Used';
+                    Caption = 'Get Return Receipt Used';
                 }
                 field(invoiceDiscCode; Rec."Invoice Disc. Code")
                 {
@@ -17293,14 +10244,6 @@ page 90060 "Sales Invoice Header"
                 field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
                 {
                     Caption = 'Invoice Discount Amount';
-                }
-                field(invoiceDiscountCalculation; Rec."Invoice Discount Calculation")
-                {
-                    Caption = 'Invoice Discount Calculation';
-                }
-                field(invoiceDiscountValue; Rec."Invoice Discount Value")
-                {
-                    Caption = 'Invoice Discount Value';
                 }
                 field(languageCode; Rec."Language Code")
                 {
@@ -17338,18 +10281,6 @@ page 90060 "Sales Invoice Header"
                 {
                     Caption = 'Opportunity No.';
                 }
-                field(orderDate; Rec."Order Date")
-                {
-                    Caption = 'Order Date';
-                }
-                field(orderNo; Rec."Order No.")
-                {
-                    Caption = 'Order No.';
-                }
-                field(orderNoSeries; Rec."Order No. Series")
-                {
-                    Caption = 'Order No. Series';
-                }
                 field(originalDocumentXML; Rec."Original Document XML")
                 {
                     Caption = 'Original Document XML';
@@ -17366,6 +10297,10 @@ page 90060 "Sales Invoice Header"
                 {
                     Caption = 'Package Tracking No.';
                 }
+                field(paid; Rec.Paid)
+                {
+                    Caption = 'Paid';
+                }
                 field(paymentDiscount; Rec."Payment Discount %")
                 {
                     Caption = 'Payment Discount %';
@@ -17373,14 +10308,6 @@ page 90060 "Sales Invoice Header"
                 field(paymentMethodCode; Rec."Payment Method Code")
                 {
                     Caption = 'Payment Method Code';
-                }
-                field(paymentReference; Rec."Payment Reference")
-                {
-                    Caption = 'Payment Reference';
-                }
-                field(paymentServiceSetID; Rec."Payment Service Set ID")
-                {
-                    Caption = 'Payment Service Set ID';
                 }
                 field(paymentTermsCode; Rec."Payment Terms Code")
                 {
@@ -17406,17 +10333,17 @@ page 90060 "Sales Invoice Header"
                 {
                     Caption = 'Pre-Assigned No. Series';
                 }
-                field(prepaymentInvoice; Rec."Prepayment Invoice")
+                field(prepaymentCreditMemo; Rec."Prepayment Credit Memo")
                 {
-                    Caption = 'Prepayment Invoice';
-                }
-                field(prepaymentNoSeries; Rec."Prepayment No. Series")
-                {
-                    Caption = 'Prepayment No. Series';
+                    Caption = 'Prepayment Credit Memo';
                 }
                 field(prepaymentOrderNo; Rec."Prepayment Order No.")
                 {
                     Caption = 'Prepayment Order No.';
+                }
+                field(prepmtCrMemoNoSeries; Rec."Prepmt. Cr. Memo No. Series")
+                {
+                    Caption = 'Prepmt. Cr. Memo No. Series';
                 }
                 field(priceCalculationMethod; Rec."Price Calculation Method")
                 {
@@ -17430,9 +10357,9 @@ page 90060 "Sales Invoice Header"
                 {
                     Caption = 'QR Code';
                 }
-                field(quoteNo; Rec."Quote No.")
+                field(rcvdFromCountRegionCode; Rec."Rcvd.-from Count./Region Code")
                 {
-                    Caption = 'Quote No.';
+                    Caption = 'Received-from Country/Region Code';
                 }
                 field(reasonCode; Rec."Reason Code")
                 {
@@ -17446,9 +10373,13 @@ page 90060 "Sales Invoice Header"
                 {
                     Caption = 'Responsibility Center';
                 }
-                field(reversed; Rec.Reversed)
+                field(returnOrderNo; Rec."Return Order No.")
                 {
-                    Caption = 'Reversed';
+                    Caption = 'Return Order No.';
+                }
+                field(returnOrderNoSeries; Rec."Return Order No. Series")
+                {
+                    Caption = 'Return Order No. Series';
                 }
                 field(satAddressID; Rec."SAT Address ID")
                 {
@@ -17574,6 +10505,10 @@ page 90060 "Sales Invoice Header"
                 {
                     Caption = 'Shipping Agent Code';
                 }
+                field(shippingAgentServiceCode; Rec."Shipping Agent Service Code")
+                {
+                    Caption = 'Shipping Agent Service Code';
+                }
                 field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
                 {
                     Caption = 'Shortcut Dimension 1 Code';
@@ -17675,1168 +10610,7 @@ page 90060 "Sales Invoice Header"
     }
 }
 
-page 90061 "Sales Invoice Line"
-{
-    APIGroup = 'standardEndpoints';
-    APIPublisher = 'fivetran';
-    APIVersion = 'v1.0';
-    ApplicationArea = All;
-    Caption = 'salesInvoiceLine';
-    DelayedInsert = true;
-    EntityName = 'salesInvoiceLine';
-    EntitySetName = 'salesInvoiceLines';
-    PageType = API;
-    SourceTable = "Sales Invoice Line";
-    ODataKeyFields = SystemId;
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(allocationAccountNo; Rec."Allocation Account No.")
-                {
-                    Caption = 'Allocation Account No.';
-                }
-                field(allowInvoiceDisc; Rec."Allow Invoice Disc.")
-                {
-                    Caption = 'Allow Invoice Disc.';
-                }
-                field(allowLineDisc; Rec."Allow Line Disc.")
-                {
-                    Caption = 'Allow Line Disc.';
-                }
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(applFromItemEntry; Rec."Appl.-from Item Entry")
-                {
-                    Caption = 'Appl.-from Item Entry';
-                }
-                field(applToItemEntry; Rec."Appl.-to Item Entry")
-                {
-                    Caption = 'Appl.-to Item Entry';
-                }
-                field("area"; Rec."Area")
-                {
-                    Caption = 'Area';
-                }
-                field(attachedToLineNo; Rec."Attached to Line No.")
-                {
-                    Caption = 'Attached to Line No.';
-                }
-                field(billToCustomerNo; Rec."Bill-to Customer No.")
-                {
-                    Caption = 'Bill-to Customer No.';
-                }
-                field(binCode; Rec."Bin Code")
-                {
-                    Caption = 'Bin Code';
-                }
-                field(blanketOrderLineNo; Rec."Blanket Order Line No.")
-                {
-                    Caption = 'Blanket Order Line No.';
-                }
-                field(blanketOrderNo; Rec."Blanket Order No.")
-                {
-                    Caption = 'Blanket Order No.';
-                }
-                field(customTransitNumber; Rec."Custom Transit Number")
-                {
-                    Caption = 'Custom Transit Number';
-                }
-                field(customerDiscGroup; Rec."Customer Disc. Group")
-                {
-                    Caption = 'Customer Disc. Group';
-                }
-                field(customerPriceGroup; Rec."Customer Price Group")
-                {
-                    Caption = 'Customer Price Group';
-                }
-                field(deferralCode; Rec."Deferral Code")
-                {
-                    Caption = 'Deferral Code';
-                }
-                field(deprUntilFAPostingDate; Rec."Depr. until FA Posting Date")
-                {
-                    Caption = 'Depr. until FA Posting Date';
-                }
-                field(depreciationBookCode; Rec."Depreciation Book Code")
-                {
-                    Caption = 'Depreciation Book Code';
-                }
-                field(description; Rec.Description)
-                {
-                    Caption = 'Description';
-                }
-                field(description2; Rec."Description 2")
-                {
-                    Caption = 'Description 2';
-                }
-                field(dimensionSetID; Rec."Dimension Set ID")
-                {
-                    Caption = 'Dimension Set ID';
-                }
-                field(documentNo; Rec."Document No.")
-                {
-                    Caption = 'Document No.';
-                }
-                field(dropShipment; Rec."Drop Shipment")
-                {
-                    Caption = 'Drop Shipment';
-                }
-                field(duplicateInDepreciationBook; Rec."Duplicate in Depreciation Book")
-                {
-                    Caption = 'Duplicate in Depreciation Book';
-                }
-                field(exitPoint; Rec."Exit Point")
-                {
-                    Caption = 'Exit Point';
-                }
-                field(faPostingDate; Rec."FA Posting Date")
-                {
-                    Caption = 'FA Posting Date';
-                }
-                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
-                {
-                    Caption = 'Gen. Bus. Posting Group';
-                }
-                field(genProdPostingGroup; Rec."Gen. Prod. Posting Group")
-                {
-                    Caption = 'Gen. Prod. Posting Group';
-                }
-                field(grossWeight; Rec."Gross Weight")
-                {
-                    Caption = 'Gross Weight';
-                }
-                field(icItemReferenceNo; Rec."IC Item Reference No.")
-                {
-                    Caption = 'IC Item Reference No.';
-                }
-                field(icPartnerCode; Rec."IC Partner Code")
-                {
-                    Caption = 'IC Partner Code';
-                }
-                field(icPartnerRefType; Rec."IC Partner Ref. Type")
-                {
-                    Caption = 'IC Partner Ref. Type';
-                }
-                field(icPartnerReference; Rec."IC Partner Reference")
-                {
-                    Caption = 'IC Partner Reference';
-                }
-                field(invDiscountAmount; Rec."Inv. Discount Amount")
-                {
-                    Caption = 'Inv. Discount Amount';
-                }
-                field(itemCategoryCode; Rec."Item Category Code")
-                {
-                    Caption = 'Item Category Code';
-                }
-                field(itemReferenceNo; Rec."Item Reference No.")
-                {
-                    Caption = 'Item Reference No.';
-                }
-                field(itemReferenceType; Rec."Item Reference Type")
-                {
-                    Caption = 'Item Reference Type';
-                }
-                field(itemReferenceTypeNo; Rec."Item Reference Type No.")
-                {
-                    Caption = 'Item Reference Type No.';
-                }
-                field(itemReferenceUnitOfMeasure; Rec."Item Reference Unit of Measure")
-                {
-                    Caption = 'Unit of Measure (Item Ref.)';
-                }
-                field(jobContractEntryNo; Rec."Job Contract Entry No.")
-                {
-                    Caption = 'Job Contract Entry No.';
-                }
-                field(jobNo; Rec."Job No.")
-                {
-                    Caption = 'Job No.';
-                }
-                field(jobTaskNo; Rec."Job Task No.")
-                {
-                    Caption = 'Job Task No.';
-                }
-                field(lineAmount; Rec."Line Amount")
-                {
-                    Caption = 'Line Amount';
-                }
-                field(lineDiscount; Rec."Line Discount %")
-                {
-                    Caption = 'Line Discount %';
-                }
-                field(lineDiscountAmount; Rec."Line Discount Amount")
-                {
-                    Caption = 'Line Discount Amount';
-                }
-                field(lineDiscountCalculation; Rec."Line Discount Calculation")
-                {
-                    Caption = 'Line Discount Calculation';
-                }
-                field(lineNo; Rec."Line No.")
-                {
-                    Caption = 'Line No.';
-                }
-                field(locationCode; Rec."Location Code")
-                {
-                    Caption = 'Location Code';
-                }
-                field(netWeight; Rec."Net Weight")
-                {
-                    Caption = 'Net Weight';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(nonstock; Rec.Nonstock)
-                {
-                    Caption = 'Catalog';
-                }
-                field(orderLineNo; Rec."Order Line No.")
-                {
-                    Caption = 'Order Line No.';
-                }
-                field(orderNo; Rec."Order No.")
-                {
-                    Caption = 'Order No.';
-                }
-                field(packageTrackingNo; Rec."Package Tracking No.")
-                {
-                    Caption = 'Package Tracking No.';
-                }
-                field(pmtDiscountAmount; Rec."Pmt. Discount Amount")
-                {
-                    Caption = 'Pmt. Discount Amount';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(postingGroup; Rec."Posting Group")
-                {
-                    Caption = 'Posting Group';
-                }
-                field(prepaymentLine; Rec."Prepayment Line")
-                {
-                    Caption = 'Prepayment Line';
-                }
-                field(priceCalculationMethod; Rec."Price Calculation Method")
-                {
-                    Caption = 'Price Calculation Method';
-                }
-                field(priceDescription; Rec."Price description")
-                {
-                    Caption = 'Price description';
-                }
-                field(purchasingCode; Rec."Purchasing Code")
-                {
-                    Caption = 'Purchasing Code';
-                }
-                field(qtyPerUnitOfMeasure; Rec."Qty. per Unit of Measure")
-                {
-                    Caption = 'Qty. per Unit of Measure';
-                }
-                field(quantity; Rec.Quantity)
-                {
-                    Caption = 'Quantity';
-                }
-                field(quantityBase; Rec."Quantity (Base)")
-                {
-                    Caption = 'Quantity (Base)';
-                }
-                field(responsibilityCenter; Rec."Responsibility Center")
-                {
-                    Caption = 'Responsibility Center';
-                }
-                field(retentionAttachedToLineNo; Rec."Retention Attached to Line No.")
-                {
-                    Caption = 'Retention Attached to Line No.';
-                }
-                field(retentionVAT; Rec."Retention VAT %")
-                {
-                    Caption = 'Retention VAT %';
-                }
-                field(returnReasonCode; Rec."Return Reason Code")
-                {
-                    Caption = 'Return Reason Code';
-                }
-                field(sellToCustomerNo; Rec."Sell-to Customer No.")
-                {
-                    Caption = 'Sell-to Customer No.';
-                }
-                field(shipmentDate; Rec."Shipment Date")
-                {
-                    Caption = 'Shipment Date';
-                }
-                field(shipmentLineNo; Rec."Shipment Line No.")
-                {
-                    Caption = 'Shipment Line No.';
-                }
-                field(shipmentNo; Rec."Shipment No.")
-                {
-                    Caption = 'Shipment No.';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(systemCreatedEntry; Rec."System-Created Entry")
-                {
-                    Caption = 'System-Created Entry';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAreaCode; Rec."Tax Area Code")
-                {
-                    Caption = 'Tax Area Code';
-                }
-                field(taxCategory; Rec."Tax Category")
-                {
-                    Caption = 'Tax Category';
-                }
-                field(taxGroupCode; Rec."Tax Group Code")
-                {
-                    Caption = 'Tax Group Code';
-                }
-                field(taxLiable; Rec."Tax Liable")
-                {
-                    Caption = 'Tax Liable';
-                }
-                field(transactionSpecification; Rec."Transaction Specification")
-                {
-                    Caption = 'Transaction Specification';
-                }
-                field("transactionType"; Rec."Transaction Type")
-                {
-                    Caption = 'Transaction Type';
-                }
-                field(transportMethod; Rec."Transport Method")
-                {
-                    Caption = 'Transport Method';
-                }
-                field("type"; Rec."Type")
-                {
-                    Caption = 'Type';
-                }
-                field(unitCost; Rec."Unit Cost")
-                {
-                    Caption = 'Unit Cost';
-                }
-                field(unitCostLCY; Rec."Unit Cost (LCY)")
-                {
-                    Caption = 'Unit Cost (LCY)';
-                }
-                field(unitPrice; Rec."Unit Price")
-                {
-                    Caption = 'Unit Price';
-                }
-                field(unitVolume; Rec."Unit Volume")
-                {
-                    Caption = 'Unit Volume';
-                }
-                field(unitOfMeasure; Rec."Unit of Measure")
-                {
-                    Caption = 'Unit of Measure';
-                }
-                field(unitOfMeasureCode; Rec."Unit of Measure Code")
-                {
-                    Caption = 'Unit of Measure Code';
-                }
-                field(unitsPerParcel; Rec."Units per Parcel")
-                {
-                    Caption = 'Units per Parcel';
-                }
-                field(useDuplicationList; Rec."Use Duplication List")
-                {
-                    Caption = 'Use Duplication List';
-                }
-                field(vat; Rec."VAT %")
-                {
-                    Caption = 'VAT %';
-                }
-                field(vatBaseAmount; Rec."VAT Base Amount")
-                {
-                    Caption = 'VAT Base Amount';
-                }
-                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
-                {
-                    Caption = 'VAT Bus. Posting Group';
-                }
-                field(vatCalculationType; Rec."VAT Calculation Type")
-                {
-                    Caption = 'VAT Calculation Type';
-                }
-                field(vatClauseCode; Rec."VAT Clause Code")
-                {
-                    Caption = 'VAT Clause Code';
-                }
-                field(vatDifference; Rec."VAT Difference")
-                {
-                    Caption = 'VAT Difference';
-                }
-                field(vatIdentifier; Rec."VAT Identifier")
-                {
-                    Caption = 'VAT Identifier';
-                }
-                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
-                {
-                    Caption = 'VAT Prod. Posting Group';
-                }
-                field(variantCode; Rec."Variant Code")
-                {
-                    Caption = 'Variant Code';
-                }
-                field(workTypeCode; Rec."Work Type Code")
-                {
-                    Caption = 'Work Type Code';
-                }
-            }
-        }
-    }
-}
-
-page 90062 "Purchase Header"
-{
-    APIGroup = 'standardEndpoints';
-    APIPublisher = 'fivetran';
-    APIVersion = 'v1.0';
-    ApplicationArea = All;
-    Caption = 'purchaseHeader';
-    DelayedInsert = true;
-    EntityName = 'purchaseHeader';
-    EntitySetName = 'purchaseHeaders';
-    PageType = API;
-    SourceTable = "Purchase Header";
-    ODataKeyFields = SystemId;
-    DataAccessIntent = ReadOnly;
-    Editable = false;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(aRcdNotInvExVATLCY; Rec."A. Rcd. Not Inv. Ex. VAT (LCY)")
-                {
-                    Caption = 'Amount Received Not Invoiced (LCY)';
-                }
-                field(amount; Rec.Amount)
-                {
-                    Caption = 'Amount';
-                }
-                field(amountIncludingVAT; Rec."Amount Including VAT")
-                {
-                    Caption = 'Amount Including VAT';
-                }
-                field(amtRcdNotInvoicedLCY; Rec."Amt. Rcd. Not Invoiced (LCY)")
-                {
-                    Caption = 'Amount Received Not Invoiced (LCY) Incl. VAT';
-                }
-                field(appliesToDocNo; Rec."Applies-to Doc. No.")
-                {
-                    Caption = 'Applies-to Doc. No.';
-                }
-                field(appliesToDocType; Rec."Applies-to Doc. Type")
-                {
-                    Caption = 'Applies-to Doc. Type';
-                }
-                field(appliesToID; Rec."Applies-to ID")
-                {
-                    Caption = 'Applies-to ID';
-                }
-                field("area"; Rec."Area")
-                {
-                    Caption = 'Area';
-                }
-                field(assignedUserID; Rec."Assigned User ID")
-                {
-                    Caption = 'Assigned User ID';
-                }
-                field(balAccountNo; Rec."Bal. Account No.")
-                {
-                    Caption = 'Bal. Account No.';
-                }
-                field(balAccountType; Rec."Bal. Account Type")
-                {
-                    Caption = 'Bal. Account Type';
-                }
-                field(buyFromAddress; Rec."Buy-from Address")
-                {
-                    Caption = 'Buy-from Address';
-                }
-                field(buyFromAddress2; Rec."Buy-from Address 2")
-                {
-                    Caption = 'Buy-from Address 2';
-                }
-                field(buyFromCity; Rec."Buy-from City")
-                {
-                    Caption = 'Buy-from City';
-                }
-                field(buyFromContact; Rec."Buy-from Contact")
-                {
-                    Caption = 'Buy-from Contact';
-                }
-                field(buyFromContactNo; Rec."Buy-from Contact No.")
-                {
-                    Caption = 'Buy-from Contact No.';
-                }
-                field(buyFromCountryRegionCode; Rec."Buy-from Country/Region Code")
-                {
-                    Caption = 'Buy-from Country/Region Code';
-                }
-                field(buyFromCounty; Rec."Buy-from County")
-                {
-                    Caption = 'Buy-from County';
-                }
-                field(buyFromICPartnerCode; Rec."Buy-from IC Partner Code")
-                {
-                    Caption = 'Buy-from IC Partner Code';
-                }
-                field(buyFromPostCode; Rec."Buy-from Post Code")
-                {
-                    Caption = 'Buy-from Post Code';
-                }
-                field(buyFromVendorName; Rec."Buy-from Vendor Name")
-                {
-                    Caption = 'Buy-from Vendor Name';
-                }
-                field(buyFromVendorName2; Rec."Buy-from Vendor Name 2")
-                {
-                    Caption = 'Buy-from Vendor Name 2';
-                }
-                field(buyFromVendorNo; Rec."Buy-from Vendor No.")
-                {
-                    Caption = 'Buy-from Vendor No.';
-                }
-                field(campaignNo; Rec."Campaign No.")
-                {
-                    Caption = 'Campaign No.';
-                }
-                field(comment; Rec.Comment)
-                {
-                    Caption = 'Comment';
-                }
-                field(completelyReceived; Rec."Completely Received")
-                {
-                    Caption = 'Completely Received';
-                }
-                field(compressPrepayment; Rec."Compress Prepayment")
-                {
-                    Caption = 'Compress Prepayment';
-                }
-                field(correction; Rec.Correction)
-                {
-                    Caption = 'Correction';
-                }
-                field(creditorNo; Rec."Creditor No.")
-                {
-                    Caption = 'Creditor No.';
-                }
-                field(currencyCode; Rec."Currency Code")
-                {
-                    Caption = 'Currency Code';
-                }
-                field(currencyFactor; Rec."Currency Factor")
-                {
-                    Caption = 'Currency Factor';
-                }
-                field(dimensionSetID; Rec."Dimension Set ID")
-                {
-                    Caption = 'Dimension Set ID';
-                }
-                field(docNoOccurrence; Rec."Doc. No. Occurrence")
-                {
-                    Caption = 'Doc. No. Occurrence';
-                }
-                field(documentDate; Rec."Document Date")
-                {
-                    Caption = 'Document Date';
-                }
-                field(documentType; Rec."Document Type")
-                {
-                    Caption = 'Document Type';
-                }
-                field(dueDate; Rec."Due Date")
-                {
-                    Caption = 'Due Date';
-                }
-                field(entryPoint; Rec."Entry Point")
-                {
-                    Caption = 'Entry Point';
-                }
-                field(expectedReceiptDate; Rec."Expected Receipt Date")
-                {
-                    Caption = 'Expected Receipt Date';
-                }
-                field(fiscalInvoiceNumberPAC; Rec."Fiscal Invoice Number PAC")
-                {
-                    Caption = 'Fiscal Invoice Number PAC';
-                }
-                field(formatRegion; Rec."Format Region")
-                {
-                    Caption = 'Format Region';
-                }
-                field(gstHSTTaxType; Rec."GST/HST Tax Type")
-                {
-                    Caption = 'GST HST Tax Type';
-                }
-                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
-                {
-                    Caption = 'Gen. Bus. Posting Group';
-                }
-                field(icDirection; Rec."IC Direction")
-                {
-                    Caption = 'IC Direction';
-                }
-                field(icReferenceDocumentNo; Rec."IC Reference Document No.")
-                {
-                    Caption = 'IC Reference Document No.';
-                }
-                field(icStatus; Rec."IC Status")
-                {
-                    Caption = 'IC Status';
-                }
-                field(irs1099Amount; Rec."IRS 1099 Amount")
-                {
-                    Caption = 'IRS 1099 Amount';
-                }
-                field(irs1099Code; Rec."IRS 1099 Code")
-                {
-                    Caption = 'IRS 1099 Code';
-                }
-                field(inboundWhseHandlingTime; Rec."Inbound Whse. Handling Time")
-                {
-                    Caption = 'Inbound Whse. Handling Time';
-                }
-                field(incomingDocumentEntryNo; Rec."Incoming Document Entry No.")
-                {
-                    Caption = 'Incoming Document Entry No.';
-                }
-                field(invoice; Rec.Invoice)
-                {
-                    Caption = 'Invoice';
-                }
-                field(invoiceDiscCode; Rec."Invoice Disc. Code")
-                {
-                    Caption = 'Invoice Disc. Code';
-                }
-                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
-                {
-                    Caption = 'Invoice Discount Amount';
-                }
-                field(invoiceDiscountCalculation; Rec."Invoice Discount Calculation")
-                {
-                    Caption = 'Invoice Discount Calculation';
-                }
-                field(invoiceDiscountValue; Rec."Invoice Discount Value")
-                {
-                    Caption = 'Invoice Discount Value';
-                }
-                field(invoiceReceivedDate; Rec."Invoice Received Date")
-                {
-                    Caption = 'Invoice Received Date';
-                }
-                field(jobQueueEntryID; Rec."Job Queue Entry ID")
-                {
-                    Caption = 'Job Queue Entry ID';
-                }
-                field(jobQueueStatus; Rec."Job Queue Status")
-                {
-                    Caption = 'Job Queue Status';
-                }
-                field(journalTemplName; Rec."Journal Templ. Name")
-                {
-                    Caption = 'Journal Template Name';
-                }
-                field(languageCode; Rec."Language Code")
-                {
-                    Caption = 'Language Code';
-                }
-                field(lastPostingNo; Rec."Last Posting No.")
-                {
-                    Caption = 'Last Posting No.';
-                }
-                field(lastPrepaymentNo; Rec."Last Prepayment No.")
-                {
-                    Caption = 'Last Prepayment No.';
-                }
-                field(lastPrepmtCrMemoNo; Rec."Last Prepmt. Cr. Memo No.")
-                {
-                    Caption = 'Last Prepmt. Cr. Memo No.';
-                }
-                field(lastReceivingNo; Rec."Last Receiving No.")
-                {
-                    Caption = 'Last Receiving No.';
-                }
-                field(lastReturnShipmentNo; Rec."Last Return Shipment No.")
-                {
-                    Caption = 'Last Return Shipment No.';
-                }
-                field(leadTimeCalculation; Rec."Lead Time Calculation")
-                {
-                    Caption = 'Lead Time Calculation';
-                }
-                field(locationCode; Rec."Location Code")
-                {
-                    Caption = 'Location Code';
-                }
-                field(no; Rec."No.")
-                {
-                    Caption = 'No.';
-                }
-                field(noPrinted; Rec."No. Printed")
-                {
-                    Caption = 'No. Printed';
-                }
-                field(noSeries; Rec."No. Series")
-                {
-                    Caption = 'No. Series';
-                }
-                field(noOfArchivedVersions; Rec."No. of Archived Versions")
-                {
-                    Caption = 'No. of Archived Versions';
-                }
-                field(onHold; Rec."On Hold")
-                {
-                    Caption = 'On Hold';
-                }
-                field(orderAddressCode; Rec."Order Address Code")
-                {
-                    Caption = 'Order Address Code';
-                }
-                field(orderClass; Rec."Order Class")
-                {
-                    Caption = 'Order Class';
-                }
-                field(orderDate; Rec."Order Date")
-                {
-                    Caption = 'Order Date';
-                }
-                field(partiallyInvoiced; Rec."Partially Invoiced")
-                {
-                    Caption = 'Partially Invoiced';
-                }
-                field(payToAddress; Rec."Pay-to Address")
-                {
-                    Caption = 'Pay-to Address';
-                }
-                field(payToAddress2; Rec."Pay-to Address 2")
-                {
-                    Caption = 'Pay-to Address 2';
-                }
-                field(payToCity; Rec."Pay-to City")
-                {
-                    Caption = 'Pay-to City';
-                }
-                field(payToContact; Rec."Pay-to Contact")
-                {
-                    Caption = 'Pay-to Contact';
-                }
-                field(payToContactNo; Rec."Pay-to Contact No.")
-                {
-                    Caption = 'Pay-to Contact No.';
-                }
-                field(payToCountryRegionCode; Rec."Pay-to Country/Region Code")
-                {
-                    Caption = 'Pay-to Country/Region Code';
-                }
-                field(payToCounty; Rec."Pay-to County")
-                {
-                    Caption = 'Pay-to County';
-                }
-                field(payToICPartnerCode; Rec."Pay-to IC Partner Code")
-                {
-                    Caption = 'Pay-to IC Partner Code';
-                }
-                field(payToName; Rec."Pay-to Name")
-                {
-                    Caption = 'Pay-to Name';
-                }
-                field(payToName2; Rec."Pay-to Name 2")
-                {
-                    Caption = 'Pay-to Name 2';
-                }
-                field(payToPostCode; Rec."Pay-to Post Code")
-                {
-                    Caption = 'Pay-to Post Code';
-                }
-                field(payToVendorNo; Rec."Pay-to Vendor No.")
-                {
-                    Caption = 'Pay-to Vendor No.';
-                }
-                field(paymentDiscount; Rec."Payment Discount %")
-                {
-                    Caption = 'Payment Discount %';
-                }
-                field(paymentMethodCode; Rec."Payment Method Code")
-                {
-                    Caption = 'Payment Method Code';
-                }
-                field(paymentReference; Rec."Payment Reference")
-                {
-                    Caption = 'Payment Reference';
-                }
-                field(paymentTermsCode; Rec."Payment Terms Code")
-                {
-                    Caption = 'Payment Terms Code';
-                }
-                field(pendingApprovals; Rec."Pending Approvals")
-                {
-                    Caption = 'Pending Approvals';
-                }
-                field(pmtDiscountDate; Rec."Pmt. Discount Date")
-                {
-                    Caption = 'Pmt. Discount Date';
-                }
-                field(postingDate; Rec."Posting Date")
-                {
-                    Caption = 'Posting Date';
-                }
-                field(postingDescription; Rec."Posting Description")
-                {
-                    Caption = 'Posting Description';
-                }
-                field(postingNo; Rec."Posting No.")
-                {
-                    Caption = 'Posting No.';
-                }
-                field(postingNoSeries; Rec."Posting No. Series")
-                {
-                    Caption = 'Posting No. Series';
-                }
-                field(postingFromWhseRef; Rec."Posting from Whse. Ref.")
-                {
-                    Caption = 'Posting from Whse. Ref.';
-                }
-                field(prepayment; Rec."Prepayment %")
-                {
-                    Caption = 'Prepayment %';
-                }
-                field(prepaymentDueDate; Rec."Prepayment Due Date")
-                {
-                    Caption = 'Prepayment Due Date';
-                }
-                field(prepaymentNo; Rec."Prepayment No.")
-                {
-                    Caption = 'Prepayment No.';
-                }
-                field(prepaymentNoSeries; Rec."Prepayment No. Series")
-                {
-                    Caption = 'Prepayment No. Series';
-                }
-                field(prepmtCrMemoNo; Rec."Prepmt. Cr. Memo No.")
-                {
-                    Caption = 'Prepmt. Cr. Memo No.';
-                }
-                field(prepmtCrMemoNoSeries; Rec."Prepmt. Cr. Memo No. Series")
-                {
-                    Caption = 'Prepmt. Cr. Memo No. Series';
-                }
-                field(prepmtIncludeTax; Rec."Prepmt. Include Tax")
-                {
-                    Caption = 'Prepmt. Include Tax';
-                }
-                field(prepmtPaymentDiscount; Rec."Prepmt. Payment Discount %")
-                {
-                    Caption = 'Prepmt. Payment Discount %';
-                }
-                field(prepmtPaymentTermsCode; Rec."Prepmt. Payment Terms Code")
-                {
-                    Caption = 'Prepmt. Payment Terms Code';
-                }
-                field(prepmtPmtDiscountDate; Rec."Prepmt. Pmt. Discount Date")
-                {
-                    Caption = 'Prepmt. Pmt. Discount Date';
-                }
-                field(prepmtPostingDescription; Rec."Prepmt. Posting Description")
-                {
-                    Caption = 'Prepmt. Posting Description';
-                }
-                field(priceCalculationMethod; Rec."Price Calculation Method")
-                {
-                    Caption = 'Price Calculation Method';
-                }
-                field(pricesIncludingVAT; Rec."Prices Including VAT")
-                {
-                    Caption = 'Prices Including VAT';
-                }
-                field(printPostedDocuments; Rec."Print Posted Documents")
-                {
-                    Caption = 'Print Posted Documents';
-                }
-                field(promisedReceiptDate; Rec."Promised Receipt Date")
-                {
-                    Caption = 'Promised Receipt Date';
-                }
-                field(provincialTaxAreaCode; Rec."Provincial Tax Area Code")
-                {
-                    Caption = 'Provincial Tax Area Code';
-                }
-                field(purchaserCode; Rec."Purchaser Code")
-                {
-                    Caption = 'Purchaser Code';
-                }
-                field(quoteNo; Rec."Quote No.")
-                {
-                    Caption = 'Quote No.';
-                }
-                field(reasonCode; Rec."Reason Code")
-                {
-                    Caption = 'Reason Code';
-                }
-                field(recalculateInvoiceDisc; Rec."Recalculate Invoice Disc.")
-                {
-                    Caption = 'Recalculate Invoice Disc.';
-                }
-                field(receive; Rec.Receive)
-                {
-                    Caption = 'Receive';
-                }
-                field(receivingNo; Rec."Receiving No.")
-                {
-                    Caption = 'Receiving No.';
-                }
-                field(receivingNoSeries; Rec."Receiving No. Series")
-                {
-                    Caption = 'Receiving No. Series';
-                }
-                field(remitToCode; Rec."Remit-to Code")
-                {
-                    Caption = 'Remit-to Code';
-                }
-                field(requestedReceiptDate; Rec."Requested Receipt Date")
-                {
-                    Caption = 'Requested Receipt Date';
-                }
-                field(responsibilityCenter; Rec."Responsibility Center")
-                {
-                    Caption = 'Responsibility Center';
-                }
-                field(returnShipmentNo; Rec."Return Shipment No.")
-                {
-                    Caption = 'Return Shipment No.';
-                }
-                field(returnShipmentNoSeries; Rec."Return Shipment No. Series")
-                {
-                    Caption = 'Return Shipment No. Series';
-                }
-                field(steTransactionID; Rec."STE Transaction ID")
-                {
-                    Caption = 'STE Transaction ID';
-                }
-                field(sellToCustomerNo; Rec."Sell-to Customer No.")
-                {
-                    Caption = 'Sell-to Customer No.';
-                }
-                field(sendICDocument; Rec."Send IC Document")
-                {
-                    Caption = 'Send IC Document';
-                }
-                field(ship; Rec.Ship)
-                {
-                    Caption = 'Ship';
-                }
-                field(shipToAddress; Rec."Ship-to Address")
-                {
-                    Caption = 'Ship-to Address';
-                }
-                field(shipToAddress2; Rec."Ship-to Address 2")
-                {
-                    Caption = 'Ship-to Address 2';
-                }
-                field(shipToCity; Rec."Ship-to City")
-                {
-                    Caption = 'Ship-to City';
-                }
-                field(shipToCode; Rec."Ship-to Code")
-                {
-                    Caption = 'Ship-to Code';
-                }
-                field(shipToContact; Rec."Ship-to Contact")
-                {
-                    Caption = 'Ship-to Contact';
-                }
-                field(shipToCountryRegionCode; Rec."Ship-to Country/Region Code")
-                {
-                    Caption = 'Ship-to Country/Region Code';
-                }
-                field(shipToCounty; Rec."Ship-to County")
-                {
-                    Caption = 'Ship-to County';
-                }
-                field(shipToName; Rec."Ship-to Name")
-                {
-                    Caption = 'Ship-to Name';
-                }
-                field(shipToName2; Rec."Ship-to Name 2")
-                {
-                    Caption = 'Ship-to Name 2';
-                }
-                field(shipToPostCode; Rec."Ship-to Post Code")
-                {
-                    Caption = 'Ship-to Post Code';
-                }
-                field(shipToUPSZone; Rec."Ship-to UPS Zone")
-                {
-                    Caption = 'Ship-to UPS Zone';
-                }
-                field(shipmentMethodCode; Rec."Shipment Method Code")
-                {
-                    Caption = 'Shipment Method Code';
-                }
-                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
-                {
-                    Caption = 'Shortcut Dimension 1 Code';
-                }
-                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
-                {
-                    Caption = 'Shortcut Dimension 2 Code';
-                }
-                field(status; Rec.Status)
-                {
-                    Caption = 'Status';
-                }
-                field(systemCreatedAt; Rec.SystemCreatedAt)
-                {
-                    Caption = 'SystemCreatedAt';
-                }
-                field(systemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    Caption = 'SystemCreatedBy';
-                }
-                field(systemId; Rec.SystemId)
-                {
-                    Caption = 'SystemId';
-                }
-                field(systemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    Caption = 'SystemModifiedAt';
-                }
-                field(systemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    Caption = 'SystemModifiedBy';
-                }
-                field(taxAreaCode; Rec."Tax Area Code")
-                {
-                    Caption = 'Tax Area Code';
-                }
-                field(taxExemptionNo; Rec."Tax Exemption No.")
-                {
-                    Caption = 'Tax Exemption No.';
-                }
-                field(taxLiable; Rec."Tax Liable")
-                {
-                    Caption = 'Tax Liable';
-                }
-                field(transactionSpecification; Rec."Transaction Specification")
-                {
-                    Caption = 'Transaction Specification';
-                }
-                field("transactionType"; Rec."Transaction Type")
-                {
-                    Caption = 'Transaction Type';
-                }
-                field(transportMethod; Rec."Transport Method")
-                {
-                    Caption = 'Transport Method';
-                }
-                field(vatBaseDiscount; Rec."VAT Base Discount %")
-                {
-                    Caption = 'VAT Base Discount %';
-                }
-                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
-                {
-                    Caption = 'VAT Bus. Posting Group';
-                }
-                field(vatCountryRegionCode; Rec."VAT Country/Region Code")
-                {
-                    Caption = 'VAT Country/Region Code';
-                }
-                field(vatRegistrationNo; Rec."VAT Registration No.")
-                {
-                    Caption = 'VAT Registration No.';
-                }
-                field(vatReportingDate; Rec."VAT Reporting Date")
-                {
-                    Caption = 'VAT Date';
-                }
-                field(vendorAuthorizationNo; Rec."Vendor Authorization No.")
-                {
-                    Caption = 'Vendor Authorization No.';
-                }
-                field(vendorCrMemoNo; Rec."Vendor Cr. Memo No.")
-                {
-                    Caption = 'Vendor Cr. Memo No.';
-                }
-                field(vendorInvoiceNo; Rec."Vendor Invoice No.")
-                {
-                    Caption = 'Vendor Invoice No.';
-                }
-                field(vendorOrderNo; Rec."Vendor Order No.")
-                {
-                    Caption = 'Vendor Order No.';
-                }
-                field(vendorPostingGroup; Rec."Vendor Posting Group")
-                {
-                    Caption = 'Vendor Posting Group';
-                }
-                field(vendorShipmentNo; Rec."Vendor Shipment No.")
-                {
-                    Caption = 'Vendor Shipment No.';
-                }
-                field(yourReference; Rec."Your Reference")
-                {
-                    Caption = 'Your Reference';
-                }
-                field(dateFilter; Rec."Date Filter")
-                {
-                    Caption = 'Date Filter';
-                }
-                field(locationFilter; Rec."Location Filter")
-                {
-                    Caption = 'Location Filter';
-                }
-            }
-        }
-    }
-}
-
-page 90063 "Purchase Line"
+page 90036 "Purchase Line"
 {
     APIGroup = 'standardEndpoints';
     APIPublisher = 'fivetran';
@@ -19755,21 +11529,21 @@ page 90063 "Purchase Line"
     }
 }
 
-page 90064 Job
+page 90037 "Sales Shipment Line"
 {
-    APIGroup = 'standardEndpoints';
-    APIPublisher = 'fivetran';
-    APIVersion = 'v1.0';
-    ApplicationArea = All;
-    Caption = 'job';
     DelayedInsert = true;
-    EntityName = 'job';
-    EntitySetName = 'jobs';
     PageType = API;
-    SourceTable = Job;
-    ODataKeyFields = SystemId;
+    APIVersion = 'v1.0';
+    APIPublisher = 'fivetran';
+    APIGroup = 'standardEndpoints';
     DataAccessIntent = ReadOnly;
     Editable = false;
+    EntityCaption = 'Sales Shipment Line';
+    EntitySetCaption = 'Sales Shipment Lines';
+    ODataKeyFields = SystemId;
+    EntityName = 'salesShipmentLine';
+    EntitySetName = 'salesShipmentLines';
+    SourceTable = "Sales Shipment Line";
 
     layout
     {
@@ -19777,21 +11551,468 @@ page 90064 Job
         {
             repeater(General)
             {
-                field(allowScheduleContractLines; Rec."Allow Schedule/Contract Lines")
+                field(allowInvoiceDisc; Rec."Allow Invoice Disc.")
                 {
-                    Caption = 'Allow Budget/Billable Lines';
+                    Caption = 'Allow Invoice Disc.';
                 }
-                field(appliedCostsGLAmount; Rec."Applied Costs G/L Amount")
+                field(allowLineDisc; Rec."Allow Line Disc.")
                 {
-                    Caption = 'Applied Costs G/L Amount';
+                    Caption = 'Allow Line Disc.';
                 }
-                field(appliedSalesGLAmount; Rec."Applied Sales G/L Amount")
+                field(applFromItemEntry; Rec."Appl.-from Item Entry")
                 {
-                    Caption = 'Applied Sales G/L Amount';
+                    Caption = 'Appl.-from Item Entry';
                 }
-                field(applyUsageLink; Rec."Apply Usage Link")
+                field(applToItemEntry; Rec."Appl.-to Item Entry")
                 {
-                    Caption = 'Apply Usage Link';
+                    Caption = 'Appl.-to Item Entry';
+                }
+                field("area"; Rec."Area")
+                {
+                    Caption = 'Area';
+                }
+                field(attachedToLineNo; Rec."Attached to Line No.")
+                {
+                    Caption = 'Attached to Line No.';
+                }
+                field(authorizedForCreditCard; Rec."Authorized for Credit Card")
+                {
+                    Caption = 'Authorized for Credit Card';
+                }
+                field(billToCustomerNo; Rec."Bill-to Customer No.")
+                {
+                    Caption = 'Bill-to Customer No.';
+                }
+                field(binCode; Rec."Bin Code")
+                {
+                    Caption = 'Bin Code';
+                }
+                field(blanketOrderLineNo; Rec."Blanket Order Line No.")
+                {
+                    Caption = 'Blanket Order Line No.';
+                }
+                field(blanketOrderNo; Rec."Blanket Order No.")
+                {
+                    Caption = 'Blanket Order No.';
+                }
+                field(correction; Rec.Correction)
+                {
+                    Caption = 'Correction';
+                }
+                field(currencyCode; Rec."Currency Code")
+                {
+                    Caption = 'Currency Code';
+                }
+                field(customTransitNumber; Rec."Custom Transit Number")
+                {
+                    Caption = 'Custom Transit Number';
+                }
+                field(customerDiscGroup; Rec."Customer Disc. Group")
+                {
+                    Caption = 'Customer Disc. Group';
+                }
+                field(customerPriceGroup; Rec."Customer Price Group")
+                {
+                    Caption = 'Customer Price Group';
+                }
+                field(deprUntilFAPostingDate; Rec."Depr. until FA Posting Date")
+                {
+                    Caption = 'Depr. until FA Posting Date';
+                }
+                field(depreciationBookCode; Rec."Depreciation Book Code")
+                {
+                    Caption = 'Depreciation Book Code';
+                }
+                field(description; Rec.Description)
+                {
+                    Caption = 'Description';
+                }
+                field(description2; Rec."Description 2")
+                {
+                    Caption = 'Description 2';
+                }
+                field(dimensionSetID; Rec."Dimension Set ID")
+                {
+                    Caption = 'Dimension Set ID';
+                }
+                field(documentId; Rec."Document Id")
+                {
+                    Caption = 'Document Id';
+                }
+                field(documentNo; Rec."Document No.")
+                {
+                    Caption = 'Document No.';
+                }
+                field(dropShipment; Rec."Drop Shipment")
+                {
+                    Caption = 'Drop Shipment';
+                }
+                field(duplicateInDepreciationBook; Rec."Duplicate in Depreciation Book")
+                {
+                    Caption = 'Duplicate in Depreciation Book';
+                }
+                field(exitPoint; Rec."Exit Point")
+                {
+                    Caption = 'Exit Point';
+                }
+                field(faPostingDate; Rec."FA Posting Date")
+                {
+                    Caption = 'FA Posting Date';
+                }
+                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
+                {
+                    Caption = 'Gen. Bus. Posting Group';
+                }
+                field(genProdPostingGroup; Rec."Gen. Prod. Posting Group")
+                {
+                    Caption = 'Gen. Prod. Posting Group';
+                }
+                field(grossWeight; Rec."Gross Weight")
+                {
+                    Caption = 'Gross Weight';
+                }
+                field(icItemReferenceNo; Rec."IC Item Reference No.")
+                {
+                    Caption = 'IC Item Reference No.';
+                }
+                field(icPartnerRefType; Rec."IC Partner Ref. Type")
+                {
+                    Caption = 'IC Partner Ref. Type';
+                }
+                field(icPartnerReference; Rec."IC Partner Reference")
+                {
+                    Caption = 'IC Partner Reference';
+                }
+                field(itemCategoryCode; Rec."Item Category Code")
+                {
+                    Caption = 'Item Category Code';
+                }
+                field(itemChargeBaseAmount; Rec."Item Charge Base Amount")
+                {
+                    Caption = 'Item Charge Base Amount';
+                }
+                field(itemReferenceNo; Rec."Item Reference No.")
+                {
+                    Caption = 'Item Reference No.';
+                }
+                field(itemReferenceType; Rec."Item Reference Type")
+                {
+                    Caption = 'Item Reference Type';
+                }
+                field(itemReferenceTypeNo; Rec."Item Reference Type No.")
+                {
+                    Caption = 'Item Reference Type No.';
+                }
+                field(itemReferenceUnitOfMeasure; Rec."Item Reference Unit of Measure")
+                {
+                    Caption = 'Unit of Measure (Item Ref.)';
+                }
+                field(itemShptEntryNo; Rec."Item Shpt. Entry No.")
+                {
+                    Caption = 'Item Shpt. Entry No.';
+                }
+                field(jobContractEntryNo; Rec."Job Contract Entry No.")
+                {
+                    Caption = 'Job Contract Entry No.';
+                }
+                field(jobNo; Rec."Job No.")
+                {
+                    Caption = 'Job No.';
+                }
+                field(jobTaskNo; Rec."Job Task No.")
+                {
+                    Caption = 'Job Task No.';
+                }
+                field(lineDiscount; Rec."Line Discount %")
+                {
+                    Caption = 'Line Discount %';
+                }
+                field(lineNo; Rec."Line No.")
+                {
+                    Caption = 'Line No.';
+                }
+                field(locationCode; Rec."Location Code")
+                {
+                    Caption = 'Location Code';
+                }
+                field(netWeight; Rec."Net Weight")
+                {
+                    Caption = 'Net Weight';
+                }
+                field(no; Rec."No.")
+                {
+                    Caption = 'No.';
+                }
+                field(nonstock; Rec.Nonstock)
+                {
+                    Caption = 'Catalog';
+                }
+                field(orderLineNo; Rec."Order Line No.")
+                {
+                    Caption = 'Order Line No.';
+                }
+                field(orderNo; Rec."Order No.")
+                {
+                    Caption = 'Order No.';
+                }
+                field(outboundWhseHandlingTime; Rec."Outbound Whse. Handling Time")
+                {
+                    Caption = 'Outbound Whse. Handling Time';
+                }
+                field(packageTrackingNo; Rec."Package Tracking No.")
+                {
+                    Caption = 'Package Tracking No.';
+                }
+                field(plannedDeliveryDate; Rec."Planned Delivery Date")
+                {
+                    Caption = 'Planned Delivery Date';
+                }
+                field(plannedShipmentDate; Rec."Planned Shipment Date")
+                {
+                    Caption = 'Planned Shipment Date';
+                }
+                field(postingDate; Rec."Posting Date")
+                {
+                    Caption = 'Posting Date';
+                }
+                field(postingGroup; Rec."Posting Group")
+                {
+                    Caption = 'Posting Group';
+                }
+                field(priceCalculationMethod; Rec."Price Calculation Method")
+                {
+                    Caption = 'Price Calculation Method';
+                }
+                field(promisedDeliveryDate; Rec."Promised Delivery Date")
+                {
+                    Caption = 'Promised Delivery Date';
+                }
+                field(purchOrderLineNo; Rec."Purch. Order Line No.")
+                {
+                    Caption = 'Purch. Order Line No.';
+                }
+                field(purchaseOrderNo; Rec."Purchase Order No.")
+                {
+                    Caption = 'Purchase Order No.';
+                }
+                field(purchasingCode; Rec."Purchasing Code")
+                {
+                    Caption = 'Purchasing Code';
+                }
+                field(qtyInvoicedBase; Rec."Qty. Invoiced (Base)")
+                {
+                    Caption = 'Qty. Invoiced (Base)';
+                }
+                field(qtyShippedNotInvoiced; Rec."Qty. Shipped Not Invoiced")
+                {
+                    Caption = 'Qty. Shipped Not Invoiced';
+                }
+                field(qtyPerUnitOfMeasure; Rec."Qty. per Unit of Measure")
+                {
+                    Caption = 'Qty. per Unit of Measure';
+                }
+                field(quantity; Rec.Quantity)
+                {
+                    Caption = 'Quantity';
+                }
+                field(quantityBase; Rec."Quantity (Base)")
+                {
+                    Caption = 'Quantity (Base)';
+                }
+                field(quantityInvoiced; Rec."Quantity Invoiced")
+                {
+                    Caption = 'Quantity Invoiced';
+                }
+                field(requestedDeliveryDate; Rec."Requested Delivery Date")
+                {
+                    Caption = 'Requested Delivery Date';
+                }
+                field(responsibilityCenter; Rec."Responsibility Center")
+                {
+                    Caption = 'Responsibility Center';
+                }
+                field(returnReasonCode; Rec."Return Reason Code")
+                {
+                    Caption = 'Return Reason Code';
+                }
+                field(sellToCustomerNo; Rec."Sell-to Customer No.")
+                {
+                    Caption = 'Sell-to Customer No.';
+                }
+                field(shipmentDate; Rec."Shipment Date")
+                {
+                    Caption = 'Shipment Date';
+                }
+                field(shippingTime; Rec."Shipping Time")
+                {
+                    Caption = 'Shipping Time';
+                }
+                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
+                {
+                    Caption = 'Shortcut Dimension 1 Code';
+                }
+                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
+                {
+                    Caption = 'Shortcut Dimension 2 Code';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+                field(taxAreaCode; Rec."Tax Area Code")
+                {
+                    Caption = 'Tax Area Code';
+                }
+                field(taxGroupCode; Rec."Tax Group Code")
+                {
+                    Caption = 'Tax Group Code';
+                }
+                field(taxLiable; Rec."Tax Liable")
+                {
+                    Caption = 'Tax Liable';
+                }
+                field(transactionSpecification; Rec."Transaction Specification")
+                {
+                    Caption = 'Transaction Specification';
+                }
+                field("transactionType"; Rec."Transaction Type")
+                {
+                    Caption = 'Transaction Type';
+                }
+                field(transportMethod; Rec."Transport Method")
+                {
+                    Caption = 'Transport Method';
+                }
+                field("type"; Rec."Type")
+                {
+                    Caption = 'Type';
+                }
+                field(unitCost; Rec."Unit Cost")
+                {
+                    Caption = 'Unit Cost';
+                }
+                field(unitCostLCY; Rec."Unit Cost (LCY)")
+                {
+                    Caption = 'Unit Cost (LCY)';
+                }
+                field(unitPrice; Rec."Unit Price")
+                {
+                    Caption = 'Unit Price';
+                }
+                field(unitVolume; Rec."Unit Volume")
+                {
+                    Caption = 'Unit Volume';
+                }
+                field(unitOfMeasure; Rec."Unit of Measure")
+                {
+                    Caption = 'Unit of Measure';
+                }
+                field(unitOfMeasureCode; Rec."Unit of Measure Code")
+                {
+                    Caption = 'Unit of Measure Code';
+                }
+                field(unitsPerParcel; Rec."Units per Parcel")
+                {
+                    Caption = 'Units per Parcel';
+                }
+                field(useDuplicationList; Rec."Use Duplication List")
+                {
+                    Caption = 'Use Duplication List';
+                }
+                field(vat; Rec."VAT %")
+                {
+                    Caption = 'VAT %';
+                }
+                field(vatBaseAmount; Rec."VAT Base Amount")
+                {
+                    Caption = 'VAT Base Amount';
+                }
+                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
+                {
+                    Caption = 'VAT Bus. Posting Group';
+                }
+                field(vatCalculationType; Rec."VAT Calculation Type")
+                {
+                    Caption = 'VAT Calculation Type';
+                }
+                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
+                {
+                    Caption = 'VAT Prod. Posting Group';
+                }
+                field(variantCode; Rec."Variant Code")
+                {
+                    Caption = 'Variant Code';
+                }
+                field(workTypeCode; Rec."Work Type Code")
+                {
+                    Caption = 'Work Type Code';
+                }
+            }
+        }
+    }
+}
+
+page 90038 "Sales Shipment Header"
+{
+    DelayedInsert = true;
+    PageType = API;
+    APIVersion = 'v1.0';
+    APIPublisher = 'fivetran';
+    APIGroup = 'standardEndpoints';
+    DataAccessIntent = ReadOnly;
+    Editable = false;
+    EntityCaption = 'Sales Shipment Header';
+    EntitySetCaption = 'Sales Shipment Headers';
+    ODataKeyFields = SystemId;
+    EntityName = 'salesShipmentHeader';
+    EntitySetName = 'salesShipmentHeaders';
+    SourceTable = "Sales Shipment Header";
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(allowLineDisc; Rec."Allow Line Disc.")
+                {
+                    Caption = 'Allow Line Disc.';
+                }
+                field(appliesToDocNo; Rec."Applies-to Doc. No.")
+                {
+                    Caption = 'Applies-to Doc. No.';
+                }
+                field(appliesToDocType; Rec."Applies-to Doc. Type")
+                {
+                    Caption = 'Applies-to Doc. Type';
+                }
+                field("area"; Rec."Area")
+                {
+                    Caption = 'Area';
+                }
+                field(balAccountNo; Rec."Bal. Account No.")
+                {
+                    Caption = 'Bal. Account No.';
+                }
+                field(balAccountType; Rec."Bal. Account Type")
+                {
+                    Caption = 'Bal. Account Type';
                 }
                 field(billToAddress; Rec."Bill-to Address")
                 {
@@ -19837,125 +12058,225 @@ page 90064 Job
                 {
                     Caption = 'Bill-to Post Code';
                 }
-                field(blocked; Rec.Blocked)
+                field(cfdiCancellationID; Rec."CFDI Cancellation ID")
                 {
-                    Caption = 'Blocked';
+                    Caption = 'CFDI Cancellation ID';
                 }
-                field(calcRecogCostsAmount; Rec."Calc. Recog. Costs Amount")
+                field(cfdiCancellationReasonCode; Rec."CFDI Cancellation Reason Code")
                 {
-                    Caption = 'Calc. Recog. Costs Amount';
+                    Caption = 'CFDI Cancellation Reason';
                 }
-                field(calcRecogCostsGLAmount; Rec."Calc. Recog. Costs G/L Amount")
+                field(cfdiExportCode; Rec."CFDI Export Code")
                 {
-                    Caption = 'Calc. Recog. Costs G/L Amount';
+                    Caption = 'CFDI Export Code';
                 }
-                field(calcRecogSalesAmount; Rec."Calc. Recog. Sales Amount")
+                field(campaignNo; Rec."Campaign No.")
                 {
-                    Caption = 'Calc. Recog. Sales Amount';
+                    Caption = 'Campaign No.';
                 }
-                field(calcRecogSalesGLAmount; Rec."Calc. Recog. Sales G/L Amount")
+                field(certificateSerialNo; Rec."Certificate Serial No.")
                 {
-                    Caption = 'Calc. Recog. Sales G/L Amount';
+                    Caption = 'Certificate Serial No.';
                 }
                 field(comment; Rec.Comment)
                 {
                     Caption = 'Comment';
                 }
-                field(complete; Rec.Complete)
+                field(companyBankAccountCode; Rec."Company Bank Account Code")
                 {
-                    Caption = 'Complete';
+                    Caption = 'Company Bank Account Code';
                 }
-                field(completelyPicked; Rec."Completely Picked")
+                field(correction; Rec.Correction)
                 {
-                    Caption = 'Completely Picked';
-                }
-                field(costCalculationMethod; Rec."Cost Calculation Method")
-                {
-                    Caption = 'Cost Calculation Method';
-                }
-                field(creationDate; Rec."Creation Date")
-                {
-                    Caption = 'Creation Date';
+                    Caption = 'Correction';
                 }
                 field(currencyCode; Rec."Currency Code")
                 {
                     Caption = 'Currency Code';
                 }
+                field(currencyFactor; Rec."Currency Factor")
+                {
+                    Caption = 'Currency Factor';
+                }
                 field(customerDiscGroup; Rec."Customer Disc. Group")
                 {
                     Caption = 'Customer Disc. Group';
+                }
+                field(customerPostingGroup; Rec."Customer Posting Group")
+                {
+                    Caption = 'Customer Posting Group';
                 }
                 field(customerPriceGroup; Rec."Customer Price Group")
                 {
                     Caption = 'Customer Price Group';
                 }
-                field(description; Rec.Description)
+                field(dateTimeCancelSent; Rec."Date/Time Cancel Sent")
                 {
-                    Caption = 'Description';
+                    Caption = 'Date/Time Cancel Sent';
                 }
-                field(description2; Rec."Description 2")
+                field(dateTimeCanceled; Rec."Date/Time Canceled")
                 {
-                    Caption = 'Description 2';
+                    Caption = 'Date/Time Canceled';
                 }
-                field(endingDate; Rec."Ending Date")
+                field(dateTimeFirstReqSent; Rec."Date/Time First Req. Sent")
                 {
-                    Caption = 'Ending Date';
+                    Caption = 'Date/Time First Req. Sent';
                 }
-                field(exchCalculationCost; Rec."Exch. Calculation (Cost)")
+                field(dateTimeStampReceived; Rec."Date/Time Stamp Received")
                 {
-                    Caption = 'Exch. Calculation (Cost)';
+                    Caption = 'Date/Time Stamp Received';
                 }
-                field(exchCalculationPrice; Rec."Exch. Calculation (Price)")
+                field(dateTimeStamped; Rec."Date/Time Stamped")
                 {
-                    Caption = 'Exch. Calculation (Price)';
+                    Caption = 'Date/Time Stamped';
+                }
+                field(digitalStampPAC; Rec."Digital Stamp PAC")
+                {
+                    Caption = 'Digital Stamp PAC';
+                }
+                field(digitalStampSAT; Rec."Digital Stamp SAT")
+                {
+                    Caption = 'Digital Stamp SAT';
+                }
+                field(dimensionSetID; Rec."Dimension Set ID")
+                {
+                    Caption = 'Dimension Set ID';
+                }
+                field(documentDate; Rec."Document Date")
+                {
+                    Caption = 'Document Date';
+                }
+                field(dueDate; Rec."Due Date")
+                {
+                    Caption = 'Due Date';
+                }
+                field(eu3PartyTrade; Rec."EU 3-Party Trade")
+                {
+                    Caption = 'EU 3-Party Trade';
+                }
+                field(electronicDocumentStatus; Rec."Electronic Document Status")
+                {
+                    Caption = 'Electronic Document Status';
+                }
+                field(errorCode; Rec."Error Code")
+                {
+                    Caption = 'Error Code';
+                }
+                field(errorDescription; Rec."Error Description")
+                {
+                    Caption = 'Error Description';
+                }
+                field(exitPoint; Rec."Exit Point")
+                {
+                    Caption = 'Exit Point';
                 }
                 field(externalDocumentNo; Rec."External Document No.")
                 {
                     Caption = 'External Document No.';
                 }
-                field(globalDimension1Code; Rec."Global Dimension 1 Code")
+                field(fiscalInvoiceNumberPAC; Rec."Fiscal Invoice Number PAC")
                 {
-                    Caption = 'Global Dimension 1 Code';
+                    Caption = 'Fiscal Invoice Number PAC';
                 }
-                field(globalDimension2Code; Rec."Global Dimension 2 Code")
+                field(foreignTrade; Rec."Foreign Trade")
                 {
-                    Caption = 'Global Dimension 2 Code';
+                    Caption = 'Foreign Trade';
                 }
-                field(image; Rec.Image)
+                field(formatRegion; Rec."Format Region")
                 {
-                    Caption = 'Image';
+                    Caption = 'Format Region';
                 }
-                field(invoiceCurrencyCode; Rec."Invoice Currency Code")
+                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
                 {
-                    Caption = 'Invoice Currency Code';
+                    Caption = 'Gen. Bus. Posting Group';
                 }
-                field(jobPostingGroup; Rec."Job Posting Group")
+                field(insurerName; Rec."Insurer Name")
                 {
-                    Caption = 'Job Posting Group';
+                    Caption = 'Insurer Name';
+                }
+                field(insurerPolicyNumber; Rec."Insurer Policy Number")
+                {
+                    Caption = 'Insurer Policy Number';
+                }
+                field(invoiceDiscCode; Rec."Invoice Disc. Code")
+                {
+                    Caption = 'Invoice Disc. Code';
                 }
                 field(languageCode; Rec."Language Code")
                 {
                     Caption = 'Language Code';
                 }
-                field(lastDateModified; Rec."Last Date Modified")
+                field(locationCode; Rec."Location Code")
                 {
-                    Caption = 'Last Date Modified';
+                    Caption = 'Location Code';
                 }
-                field(nextInvoiceDate; Rec."Next Invoice Date")
+                field(markedAsCanceled; Rec."Marked as Canceled")
                 {
-                    Caption = 'Next Invoice Date';
+                    Caption = 'Marked as Canceled';
+                }
+                field(medicalInsPolicyNumber; Rec."Medical Ins. Policy Number")
+                {
+                    Caption = 'Medical Ins. Policy Number';
+                }
+                field(medicalInsurerName; Rec."Medical Insurer Name")
+                {
+                    Caption = 'Medical Insurer Name';
                 }
                 field(no; Rec."No.")
                 {
                     Caption = 'No.';
                 }
+                field(noPrinted; Rec."No. Printed")
+                {
+                    Caption = 'No. Printed';
+                }
                 field(noSeries; Rec."No. Series")
                 {
                     Caption = 'No. Series';
                 }
-                field(overBudget; Rec."Over Budget")
+                field(onHold; Rec."On Hold")
                 {
-                    Caption = 'Over Budget';
+                    Caption = 'On Hold';
+                }
+                field(opportunityNo; Rec."Opportunity No.")
+                {
+                    Caption = 'Opportunity No.';
+                }
+                field(orderDate; Rec."Order Date")
+                {
+                    Caption = 'Order Date';
+                }
+                field(orderNo; Rec."Order No.")
+                {
+                    Caption = 'Order No.';
+                }
+                field(orderNoSeries; Rec."Order No. Series")
+                {
+                    Caption = 'Order No. Series';
+                }
+                field(originalDocumentXML; Rec."Original Document XML")
+                {
+                    Caption = 'Original Document XML';
+                }
+                field(originalString; Rec."Original String")
+                {
+                    Caption = 'Original String';
+                }
+                field(outboundWhseHandlingTime; Rec."Outbound Whse. Handling Time")
+                {
+                    Caption = 'Outbound Whse. Handling Time';
+                }
+                field(pacWebServiceName; Rec."PAC Web Service Name")
+                {
+                    Caption = 'PAC Web Service Name';
+                }
+                field(packageTrackingNo; Rec."Package Tracking No.")
+                {
+                    Caption = 'Package Tracking No.';
+                }
+                field(paymentDiscount; Rec."Payment Discount %")
+                {
+                    Caption = 'Payment Discount %';
                 }
                 field(paymentMethodCode; Rec."Payment Method Code")
                 {
@@ -19965,49 +12286,61 @@ page 90064 Job
                 {
                     Caption = 'Payment Terms Code';
                 }
-                field(personResponsible; Rec."Person Responsible")
+                field(pmtDiscountDate; Rec."Pmt. Discount Date")
                 {
-                    Caption = 'Person Responsible';
+                    Caption = 'Pmt. Discount Date';
+                }
+                field(postingDate; Rec."Posting Date")
+                {
+                    Caption = 'Posting Date';
+                }
+                field(postingDescription; Rec."Posting Description")
+                {
+                    Caption = 'Posting Description';
                 }
                 field(priceCalculationMethod; Rec."Price Calculation Method")
                 {
                     Caption = 'Price Calculation Method';
                 }
-                field(projectManager; Rec."Project Manager")
+                field(pricesIncludingVAT; Rec."Prices Including VAT")
                 {
-                    Caption = 'Project Manager';
+                    Caption = 'Prices Including VAT';
                 }
-                field(recogCostsAmount; Rec."Recog. Costs Amount")
+                field(promisedDeliveryDate; Rec."Promised Delivery Date")
                 {
-                    Caption = 'Recog. Costs Amount';
+                    Caption = 'Promised Delivery Date';
                 }
-                field(recogCostsGLAmount; Rec."Recog. Costs G/L Amount")
+                field(qrCode; Rec."QR Code")
                 {
-                    Caption = 'Recog. Costs G/L Amount';
+                    Caption = 'QR Code';
                 }
-                field(recogSalesAmount; Rec."Recog. Sales Amount")
+                field(quoteNo; Rec."Quote No.")
                 {
-                    Caption = 'Recog. Sales Amount';
+                    Caption = 'Quote No.';
                 }
-                field(recogSalesGLAmount; Rec."Recog. Sales G/L Amount")
+                field(reasonCode; Rec."Reason Code")
                 {
-                    Caption = 'Recog. Sales G/L Amount';
+                    Caption = 'Reason Code';
                 }
-                field(reserve; Rec.Reserve)
+                field(requestedDeliveryDate; Rec."Requested Delivery Date")
                 {
-                    Caption = 'Reserve';
+                    Caption = 'Requested Delivery Date';
                 }
-                field(scheduledResGrQty; Rec."Scheduled Res. Gr. Qty.")
+                field(responsibilityCenter; Rec."Responsibility Center")
                 {
-                    Caption = 'Scheduled Res. Gr. Qty.';
+                    Caption = 'Responsibility Center';
                 }
-                field(scheduledResQty; Rec."Scheduled Res. Qty.")
+                field(satAddressID; Rec."SAT Address ID")
                 {
-                    Caption = 'Scheduled Res. Qty.';
+                    Caption = 'SAT Address ID';
                 }
-                field(searchDescription; Rec."Search Description")
+                field(satWeightUnitOfMeasure; Rec."SAT Weight Unit Of Measure")
                 {
-                    Caption = 'Search Description';
+                    Caption = 'SAT Weight Unit Of Measure';
+                }
+                field(salespersonCode; Rec."Salesperson Code")
+                {
+                    Caption = 'Salesperson Code';
                 }
                 field(sellToAddress; Rec."Sell-to Address")
                 {
@@ -20101,9 +12434,2407 @@ page 90064 Job
                 {
                     Caption = 'Ship-to Post Code';
                 }
-                field(startingDate; Rec."Starting Date")
+                field(shipToUPSZone; Rec."Ship-to UPS Zone")
                 {
-                    Caption = 'Starting Date';
+                    Caption = 'Ship-to UPS Zone';
+                }
+                field(shipmentDate; Rec."Shipment Date")
+                {
+                    Caption = 'Shipment Date';
+                }
+                field(shipmentMethodCode; Rec."Shipment Method Code")
+                {
+                    Caption = 'Shipment Method Code';
+                }
+                field(shippingAgentCode; Rec."Shipping Agent Code")
+                {
+                    Caption = 'Shipping Agent Code';
+                }
+                field(shippingAgentServiceCode; Rec."Shipping Agent Service Code")
+                {
+                    Caption = 'Shipping Agent Service Code';
+                }
+                field(shippingTime; Rec."Shipping Time")
+                {
+                    Caption = 'Shipping Time';
+                }
+                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
+                {
+                    Caption = 'Shortcut Dimension 1 Code';
+                }
+                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
+                {
+                    Caption = 'Shortcut Dimension 2 Code';
+                }
+                field(signedDocumentXML; Rec."Signed Document XML")
+                {
+                    Caption = 'Signed Document XML';
+                }
+                field(sourceCode; Rec."Source Code")
+                {
+                    Caption = 'Source Code';
+                }
+                field(substitutionDocumentNo; Rec."Substitution Document No.")
+                {
+                    Caption = 'Substitution Document No.';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+                field(taxAreaCode; Rec."Tax Area Code")
+                {
+                    Caption = 'Tax Area Code';
+                }
+                field(taxLiable; Rec."Tax Liable")
+                {
+                    Caption = 'Tax Liable';
+                }
+                field(trailer1; Rec."Trailer 1")
+                {
+                    Caption = 'Trailer 1';
+                }
+                field(trailer2; Rec."Trailer 2")
+                {
+                    Caption = 'Trailer 2';
+                }
+                field(transactionSpecification; Rec."Transaction Specification")
+                {
+                    Caption = 'Transaction Specification';
+                }
+                field("transactionType"; Rec."Transaction Type")
+                {
+                    Caption = 'Transaction Type';
+                }
+                field(transitDistance; Rec."Transit Distance")
+                {
+                    Caption = 'Transit Distance';
+                }
+                field(transitHours; Rec."Transit Hours")
+                {
+                    Caption = 'Transit Hours';
+                }
+                field(transitFromDateTime; Rec."Transit-from Date/Time")
+                {
+                    Caption = 'Transit-from Date/Time';
+                }
+                field(transportMethod; Rec."Transport Method")
+                {
+                    Caption = 'Transport Method';
+                }
+                field(transportOperators; Rec."Transport Operators")
+                {
+                    Caption = 'Transport Operators';
+                }
+                field(userID; Rec."User ID")
+                {
+                    Caption = 'User ID';
+                }
+                field(vatBaseDiscount; Rec."VAT Base Discount %")
+                {
+                    Caption = 'VAT Base Discount %';
+                }
+                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
+                {
+                    Caption = 'VAT Bus. Posting Group';
+                }
+                field(vatCountryRegionCode; Rec."VAT Country/Region Code")
+                {
+                    Caption = 'VAT Country/Region Code';
+                }
+                field(vatRegistrationNo; Rec."VAT Registration No.")
+                {
+                    Caption = 'VAT Registration No.';
+                }
+                field(vehicleCode; Rec."Vehicle Code")
+                {
+                    Caption = 'Vehicle Code';
+                }
+                field(workDescription; Rec."Work Description")
+                {
+                    Caption = 'Work Description';
+                }
+                field(yourReference; Rec."Your Reference")
+                {
+                    Caption = 'Your Reference';
+                }
+            }
+        }
+    }
+}
+
+page 90039 "Shipment Method"
+{
+    DelayedInsert = true;
+    PageType = API;
+    APIVersion = 'v1.0';
+    APIPublisher = 'fivetran';
+    APIGroup = 'standardEndpoints';
+    DataAccessIntent = ReadOnly;
+    Editable = false;
+    EntityCaption = 'Shipment Method';
+    EntitySetCaption = 'Shipment Methods';
+    ODataKeyFields = SystemId;
+    EntityName = 'shipmentMethod';
+    EntitySetName = 'shipmentMethods';
+    SourceTable = "Shipment Method";
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field("code"; Rec."Code")
+                {
+                    Caption = 'Code';
+                }
+                field(description; Rec.Description)
+                {
+                    Caption = 'Description';
+                }
+                field(lastModifiedDateTime; Rec."Last Modified Date Time")
+                {
+                    Caption = 'Last Modified Date Time';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+            }
+        }
+    }
+}
+
+page 90040 "Unit of Measure"
+{
+    DelayedInsert = true;
+    PageType = API;
+    APIVersion = 'v1.0';
+    APIPublisher = 'fivetran';
+    APIGroup = 'standardEndpoints';
+    DataAccessIntent = ReadOnly;
+    Editable = false;
+    EntityCaption = 'Unit of Measure';
+    EntitySetCaption = 'Units of Measure';
+    ODataKeyFields = SystemId;
+    EntityName = 'unitOfMeasure';
+    EntitySetName = 'unitsOfMeasure';
+    SourceTable = "Unit of Measure";
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field("code"; Rec."Code")
+                {
+                    Caption = 'Code';
+                }
+                field(coupledToDataverse; Rec."Coupled to Dataverse")
+                {
+                    Caption = 'Coupled to Dynamics 365 Sales';
+                }
+                field(description; Rec.Description)
+                {
+                    Caption = 'Description';
+                }
+                field(internationalStandardCode; Rec."International Standard Code")
+                {
+                    Caption = 'International Standard Code';
+                }
+                field(lastModifiedDateTime; Rec."Last Modified Date Time")
+                {
+                    Caption = 'Last Modified Date Time';
+                }
+                field(satCustomsUnit; Rec."SAT Customs Unit")
+                {
+                    Caption = 'SAT Customs Unit';
+                }
+                field(satUofMClassification; Rec."SAT UofM Classification")
+                {
+                    Caption = 'SAT UofM Classification';
+                }
+                field(symbol; Rec.Symbol)
+                {
+                    Caption = 'Symbol';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+            }
+        }
+    }
+}
+
+page 90041 "API Posted Gen. Journal Batch"
+{
+    APIGroup = 'standardEndpoints';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'apiPostedGenJournalBatch';
+    DelayedInsert = true;
+    EntityName = 'postedGeneralJournalBatch';
+    EntitySetName = 'postedGeneralJournalBatch';
+    PageType = API;
+    SourceTable = "Posted Gen. Journal Batch";
+    DataAccessIntent = ReadOnly;
+    Editable = false;
+    ODataKeyFields = SystemId;
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(allowPaymentExport; Rec."Allow Payment Export")
+                {
+                    Caption = 'Allow Payment Export';
+                }
+                field(allowVATDifference; Rec."Allow VAT Difference")
+                {
+                    Caption = 'Allow VAT Difference';
+                }
+                field(balAccountNo; Rec."Bal. Account No.")
+                {
+                    Caption = 'Bal. Account No.';
+                }
+                field(balAccountType; Rec."Bal. Account Type")
+                {
+                    Caption = 'Bal. Account Type';
+                }
+                field(bankStatementImportFormat; Rec."Bank Statement Import Format")
+                {
+                    Caption = 'Bank Statement Import Format';
+                }
+                field(copyVATSetupToJnlLines; Rec."Copy VAT Setup to Jnl. Lines")
+                {
+                    Caption = 'Copy VAT Setup to Jnl. Lines';
+                }
+                field(copyToPostedJnlLines; Rec."Copy to Posted Jnl. Lines")
+                {
+                    Caption = 'Copy to Posted Jnl. Lines';
+                }
+                field(description; Rec.Description)
+                {
+                    Caption = 'Description';
+                }
+                field(journalTemplateName; Rec."Journal Template Name")
+                {
+                    Caption = 'Journal Template Name';
+                }
+                field(name; Rec.Name)
+                {
+                    Caption = 'Name';
+                }
+                field(noSeries; Rec."No. Series")
+                {
+                    Caption = 'No. Series';
+                }
+                field(postingNoSeries; Rec."Posting No. Series")
+                {
+                    Caption = 'Posting No. Series';
+                }
+                field(reasonCode; Rec."Reason Code")
+                {
+                    Caption = 'Reason Code';
+                }
+                field(suggestBalancingAmount; Rec."Suggest Balancing Amount")
+                {
+                    Caption = 'Suggest Balancing Amount';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+            }
+        }
+    }
+}
+
+page 90042 "Posted General Journal Line"
+{
+    APIGroup = 'standardEndpoints';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'postedGeneralJournalLine';
+    DelayedInsert = true;
+    EntityName = 'postedGeneralJournalLine';
+    EntitySetName = 'postedGeneralJournalLines';
+    PageType = API;
+    SourceTable = "Posted Gen. Journal Line";
+    DataAccessIntent = ReadOnly;
+    Editable = false;
+    ODataKeyFields = SystemId;
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(accountId; Rec."Account Id")
+                {
+                    Caption = 'Account Id';
+                }
+                field(accountNo; Rec."Account No.")
+                {
+                    Caption = 'Account No.';
+                }
+                field(accountType; Rec."Account Type")
+                {
+                    Caption = 'Account Type';
+                }
+                field(additionalCurrencyPosting; Rec."Additional-Currency Posting")
+                {
+                    Caption = 'Additional-Currency Posting';
+                }
+                field(allowApplication; Rec."Allow Application")
+                {
+                    Caption = 'Allow Application';
+                }
+                field(allowZeroAmountPosting; Rec."Allow Zero-Amount Posting")
+                {
+                    Caption = 'Allow Zero-Amount Posting';
+                }
+                field(amount; Rec.Amount)
+                {
+                    Caption = 'Amount';
+                }
+                field(amountLCY; Rec."Amount (LCY)")
+                {
+                    Caption = 'Amount (LCY)';
+                }
+                field(appliedAutomatically; Rec."Applied Automatically")
+                {
+                    Caption = 'Applied Automatically';
+                }
+                field(appliesToDocNo; Rec."Applies-to Doc. No.")
+                {
+                    Caption = 'Applies-to Doc. No.';
+                }
+                field(appliesToDocType; Rec."Applies-to Doc. Type")
+                {
+                    Caption = 'Applies-to Doc. Type';
+                }
+                field(appliesToExtDocNo; Rec."Applies-to Ext. Doc. No.")
+                {
+                    Caption = 'Applies-to Ext. Doc. No.';
+                }
+                field(appliesToID; Rec."Applies-to ID")
+                {
+                    Caption = 'Applies-to ID';
+                }
+                field(appliesToInvoiceId; Rec."Applies-to Invoice Id")
+                {
+                    Caption = 'Applies-to Invoice Id';
+                }
+                field(balAccountNo; Rec."Bal. Account No.")
+                {
+                    Caption = 'Bal. Account No.';
+                }
+                field(balAccountType; Rec."Bal. Account Type")
+                {
+                    Caption = 'Bal. Account Type';
+                }
+                field(balGenBusPostingGroup; Rec."Bal. Gen. Bus. Posting Group")
+                {
+                    Caption = 'Bal. Gen. Bus. Posting Group';
+                }
+                field(balGenPostingType; Rec."Bal. Gen. Posting Type")
+                {
+                    Caption = 'Bal. Gen. Posting Type';
+                }
+                field(balGenProdPostingGroup; Rec."Bal. Gen. Prod. Posting Group")
+                {
+                    Caption = 'Bal. Gen. Prod. Posting Group';
+                }
+                field(balTaxAreaCode; Rec."Bal. Tax Area Code")
+                {
+                    Caption = 'Bal. Tax Area Code';
+                }
+                field(balTaxGroupCode; Rec."Bal. Tax Group Code")
+                {
+                    Caption = 'Bal. Tax Group Code';
+                }
+                field(balTaxLiable; Rec."Bal. Tax Liable")
+                {
+                    Caption = 'Bal. Tax Liable';
+                }
+                field(balUseTax; Rec."Bal. Use Tax")
+                {
+                    Caption = 'Bal. Use Tax';
+                }
+                field(balVAT; Rec."Bal. VAT %")
+                {
+                    Caption = 'Bal. VAT %';
+                }
+                field(balVATAmount; Rec."Bal. VAT Amount")
+                {
+                    Caption = 'Bal. VAT Amount';
+                }
+                field(balVATAmountLCY; Rec."Bal. VAT Amount (LCY)")
+                {
+                    Caption = 'Bal. VAT Amount (LCY)';
+                }
+                field(balVATBaseAmount; Rec."Bal. VAT Base Amount")
+                {
+                    Caption = 'Bal. VAT Base Amount';
+                }
+                field(balVATBaseAmountLCY; Rec."Bal. VAT Base Amount (LCY)")
+                {
+                    Caption = 'Bal. VAT Base Amount (LCY)';
+                }
+                field(balVATBusPostingGroup; Rec."Bal. VAT Bus. Posting Group")
+                {
+                    Caption = 'Bal. VAT Bus. Posting Group';
+                }
+                field(balVATCalculationType; Rec."Bal. VAT Calculation Type")
+                {
+                    Caption = 'Bal. VAT Calculation Type';
+                }
+                field(balVATDifference; Rec."Bal. VAT Difference")
+                {
+                    Caption = 'Bal. VAT Difference';
+                }
+                field(balVATProdPostingGroup; Rec."Bal. VAT Prod. Posting Group")
+                {
+                    Caption = 'Bal. VAT Prod. Posting Group';
+                }
+                field(balanceLCY; Rec."Balance (LCY)")
+                {
+                    Caption = 'Balance (LCY)';
+                }
+                field(bankPaymentType; Rec."Bank Payment Type")
+                {
+                    Caption = 'Bank Payment Type';
+                }
+                field(billToPayToNo; Rec."Bill-to/Pay-to No.")
+                {
+                    Caption = 'Bill-to/Pay-to No.';
+                }
+                field(budgetedFANo; Rec."Budgeted FA No.")
+                {
+                    Caption = 'Budgeted FA No.';
+                }
+                field(businessUnitCode; Rec."Business Unit Code")
+                {
+                    Caption = 'Business Unit Code';
+                }
+                field(campaignNo; Rec."Campaign No.")
+                {
+                    Caption = 'Campaign No.';
+                }
+                field(checkExported; Rec."Check Exported")
+                {
+                    Caption = 'Check Exported';
+                }
+                field(checkPrinted; Rec."Check Printed")
+                {
+                    Caption = 'Check Printed';
+                }
+                field(checkTransmitted; Rec."Check Transmitted")
+                {
+                    Caption = 'Check Transmitted';
+                }
+                field(comment; Rec.Comment)
+                {
+                    Caption = 'Comment';
+                }
+                field(companyEntryDescription; Rec."Company Entry Description")
+                {
+                    Caption = 'Company Entry Description';
+                }
+                field(contactGraphId; Rec."Contact Graph Id")
+                {
+                    Caption = 'Contact Graph Id';
+                }
+                field(copyVATSetupToJnlLines; Rec."Copy VAT Setup to Jnl. Lines")
+                {
+                    Caption = 'Copy VAT Setup to Jnl. Lines';
+                }
+                field(correction; Rec.Correction)
+                {
+                    Caption = 'Correction';
+                }
+                field(countryRegionCode; Rec."Country/Region Code")
+                {
+                    Caption = 'Country/Region Code';
+                }
+                field(creditAmount; Rec."Credit Amount")
+                {
+                    Caption = 'Credit Amount';
+                }
+                field(creditorNo; Rec."Creditor No.")
+                {
+                    Caption = 'Creditor No.';
+                }
+                field(currencyCode; Rec."Currency Code")
+                {
+                    Caption = 'Currency Code';
+                }
+                field(currencyFactor; Rec."Currency Factor")
+                {
+                    Caption = 'Currency Factor';
+                }
+                field(customerId; Rec."Customer Id")
+                {
+                    Caption = 'Customer Id';
+                }
+                field(dataExchEntryNo; Rec."Data Exch. Entry No.")
+                {
+                    Caption = 'Data Exch. Entry No.';
+                }
+                field(dataExchLineNo; Rec."Data Exch. Line No.")
+                {
+                    Caption = 'Data Exch. Line No.';
+                }
+                field(debitAmount; Rec."Debit Amount")
+                {
+                    Caption = 'Debit Amount';
+                }
+                field(deferralCode; Rec."Deferral Code")
+                {
+                    Caption = 'Deferral Code';
+                }
+                field(deferralLineNo; Rec."Deferral Line No.")
+                {
+                    Caption = 'Deferral Line No.';
+                }
+                field(deprAcquisitionCost; Rec."Depr. Acquisition Cost")
+                {
+                    Caption = 'Depr. Acquisition Cost';
+                }
+                field(deprUntilFAPostingDate; Rec."Depr. until FA Posting Date")
+                {
+                    Caption = 'Depr. until FA Posting Date';
+                }
+                field(depreciationBookCode; Rec."Depreciation Book Code")
+                {
+                    Caption = 'Depreciation Book Code';
+                }
+                field(description; Rec.Description)
+                {
+                    Caption = 'Description';
+                }
+                field(dimensionSetID; Rec."Dimension Set ID")
+                {
+                    Caption = 'Dimension Set ID';
+                }
+                field(directDebitMandateID; Rec."Direct Debit Mandate ID")
+                {
+                    Caption = 'Direct Debit Mandate ID';
+                }
+                field(documentDate; Rec."Document Date")
+                {
+                    Caption = 'Document Date';
+                }
+                field(documentNo; Rec."Document No.")
+                {
+                    Caption = 'Document No.';
+                }
+                field(documentType; Rec."Document Type")
+                {
+                    Caption = 'Document Type';
+                }
+                field(dueDate; Rec."Due Date")
+                {
+                    Caption = 'Due Date';
+                }
+                field(duplicateInDepreciationBook; Rec."Duplicate in Depreciation Book")
+                {
+                    Caption = 'Duplicate in Depreciation Book';
+                }
+                field(eftExportSequenceNo; Rec."EFT Export Sequence No.")
+                {
+                    Caption = 'EFT Export Sequence No.';
+                }
+                field(eu3PartyTrade; Rec."EU 3-Party Trade")
+                {
+                    Caption = 'EU 3-Party Trade';
+                }
+                field(expirationDate; Rec."Expiration Date")
+                {
+                    Caption = 'Expiration Date';
+                }
+                field(exportFileName; Rec."Export File Name")
+                {
+                    Caption = 'Export File Name';
+                }
+                field(exportedToPaymentFile; Rec."Exported to Payment File")
+                {
+                    Caption = 'Exported to Payment File';
+                }
+                field(externalDocumentNo; Rec."External Document No.")
+                {
+                    Caption = 'External Document No.';
+                }
+                field(faAddCurrencyFactor; Rec."FA Add.-Currency Factor")
+                {
+                    Caption = 'FA Add.-Currency Factor';
+                }
+                field(faErrorEntryNo; Rec."FA Error Entry No.")
+                {
+                    Caption = 'FA Error Entry No.';
+                }
+                field(faPostingDate; Rec."FA Posting Date")
+                {
+                    Caption = 'FA Posting Date';
+                }
+                field(faPostingType; Rec."FA Posting Type")
+                {
+                    Caption = 'FA Posting Type';
+                }
+                field(faReclassificationEntry; Rec."FA Reclassification Entry")
+                {
+                    Caption = 'FA Reclassification Entry';
+                }
+                field(financialVoid; Rec."Financial Void")
+                {
+                    Caption = 'Financial Void';
+                }
+                field(foreignExchangeIndicator; Rec."Foreign Exchange Indicator")
+                {
+                    Caption = 'Foreign Exchange Indicator';
+                }
+                field(foreignExchangeRefIndicator; Rec."Foreign Exchange Ref.Indicator")
+                {
+                    Caption = 'Foreign Exchange Ref.Indicator';
+                }
+                field(foreignExchangeReference; Rec."Foreign Exchange Reference")
+                {
+                    Caption = 'Foreign Exchange Reference';
+                }
+                field(gLRegisterNo; Rec."G/L Register No.")
+                {
+                    Caption = 'G/L Register No.';
+                }
+                field(gstHST; Rec."GST/HST")
+                {
+                    Caption = 'GST/HST';
+                }
+                field(gatewayOperatorOFACScrInc; Rec."Gateway Operator OFAC Scr.Inc")
+                {
+                    Caption = 'Gateway Operator OFAC Scr.Inc';
+                }
+                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
+                {
+                    Caption = 'Gen. Bus. Posting Group';
+                }
+                field(genPostingType; Rec."Gen. Posting Type")
+                {
+                    Caption = 'Gen. Posting Type';
+                }
+                field(genProdPostingGroup; Rec."Gen. Prod. Posting Group")
+                {
+                    Caption = 'Gen. Prod. Posting Group';
+                }
+                field(icAccountNo; Rec."IC Account No.")
+                {
+                    Caption = 'IC Account No.';
+                }
+                field(icAccountType; Rec."IC Account Type")
+                {
+                    Caption = 'IC Account Type';
+                }
+                field(icDirection; Rec."IC Direction")
+                {
+                    Caption = 'IC Direction';
+                }
+                field(icPartnerCode; Rec."IC Partner Code")
+                {
+                    Caption = 'IC Partner Code';
+                }
+                field(icPartnerTransactionNo; Rec."IC Partner Transaction No.")
+                {
+                    Caption = 'IC Partner Transaction No.';
+                }
+                field(irs1099Amount; Rec."IRS 1099 Amount")
+                {
+                    Caption = 'IRS 1099 Amount';
+                }
+                field(irs1099Code; Rec."IRS 1099 Code")
+                {
+                    Caption = 'IRS 1099 Code';
+                }
+                field(incomingDocumentEntryNo; Rec."Incoming Document Entry No.")
+                {
+                    Caption = 'Incoming Document Entry No.';
+                }
+                field(indentation; Rec.Indentation)
+                {
+                    Caption = 'Indentation';
+                }
+                field(indexEntry; Rec."Index Entry")
+                {
+                    Caption = 'Index Entry';
+                }
+                field(insuranceNo; Rec."Insurance No.")
+                {
+                    Caption = 'Insurance No.';
+                }
+                field(invDiscountLCY; Rec."Inv. Discount (LCY)")
+                {
+                    Caption = 'Inv. Discount (LCY)';
+                }
+                field(invoiceReceivedDate; Rec."Invoice Received Date")
+                {
+                    Caption = 'Invoice Received Date';
+                }
+                field(jobCurrencyCode; Rec."Job Currency Code")
+                {
+                    Caption = 'Job Currency Code';
+                }
+                field(jobCurrencyFactor; Rec."Job Currency Factor")
+                {
+                    Caption = 'Job Currency Factor';
+                }
+                field(jobLineAmount; Rec."Job Line Amount")
+                {
+                    Caption = 'Job Line Amount';
+                }
+                field(jobLineAmountLCY; Rec."Job Line Amount (LCY)")
+                {
+                    Caption = 'Job Line Amount (LCY)';
+                }
+                field(jobLineDiscAmountLCY; Rec."Job Line Disc. Amount (LCY)")
+                {
+                    Caption = 'Job Line Disc. Amount (LCY)';
+                }
+                field(jobLineDiscount; Rec."Job Line Discount %")
+                {
+                    Caption = 'Job Line Discount %';
+                }
+                field(jobLineDiscountAmount; Rec."Job Line Discount Amount")
+                {
+                    Caption = 'Job Line Discount Amount';
+                }
+                field(jobLineType; Rec."Job Line Type")
+                {
+                    Caption = 'Job Line Type';
+                }
+                field(jobNo; Rec."Job No.")
+                {
+                    Caption = 'Job No.';
+                }
+                field(jobPlanningLineNo; Rec."Job Planning Line No.")
+                {
+                    Caption = 'Job Planning Line No.';
+                }
+                field(jobQuantity; Rec."Job Quantity")
+                {
+                    Caption = 'Job Quantity';
+                }
+                field(jobQueueEntryID; Rec."Job Queue Entry ID")
+                {
+                    Caption = 'Job Queue Entry ID';
+                }
+                field(jobQueueStatus; Rec."Job Queue Status")
+                {
+                    Caption = 'Job Queue Status';
+                }
+                field(jobRemainingQty; Rec."Job Remaining Qty.")
+                {
+                    Caption = 'Job Remaining Qty.';
+                }
+                field(jobTaskNo; Rec."Job Task No.")
+                {
+                    Caption = 'Job Task No.';
+                }
+                field(jobTotalCost; Rec."Job Total Cost")
+                {
+                    Caption = 'Job Total Cost';
+                }
+                field(jobTotalCostLCY; Rec."Job Total Cost (LCY)")
+                {
+                    Caption = 'Job Total Cost (LCY)';
+                }
+                field(jobTotalPrice; Rec."Job Total Price")
+                {
+                    Caption = 'Job Total Price';
+                }
+                field(jobTotalPriceLCY; Rec."Job Total Price (LCY)")
+                {
+                    Caption = 'Job Total Price (LCY)';
+                }
+                field(jobUnitCost; Rec."Job Unit Cost")
+                {
+                    Caption = 'Job Unit Cost';
+                }
+                field(jobUnitCostLCY; Rec."Job Unit Cost (LCY)")
+                {
+                    Caption = 'Job Unit Cost (LCY)';
+                }
+                field(jobUnitOfMeasureCode; Rec."Job Unit Of Measure Code")
+                {
+                    Caption = 'Job Unit Of Measure Code';
+                }
+                field(jobUnitPrice; Rec."Job Unit Price")
+                {
+                    Caption = 'Job Unit Price';
+                }
+                field(jobUnitPriceLCY; Rec."Job Unit Price (LCY)")
+                {
+                    Caption = 'Job Unit Price (LCY)';
+                }
+                field(journalBatchId; Rec."Journal Batch Id")
+                {
+                    Caption = 'Journal Batch Id';
+                }
+                field(journalBatchName; Rec."Journal Batch Name")
+                {
+                    Caption = 'Journal Batch Name';
+                }
+                field(journalTemplateName; Rec."Journal Template Name")
+                {
+                    Caption = 'Journal Template Name';
+                }
+                field(lastModifiedDateTime; Rec."Last Modified DateTime")
+                {
+                    Caption = 'Last Modified DateTime';
+                }
+                field(lineNo; Rec."Line No.")
+                {
+                    Caption = 'Line No.';
+                }
+                field(maintenanceCode; Rec."Maintenance Code")
+                {
+                    Caption = 'Maintenance Code';
+                }
+                field(messageToRecipient; Rec."Message to Recipient")
+                {
+                    Caption = 'Message to Recipient';
+                }
+                field(noOfDepreciationDays; Rec."No. of Depreciation Days")
+                {
+                    Caption = 'No. of Depreciation Days';
+                }
+                field(nonDeductibleVAT; Rec."Non-Deductible VAT %")
+                {
+                    Caption = 'Non-Deductible VAT %';
+                }
+                field(nonDeductibleVATAmount; Rec."Non-Deductible VAT Amount")
+                {
+                    Caption = 'Non-Deductible VAT Amount';
+                }
+                field(nonDeductibleVATAmountACY; Rec."Non-Deductible VAT Amount ACY")
+                {
+                    Caption = 'Non-Deductible VAT Amount ACY';
+                }
+                field(nonDeductibleVATAmountLCY; Rec."Non-Deductible VAT Amount LCY")
+                {
+                    Caption = 'Non-Deductible VAT Amount LCY';
+                }
+                field(nonDeductibleVATBase; Rec."Non-Deductible VAT Base")
+                {
+                    Caption = 'Non-Deductible VAT Base';
+                }
+                field(nonDeductibleVATBaseACY; Rec."Non-Deductible VAT Base ACY")
+                {
+                    Caption = 'Non-Deductible VAT Base ACY';
+                }
+                field(nonDeductibleVATBaseLCY; Rec."Non-Deductible VAT Base LCY")
+                {
+                    Caption = 'Non-Deductible VAT Base LCY';
+                }
+                field(nonDeductibleVATDiff; Rec."Non-Deductible VAT Diff.")
+                {
+                    Caption = 'Non-Deductible VAT Difference';
+                }
+                field(onHold; Rec."On Hold")
+                {
+                    Caption = 'On Hold';
+                }
+                field(origPmtDiscPossible; Rec."Orig. Pmt. Disc. Possible")
+                {
+                    Caption = 'Original Pmt. Disc. Possible';
+                }
+                field(origPmtDiscPossibleLCY; Rec."Orig. Pmt. Disc. Possible(LCY)")
+                {
+                    Caption = 'Orig. Pmt. Disc. Possible (LCY)';
+                }
+                field(originDFIIDQualifier; Rec."Origin. DFI ID Qualifier")
+                {
+                    Caption = 'Origin. DFI ID Qualifier';
+                }
+                field(payerInformation; Rec."Payer Information")
+                {
+                    Caption = 'Payer Information';
+                }
+                field(paymentDiscount; Rec."Payment Discount %")
+                {
+                    Caption = 'Payment Discount %';
+                }
+                field(paymentMethodCode; Rec."Payment Method Code")
+                {
+                    Caption = 'Payment Method Code';
+                }
+                field(paymentMethodId; Rec."Payment Method Id")
+                {
+                    Caption = 'Payment Method Id';
+                }
+                field(paymentReference; Rec."Payment Reference")
+                {
+                    Caption = 'Payment Reference';
+                }
+                field(paymentRelatedInformation1; Rec."Payment Related Information 1")
+                {
+                    Caption = 'Payment Related Information 1';
+                }
+                field(paymentRelatedInformation2; Rec."Payment Related Information 2")
+                {
+                    Caption = 'Payment Related Information 2';
+                }
+                field(paymentTermsCode; Rec."Payment Terms Code")
+                {
+                    Caption = 'Payment Terms Code';
+                }
+                field(pmtDiscountDate; Rec."Pmt. Discount Date")
+                {
+                    Caption = 'Pmt. Discount Date';
+                }
+                field(postingDate; Rec."Posting Date")
+                {
+                    Caption = 'Posting Date';
+                }
+                field(postingGroup; Rec."Posting Group")
+                {
+                    Caption = 'Posting Group';
+                }
+                field(postingNoSeries; Rec."Posting No. Series")
+                {
+                    Caption = 'Posting No. Series';
+                }
+                field(prepayment; Rec.Prepayment)
+                {
+                    Caption = 'Prepayment';
+                }
+                field(printPostedDocuments; Rec."Print Posted Documents")
+                {
+                    Caption = 'Print Posted Documents';
+                }
+                field(prodOrderNo; Rec."Prod. Order No.")
+                {
+                    Caption = 'Prod. Order No.';
+                }
+                field(profitLCY; Rec."Profit (LCY)")
+                {
+                    Caption = 'Profit (LCY)';
+                }
+                field(quantity; Rec.Quantity)
+                {
+                    Caption = 'Quantity';
+                }
+                field(reasonCode; Rec."Reason Code")
+                {
+                    Caption = 'Reason Code';
+                }
+                field(receivDFIIDQualifier; Rec."Receiv. DFI ID Qualifier")
+                {
+                    Caption = 'Receiv. DFI ID Qualifier';
+                }
+                field(recipientBankAccount; Rec."Recipient Bank Account")
+                {
+                    Caption = 'Recipient Bank Account';
+                }
+                field(recurringFrequency; Rec."Recurring Frequency")
+                {
+                    Caption = 'Recurring Frequency';
+                }
+                field(recurringMethod; Rec."Recurring Method")
+                {
+                    Caption = 'Recurring Method';
+                }
+                field(reversingEntry; Rec."Reversing Entry")
+                {
+                    Caption = 'Reversing Entry';
+                }
+                field(steTransactionID; Rec."STE Transaction ID")
+                {
+                    Caption = 'STE Transaction ID';
+                }
+                field(salesPurchLCY; Rec."Sales/Purch. (LCY)")
+                {
+                    Caption = 'Sales/Purch. (LCY)';
+                }
+                field(salespersPurchCode; Rec."Salespers./Purch. Code")
+                {
+                    Caption = 'Salespers./Purch. Code';
+                }
+                field(salvageValue; Rec."Salvage Value")
+                {
+                    Caption = 'Salvage Value';
+                }
+                field(secondaryOFACScrIndicator; Rec."Secondary OFAC Scr.Indicator")
+                {
+                    Caption = 'Secondary OFAC Scr.Indicator';
+                }
+                field(sellToBuyFromNo; Rec."Sell-to/Buy-from No.")
+                {
+                    Caption = 'Sell-to/Buy-from No.';
+                }
+                field(shipToOrderAddressCode; Rec."Ship-to/Order Address Code")
+                {
+                    Caption = 'Ship-to/Order Address Code';
+                }
+                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
+                {
+                    Caption = 'Shortcut Dimension 1 Code';
+                }
+                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
+                {
+                    Caption = 'Shortcut Dimension 2 Code';
+                }
+                field(sourceCode; Rec."Source Code")
+                {
+                    Caption = 'Source Code';
+                }
+                field(sourceCurrVATAmount; Rec."Source Curr. VAT Amount")
+                {
+                    Caption = 'Source Curr. VAT Amount';
+                }
+                field(sourceCurrVATBaseAmount; Rec."Source Curr. VAT Base Amount")
+                {
+                    Caption = 'Source Curr. VAT Base Amount';
+                }
+                field(sourceCurrencyAmount; Rec."Source Currency Amount")
+                {
+                    Caption = 'Source Currency Amount';
+                }
+                field(sourceCurrencyCode; Rec."Source Currency Code")
+                {
+                    Caption = 'Source Currency Code';
+                }
+                field(sourceLineNo; Rec."Source Line No.")
+                {
+                    Caption = 'Source Line No.';
+                }
+                field(sourceNo; Rec."Source No.")
+                {
+                    Caption = 'Source No.';
+                }
+                field(sourceType; Rec."Source Type")
+                {
+                    Caption = 'Source Type';
+                }
+                field(systemCreatedEntry; Rec."System-Created Entry")
+                {
+                    Caption = 'System-Created Entry';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+                field(taxAreaCode; Rec."Tax Area Code")
+                {
+                    Caption = 'Tax Area Code';
+                }
+                field(taxExemptionNo; Rec."Tax Exemption No.")
+                {
+                    Caption = 'Tax Exemption No.';
+                }
+                field(taxGroupCode; Rec."Tax Group Code")
+                {
+                    Caption = 'Tax Group Code';
+                }
+                field(taxJurisdictionCode; Rec."Tax Jurisdiction Code")
+                {
+                    Caption = 'Tax Jurisdiction Code';
+                }
+                field(taxLiable; Rec."Tax Liable")
+                {
+                    Caption = 'Tax Liable';
+                }
+                field(taxType; Rec."Tax Type")
+                {
+                    Caption = 'Tax Type';
+                }
+                field(transactionCode; Rec."Transaction Code")
+                {
+                    Caption = 'Transaction Code';
+                }
+                field(transactionInformation; Rec."Transaction Information")
+                {
+                    Caption = 'Transaction Information';
+                }
+                field(transactionTypeCode; Rec."Transaction Type Code")
+                {
+                    Caption = 'Transaction Type Code';
+                }
+                field(useDuplicationList; Rec."Use Duplication List")
+                {
+                    Caption = 'Use Duplication List';
+                }
+                field(useTax; Rec."Use Tax")
+                {
+                    Caption = 'Use Tax';
+                }
+                field(vat; Rec."VAT %")
+                {
+                    Caption = 'VAT %';
+                }
+                field(vatAmount; Rec."VAT Amount")
+                {
+                    Caption = 'VAT Amount';
+                }
+                field(vatAmountLCY; Rec."VAT Amount (LCY)")
+                {
+                    Caption = 'VAT Amount (LCY)';
+                }
+                field(vatBaseAmount; Rec."VAT Base Amount")
+                {
+                    Caption = 'VAT Base Amount';
+                }
+                field(vatBaseAmountLCY; Rec."VAT Base Amount (LCY)")
+                {
+                    Caption = 'VAT Base Amount (LCY)';
+                }
+                field(vatBaseBeforePmtDisc; Rec."VAT Base Before Pmt. Disc.")
+                {
+                    Caption = 'VAT Base Before Pmt. Disc.';
+                }
+                field(vatBaseDiscount; Rec."VAT Base Discount %")
+                {
+                    Caption = 'VAT Base Discount %';
+                }
+                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
+                {
+                    Caption = 'VAT Bus. Posting Group';
+                }
+                field(vatCalculationType; Rec."VAT Calculation Type")
+                {
+                    Caption = 'VAT Calculation Type';
+                }
+                field(vatDifference; Rec."VAT Difference")
+                {
+                    Caption = 'VAT Difference';
+                }
+                field(vatPosting; Rec."VAT Posting")
+                {
+                    Caption = 'VAT Posting';
+                }
+                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
+                {
+                    Caption = 'VAT Prod. Posting Group';
+                }
+                field(vatRegistrationNo; Rec."VAT Registration No.")
+                {
+                    Caption = 'VAT Registration No.';
+                }
+            }
+        }
+    }
+}
+
+page 90043 "Purchase Invoice Header"
+{
+    APIGroup = 'standardEndpoints';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'purchaseInvoiceHeader';
+    DelayedInsert = true;
+    EntityName = 'purchaseInvoiceHeader';
+    EntitySetName = 'purchaseInvoiceHeaders';
+    PageType = API;
+    SourceTable = "Purch. Inv. Header";
+    ODataKeyFields = SystemId;
+    DataAccessIntent = ReadOnly;
+    Editable = false;
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(amount; Rec.Amount)
+                {
+                    Caption = 'Amount';
+                }
+                field(amountIncludingVAT; Rec."Amount Including VAT")
+                {
+                    Caption = 'Amount Including VAT';
+                }
+                field(appliesToDocNo; Rec."Applies-to Doc. No.")
+                {
+                    Caption = 'Applies-to Doc. No.';
+                }
+                field(appliesToDocType; Rec."Applies-to Doc. Type")
+                {
+                    Caption = 'Applies-to Doc. Type';
+                }
+                field("area"; Rec."Area")
+                {
+                    Caption = 'Area';
+                }
+                field(balAccountNo; Rec."Bal. Account No.")
+                {
+                    Caption = 'Bal. Account No.';
+                }
+                field(balAccountType; Rec."Bal. Account Type")
+                {
+                    Caption = 'Bal. Account Type';
+                }
+                field(buyFromAddress; Rec."Buy-from Address")
+                {
+                    Caption = 'Buy-from Address';
+                }
+                field(buyFromAddress2; Rec."Buy-from Address 2")
+                {
+                    Caption = 'Buy-from Address 2';
+                }
+                field(buyFromCity; Rec."Buy-from City")
+                {
+                    Caption = 'Buy-from City';
+                }
+                field(buyFromContact; Rec."Buy-from Contact")
+                {
+                    Caption = 'Buy-from Contact';
+                }
+                field(buyFromContactNo; Rec."Buy-from Contact No.")
+                {
+                    Caption = 'Buy-from Contact No.';
+                }
+                field(buyFromCountryRegionCode; Rec."Buy-from Country/Region Code")
+                {
+                    Caption = 'Buy-from Country/Region Code';
+                }
+                field(buyFromCounty; Rec."Buy-from County")
+                {
+                    Caption = 'Buy-from County';
+                }
+                field(buyFromPostCode; Rec."Buy-from Post Code")
+                {
+                    Caption = 'Buy-from Post Code';
+                }
+                field(buyFromVendorName; Rec."Buy-from Vendor Name")
+                {
+                    Caption = 'Buy-from Vendor Name';
+                }
+                field(buyFromVendorName2; Rec."Buy-from Vendor Name 2")
+                {
+                    Caption = 'Buy-from Vendor Name 2';
+                }
+                field(buyFromVendorNo; Rec."Buy-from Vendor No.")
+                {
+                    Caption = 'Buy-from Vendor No.';
+                }
+                field(campaignNo; Rec."Campaign No.")
+                {
+                    Caption = 'Campaign No.';
+                }
+                field(cancelled; Rec.Cancelled)
+                {
+                    Caption = 'Cancelled';
+                }
+                field(closed; Rec.Closed)
+                {
+                    Caption = 'Closed';
+                }
+                field(comment; Rec.Comment)
+                {
+                    Caption = 'Comment';
+                }
+                field(correction; Rec.Correction)
+                {
+                    Caption = 'Correction';
+                }
+                field(corrective; Rec.Corrective)
+                {
+                    Caption = 'Corrective';
+                }
+                field(creditorNo; Rec."Creditor No.")
+                {
+                    Caption = 'Creditor No.';
+                }
+                field(currencyCode; Rec."Currency Code")
+                {
+                    Caption = 'Currency Code';
+                }
+                field(currencyFactor; Rec."Currency Factor")
+                {
+                    Caption = 'Currency Factor';
+                }
+                field(dimensionSetID; Rec."Dimension Set ID")
+                {
+                    Caption = 'Dimension Set ID';
+                }
+                field(documentDate; Rec."Document Date")
+                {
+                    Caption = 'Document Date';
+                }
+                field(draftInvoiceSystemId; Rec."Draft Invoice SystemId")
+                {
+                    Caption = 'Draft Invoice SystemId';
+                }
+                field(dueDate; Rec."Due Date")
+                {
+                    Caption = 'Due Date';
+                }
+                field(entryPoint; Rec."Entry Point")
+                {
+                    Caption = 'Entry Point';
+                }
+                field(expectedReceiptDate; Rec."Expected Receipt Date")
+                {
+                    Caption = 'Expected Receipt Date';
+                }
+                field(fiscalInvoiceNumberPAC; Rec."Fiscal Invoice Number PAC")
+                {
+                    Caption = 'Fiscal Invoice Number PAC';
+                }
+                field(formatRegion; Rec."Format Region")
+                {
+                    Caption = 'Format Region';
+                }
+                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
+                {
+                    Caption = 'Gen. Bus. Posting Group';
+                }
+                field(irs1099Code; Rec."IRS 1099 Code")
+                {
+                    Caption = 'IRS 1099 Code';
+                }
+                field(invoiceDiscCode; Rec."Invoice Disc. Code")
+                {
+                    Caption = 'Invoice Disc. Code';
+                }
+                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
+                {
+                    Caption = 'Invoice Discount Amount';
+                }
+                field(languageCode; Rec."Language Code")
+                {
+                    Caption = 'Language Code';
+                }
+                field(locationCode; Rec."Location Code")
+                {
+                    Caption = 'Location Code';
+                }
+                field(no; Rec."No.")
+                {
+                    Caption = 'No.';
+                }
+                field(noPrinted; Rec."No. Printed")
+                {
+                    Caption = 'No. Printed';
+                }
+                field(noSeries; Rec."No. Series")
+                {
+                    Caption = 'No. Series';
+                }
+                field(onHold; Rec."On Hold")
+                {
+                    Caption = 'On Hold';
+                }
+                field(orderAddressCode; Rec."Order Address Code")
+                {
+                    Caption = 'Order Address Code';
+                }
+                field(orderDate; Rec."Order Date")
+                {
+                    Caption = 'Order Date';
+                }
+                field(orderNo; Rec."Order No.")
+                {
+                    Caption = 'Order No.';
+                }
+                field(orderNoSeries; Rec."Order No. Series")
+                {
+                    Caption = 'Order No. Series';
+                }
+                field(payToAddress; Rec."Pay-to Address")
+                {
+                    Caption = 'Pay-to Address';
+                }
+                field(payToAddress2; Rec."Pay-to Address 2")
+                {
+                    Caption = 'Pay-to Address 2';
+                }
+                field(payToCity; Rec."Pay-to City")
+                {
+                    Caption = 'Pay-to City';
+                }
+                field(payToContact; Rec."Pay-to Contact")
+                {
+                    Caption = 'Pay-to Contact';
+                }
+                field(payToContactNo; Rec."Pay-to Contact No.")
+                {
+                    Caption = 'Pay-to Contact No.';
+                }
+                field(payToCountryRegionCode; Rec."Pay-to Country/Region Code")
+                {
+                    Caption = 'Pay-to Country/Region Code';
+                }
+                field(payToCounty; Rec."Pay-to County")
+                {
+                    Caption = 'Pay-to County';
+                }
+                field(payToName; Rec."Pay-to Name")
+                {
+                    Caption = 'Pay-to Name';
+                }
+                field(payToName2; Rec."Pay-to Name 2")
+                {
+                    Caption = 'Pay-to Name 2';
+                }
+                field(payToPostCode; Rec."Pay-to Post Code")
+                {
+                    Caption = 'Pay-to Post Code';
+                }
+                field(payToVendorNo; Rec."Pay-to Vendor No.")
+                {
+                    Caption = 'Pay-to Vendor No.';
+                }
+                field(paymentDiscount; Rec."Payment Discount %")
+                {
+                    Caption = 'Payment Discount %';
+                }
+                field(paymentMethodCode; Rec."Payment Method Code")
+                {
+                    Caption = 'Payment Method Code';
+                }
+                field(paymentReference; Rec."Payment Reference")
+                {
+                    Caption = 'Payment Reference';
+                }
+                field(paymentTermsCode; Rec."Payment Terms Code")
+                {
+                    Caption = 'Payment Terms Code';
+                }
+                field(pmtDiscountDate; Rec."Pmt. Discount Date")
+                {
+                    Caption = 'Pmt. Discount Date';
+                }
+                field(postingDate; Rec."Posting Date")
+                {
+                    Caption = 'Posting Date';
+                }
+                field(postingDescription; Rec."Posting Description")
+                {
+                    Caption = 'Posting Description';
+                }
+                field(preAssignedNo; Rec."Pre-Assigned No.")
+                {
+                    Caption = 'Pre-Assigned No.';
+                }
+                field(preAssignedNoSeries; Rec."Pre-Assigned No. Series")
+                {
+                    Caption = 'Pre-Assigned No. Series';
+                }
+                field(prepaymentInvoice; Rec."Prepayment Invoice")
+                {
+                    Caption = 'Prepayment Invoice';
+                }
+                field(prepaymentNoSeries; Rec."Prepayment No. Series")
+                {
+                    Caption = 'Prepayment No. Series';
+                }
+                field(prepaymentOrderNo; Rec."Prepayment Order No.")
+                {
+                    Caption = 'Prepayment Order No.';
+                }
+                field(priceCalculationMethod; Rec."Price Calculation Method")
+                {
+                    Caption = 'Price Calculation Method';
+                }
+                field(pricesIncludingVAT; Rec."Prices Including VAT")
+                {
+                    Caption = 'Prices Including VAT';
+                }
+                field(provincialTaxAreaCode; Rec."Provincial Tax Area Code")
+                {
+                    Caption = 'Provincial Tax Area Code';
+                }
+                field(purchaserCode; Rec."Purchaser Code")
+                {
+                    Caption = 'Purchaser Code';
+                }
+                field(quoteNo; Rec."Quote No.")
+                {
+                    Caption = 'Quote No.';
+                }
+                field(reasonCode; Rec."Reason Code")
+                {
+                    Caption = 'Reason Code';
+                }
+                field(remainingAmount; Rec."Remaining Amount")
+                {
+                    Caption = 'Remaining Amount';
+                }
+                field(remitToCode; Rec."Remit-to Code")
+                {
+                    Caption = 'Remit-to Code';
+                }
+                field(responsibilityCenter; Rec."Responsibility Center")
+                {
+                    Caption = 'Responsibility Center';
+                }
+                field(steTransactionID; Rec."STE Transaction ID")
+                {
+                    Caption = 'STE Transaction ID';
+                }
+                field(sellToCustomerNo; Rec."Sell-to Customer No.")
+                {
+                    Caption = 'Sell-to Customer No.';
+                }
+                field(shipToAddress; Rec."Ship-to Address")
+                {
+                    Caption = 'Ship-to Address';
+                }
+                field(shipToAddress2; Rec."Ship-to Address 2")
+                {
+                    Caption = 'Ship-to Address 2';
+                }
+                field(shipToCity; Rec."Ship-to City")
+                {
+                    Caption = 'Ship-to City';
+                }
+                field(shipToCode; Rec."Ship-to Code")
+                {
+                    Caption = 'Ship-to Code';
+                }
+                field(shipToContact; Rec."Ship-to Contact")
+                {
+                    Caption = 'Ship-to Contact';
+                }
+                field(shipToCountryRegionCode; Rec."Ship-to Country/Region Code")
+                {
+                    Caption = 'Ship-to Country/Region Code';
+                }
+                field(shipToCounty; Rec."Ship-to County")
+                {
+                    Caption = 'Ship-to County';
+                }
+                field(shipToName; Rec."Ship-to Name")
+                {
+                    Caption = 'Ship-to Name';
+                }
+                field(shipToName2; Rec."Ship-to Name 2")
+                {
+                    Caption = 'Ship-to Name 2';
+                }
+                field(shipToPostCode; Rec."Ship-to Post Code")
+                {
+                    Caption = 'Ship-to Post Code';
+                }
+                field(shipToUPSZone; Rec."Ship-to UPS Zone")
+                {
+                    Caption = 'Ship-to UPS Zone';
+                }
+                field(shipmentMethodCode; Rec."Shipment Method Code")
+                {
+                    Caption = 'Shipment Method Code';
+                }
+                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
+                {
+                    Caption = 'Shortcut Dimension 1 Code';
+                }
+                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
+                {
+                    Caption = 'Shortcut Dimension 2 Code';
+                }
+                field(sourceCode; Rec."Source Code")
+                {
+                    Caption = 'Source Code';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+                field(taxAreaCode; Rec."Tax Area Code")
+                {
+                    Caption = 'Tax Area Code';
+                }
+                field(taxExemptionNo; Rec."Tax Exemption No.")
+                {
+                    Caption = 'Tax Exemption No.';
+                }
+                field(taxLiable; Rec."Tax Liable")
+                {
+                    Caption = 'Tax Liable';
+                }
+                field(transactionSpecification; Rec."Transaction Specification")
+                {
+                    Caption = 'Transaction Specification';
+                }
+                field("transactionType"; Rec."Transaction Type")
+                {
+                    Caption = 'Transaction Type';
+                }
+                field(transportMethod; Rec."Transport Method")
+                {
+                    Caption = 'Transport Method';
+                }
+                field(userID; Rec."User ID")
+                {
+                    Caption = 'User ID';
+                }
+                field(vatBaseDiscount; Rec."VAT Base Discount %")
+                {
+                    Caption = 'VAT Base Discount %';
+                }
+                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
+                {
+                    Caption = 'VAT Bus. Posting Group';
+                }
+                field(vatCountryRegionCode; Rec."VAT Country/Region Code")
+                {
+                    Caption = 'VAT Country/Region Code';
+                }
+                field(vatRegistrationNo; Rec."VAT Registration No.")
+                {
+                    Caption = 'VAT Registration No.';
+                }
+                field(vatReportingDate; Rec."VAT Reporting Date")
+                {
+                    Caption = 'VAT Date';
+                }
+                field(vendorInvoiceNo; Rec."Vendor Invoice No.")
+                {
+                    Caption = 'Vendor Invoice No.';
+                }
+                field(vendorLedgerEntryNo; Rec."Vendor Ledger Entry No.")
+                {
+                    Caption = 'Vendor Ledger Entry No.';
+                }
+                field(vendorOrderNo; Rec."Vendor Order No.")
+                {
+                    Caption = 'Vendor Order No.';
+                }
+                field(vendorPostingGroup; Rec."Vendor Posting Group")
+                {
+                    Caption = 'Vendor Posting Group';
+                }
+                field(yourReference; Rec."Your Reference")
+                {
+                    Caption = 'Your Reference';
+                }
+            }
+        }
+    }
+}
+
+page 90044 "Purchase Invoice Line"
+{
+    APIGroup = 'standardEndpoints';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'purchaseInvoiceLine';
+    DelayedInsert = true;
+    EntityName = 'purchaseInvoiceLine';
+    EntitySetName = 'purchaseInvoiceLines';
+    PageType = API;
+    SourceTable = "Purch. Inv. Line";
+    ODataKeyFields = SystemId;
+    DataAccessIntent = ReadOnly;
+    Editable = false;
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(allocationAccountNo; Rec."Allocation Account No.")
+                {
+                    Caption = 'Allocation Account No.';
+                }
+                field(allowInvoiceDisc; Rec."Allow Invoice Disc.")
+                {
+                    Caption = 'Allow Invoice Disc.';
+                }
+                field(amount; Rec.Amount)
+                {
+                    Caption = 'Amount';
+                }
+                field(amountIncludingVAT; Rec."Amount Including VAT")
+                {
+                    Caption = 'Amount Including VAT';
+                }
+                field(applToItemEntry; Rec."Appl.-to Item Entry")
+                {
+                    Caption = 'Appl.-to Item Entry';
+                }
+                field("area"; Rec."Area")
+                {
+                    Caption = 'Area';
+                }
+                field(attachedToLineNo; Rec."Attached to Line No.")
+                {
+                    Caption = 'Attached to Line No.';
+                }
+                field(binCode; Rec."Bin Code")
+                {
+                    Caption = 'Bin Code';
+                }
+                field(blanketOrderLineNo; Rec."Blanket Order Line No.")
+                {
+                    Caption = 'Blanket Order Line No.';
+                }
+                field(blanketOrderNo; Rec."Blanket Order No.")
+                {
+                    Caption = 'Blanket Order No.';
+                }
+                field(budgetedFANo; Rec."Budgeted FA No.")
+                {
+                    Caption = 'Budgeted FA No.';
+                }
+                field(buyFromVendorNo; Rec."Buy-from Vendor No.")
+                {
+                    Caption = 'Buy-from Vendor No.';
+                }
+                field(deferralCode; Rec."Deferral Code")
+                {
+                    Caption = 'Deferral Code';
+                }
+                field(deprAcquisitionCost; Rec."Depr. Acquisition Cost")
+                {
+                    Caption = 'Depr. Acquisition Cost';
+                }
+                field(deprUntilFAPostingDate; Rec."Depr. until FA Posting Date")
+                {
+                    Caption = 'Depr. until FA Posting Date';
+                }
+                field(depreciationBookCode; Rec."Depreciation Book Code")
+                {
+                    Caption = 'Depreciation Book Code';
+                }
+                field(description; Rec.Description)
+                {
+                    Caption = 'Description';
+                }
+                field(description2; Rec."Description 2")
+                {
+                    Caption = 'Description 2';
+                }
+                field(dimensionSetID; Rec."Dimension Set ID")
+                {
+                    Caption = 'Dimension Set ID';
+                }
+                field(directUnitCost; Rec."Direct Unit Cost")
+                {
+                    Caption = 'Direct Unit Cost';
+                }
+                field(documentNo; Rec."Document No.")
+                {
+                    Caption = 'Document No.';
+                }
+                field(duplicateInDepreciationBook; Rec."Duplicate in Depreciation Book")
+                {
+                    Caption = 'Duplicate in Depreciation Book';
+                }
+                field(entryPoint; Rec."Entry Point")
+                {
+                    Caption = 'Entry Point';
+                }
+                field(expectedReceiptDate; Rec."Expected Receipt Date")
+                {
+                    Caption = 'Expected Receipt Date';
+                }
+                field(faPostingDate; Rec."FA Posting Date")
+                {
+                    Caption = 'FA Posting Date';
+                }
+                field(faPostingType; Rec."FA Posting Type")
+                {
+                    Caption = 'FA Posting Type';
+                }
+                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
+                {
+                    Caption = 'Gen. Bus. Posting Group';
+                }
+                field(genProdPostingGroup; Rec."Gen. Prod. Posting Group")
+                {
+                    Caption = 'Gen. Prod. Posting Group';
+                }
+                field(grossWeight; Rec."Gross Weight")
+                {
+                    Caption = 'Gross Weight';
+                }
+                field(icCrossReferenceNo; Rec."IC Cross-Reference No.")
+                {
+                    Caption = 'IC Item Reference No.';
+                }
+                field(icPartnerCode; Rec."IC Partner Code")
+                {
+                    Caption = 'IC Partner Code';
+                }
+                field(icPartnerRefType; Rec."IC Partner Ref. Type")
+                {
+                    Caption = 'IC Partner Ref. Type';
+                }
+                field(icPartnerReference; Rec."IC Partner Reference")
+                {
+                    Caption = 'IC Partner Reference';
+                }
+                field(irs1099Liable; Rec."IRS 1099 Liable")
+                {
+                    Caption = 'IRS 1099 Liable';
+                }
+                field(indirectCost; Rec."Indirect Cost %")
+                {
+                    Caption = 'Indirect Cost %';
+                }
+                field(insuranceNo; Rec."Insurance No.")
+                {
+                    Caption = 'Insurance No.';
+                }
+                field(invDiscountAmount; Rec."Inv. Discount Amount")
+                {
+                    Caption = 'Inv. Discount Amount';
+                }
+                field(itemCategoryCode; Rec."Item Category Code")
+                {
+                    Caption = 'Item Category Code';
+                }
+                field(itemReferenceNo; Rec."Item Reference No.")
+                {
+                    Caption = 'Item Reference No.';
+                }
+                field(itemReferenceType; Rec."Item Reference Type")
+                {
+                    Caption = 'Item Reference Type';
+                }
+                field(itemReferenceTypeNo; Rec."Item Reference Type No.")
+                {
+                    Caption = 'Item Reference Type No.';
+                }
+                field(itemReferenceUnitOfMeasure; Rec."Item Reference Unit of Measure")
+                {
+                    Caption = 'Unit of Measure (Item Ref.)';
+                }
+                field(jobCurrencyCode; Rec."Job Currency Code")
+                {
+                    Caption = 'Job Currency Code';
+                }
+                field(jobCurrencyFactor; Rec."Job Currency Factor")
+                {
+                    Caption = 'Job Currency Factor';
+                }
+                field(jobLineAmount; Rec."Job Line Amount")
+                {
+                    Caption = 'Job Line Amount';
+                }
+                field(jobLineAmountLCY; Rec."Job Line Amount (LCY)")
+                {
+                    Caption = 'Job Line Amount (LCY)';
+                }
+                field(jobLineDiscAmountLCY; Rec."Job Line Disc. Amount (LCY)")
+                {
+                    Caption = 'Job Line Disc. Amount (LCY)';
+                }
+                field(jobLineDiscount; Rec."Job Line Discount %")
+                {
+                    Caption = 'Job Line Discount %';
+                }
+                field(jobLineDiscountAmount; Rec."Job Line Discount Amount")
+                {
+                    Caption = 'Job Line Discount Amount';
+                }
+                field(jobLineType; Rec."Job Line Type")
+                {
+                    Caption = 'Job Line Type';
+                }
+                field(jobNo; Rec."Job No.")
+                {
+                    Caption = 'Job No.';
+                }
+                field(jobTaskNo; Rec."Job Task No.")
+                {
+                    Caption = 'Job Task No.';
+                }
+                field(jobTotalPrice; Rec."Job Total Price")
+                {
+                    Caption = 'Job Total Price';
+                }
+                field(jobTotalPriceLCY; Rec."Job Total Price (LCY)")
+                {
+                    Caption = 'Job Total Price (LCY)';
+                }
+                field(jobUnitPrice; Rec."Job Unit Price")
+                {
+                    Caption = 'Job Unit Price';
+                }
+                field(jobUnitPriceLCY; Rec."Job Unit Price (LCY)")
+                {
+                    Caption = 'Job Unit Price (LCY)';
+                }
+                field(lineAmount; Rec."Line Amount")
+                {
+                    Caption = 'Line Amount';
+                }
+                field(lineDiscount; Rec."Line Discount %")
+                {
+                    Caption = 'Line Discount %';
+                }
+                field(lineDiscountAmount; Rec."Line Discount Amount")
+                {
+                    Caption = 'Line Discount Amount';
+                }
+                field(lineNo; Rec."Line No.")
+                {
+                    Caption = 'Line No.';
+                }
+                field(locationCode; Rec."Location Code")
+                {
+                    Caption = 'Location Code';
+                }
+                field(maintenanceCode; Rec."Maintenance Code")
+                {
+                    Caption = 'Maintenance Code';
+                }
+                field(netWeight; Rec."Net Weight")
+                {
+                    Caption = 'Net Weight';
+                }
+                field(no; Rec."No.")
+                {
+                    Caption = 'No.';
+                }
+                field(nonDeductibleVAT; Rec."Non-Deductible VAT %")
+                {
+                    Caption = 'Non-Deductible VAT %';
+                }
+                field(nonDeductibleVATAmount; Rec."Non-Deductible VAT Amount")
+                {
+                    Caption = 'Non-Deductible VAT Amount';
+                }
+                field(nonDeductibleVATBase; Rec."Non-Deductible VAT Base")
+                {
+                    Caption = 'Non-Deductible VAT Base';
+                }
+                field(nonDeductibleVATDiff; Rec."Non-Deductible VAT Diff.")
+                {
+                    Caption = 'Non-Deductible VAT Difference';
+                }
+                field(nonstock; Rec.Nonstock)
+                {
+                    Caption = 'Catalog';
+                }
+                field(operationNo; Rec."Operation No.")
+                {
+                    Caption = 'Operation No.';
+                }
+                field(orderLineNo; Rec."Order Line No.")
+                {
+                    Caption = 'Order Line No.';
+                }
+                field(orderNo; Rec."Order No.")
+                {
+                    Caption = 'Order No.';
+                }
+                field(overheadRate; Rec."Overhead Rate")
+                {
+                    Caption = 'Overhead Rate';
+                }
+                field(payToVendorNo; Rec."Pay-to Vendor No.")
+                {
+                    Caption = 'Pay-to Vendor No.';
+                }
+                field(pmtDiscountAmount; Rec."Pmt. Discount Amount")
+                {
+                    Caption = 'Pmt. Discount Amount';
+                }
+                field(postingDate; Rec."Posting Date")
+                {
+                    Caption = 'Posting Date';
+                }
+                field(postingGroup; Rec."Posting Group")
+                {
+                    Caption = 'Posting Group';
+                }
+                field(prepaymentLine; Rec."Prepayment Line")
+                {
+                    Caption = 'Prepayment Line';
+                }
+                field(priceCalculationMethod; Rec."Price Calculation Method")
+                {
+                    Caption = 'Price Calculation Method';
+                }
+                field(prodOrderLineNo; Rec."Prod. Order Line No.")
+                {
+                    Caption = 'Prod. Order Line No.';
+                }
+                field(prodOrderNo; Rec."Prod. Order No.")
+                {
+                    Caption = 'Prod. Order No.';
+                }
+                field(provincialTaxAreaCode; Rec."Provincial Tax Area Code")
+                {
+                    Caption = 'Provincial Tax Area Code';
+                }
+                field(purchasingCode; Rec."Purchasing Code")
+                {
+                    Caption = 'Purchasing Code';
+                }
+                field(qtyPerUnitOfMeasure; Rec."Qty. per Unit of Measure")
+                {
+                    Caption = 'Qty. per Unit of Measure';
+                }
+                field(quantity; Rec.Quantity)
+                {
+                    Caption = 'Quantity';
+                }
+                field(quantityBase; Rec."Quantity (Base)")
+                {
+                    Caption = 'Quantity (Base)';
+                }
+                field(receiptLineNo; Rec."Receipt Line No.")
+                {
+                    Caption = 'Receipt Line No.';
+                }
+                field(receiptNo; Rec."Receipt No.")
+                {
+                    Caption = 'Receipt No.';
+                }
+                field(responsibilityCenter; Rec."Responsibility Center")
+                {
+                    Caption = 'Responsibility Center';
+                }
+                field(returnReasonCode; Rec."Return Reason Code")
+                {
+                    Caption = 'Return Reason Code';
+                }
+                field(routingNo; Rec."Routing No.")
+                {
+                    Caption = 'Routing No.';
+                }
+                field(routingReferenceNo; Rec."Routing Reference No.")
+                {
+                    Caption = 'Routing Reference No.';
+                }
+                field(salvageValue; Rec."Salvage Value")
+                {
+                    Caption = 'Salvage Value';
+                }
+                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
+                {
+                    Caption = 'Shortcut Dimension 1 Code';
+                }
+                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
+                {
+                    Caption = 'Shortcut Dimension 2 Code';
+                }
+                field(systemCreatedEntry; Rec."System-Created Entry")
+                {
+                    Caption = 'System-Created Entry';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+                field(taxAreaCode; Rec."Tax Area Code")
+                {
+                    Caption = 'Tax Area Code';
+                }
+                field(taxGroupCode; Rec."Tax Group Code")
+                {
+                    Caption = 'Tax Group Code';
+                }
+                field(taxLiable; Rec."Tax Liable")
+                {
+                    Caption = 'Tax Liable';
+                }
+                field(transactionSpecification; Rec."Transaction Specification")
+                {
+                    Caption = 'Transaction Specification';
+                }
+                field("transactionType"; Rec."Transaction Type")
+                {
+                    Caption = 'Transaction Type';
+                }
+                field(transportMethod; Rec."Transport Method")
+                {
+                    Caption = 'Transport Method';
+                }
+                field("type"; Rec."Type")
+                {
+                    Caption = 'Type';
+                }
+                field(unitCost; Rec."Unit Cost")
+                {
+                    Caption = 'Unit Cost';
+                }
+                field(unitCostLCY; Rec."Unit Cost (LCY)")
+                {
+                    Caption = 'Unit Cost (LCY)';
+                }
+                field(unitPriceLCY; Rec."Unit Price (LCY)")
+                {
+                    Caption = 'Unit Price (LCY)';
+                }
+                field(unitVolume; Rec."Unit Volume")
+                {
+                    Caption = 'Unit Volume';
+                }
+                field(unitOfMeasure; Rec."Unit of Measure")
+                {
+                    Caption = 'Unit of Measure';
+                }
+                field(unitOfMeasureCode; Rec."Unit of Measure Code")
+                {
+                    Caption = 'Unit of Measure Code';
+                }
+                field(unitsPerParcel; Rec."Units per Parcel")
+                {
+                    Caption = 'Units per Parcel';
+                }
+                field(useDuplicationList; Rec."Use Duplication List")
+                {
+                    Caption = 'Use Duplication List';
+                }
+                field(useTax; Rec."Use Tax")
+                {
+                    Caption = 'Use Tax';
+                }
+                field(vat; Rec."VAT %")
+                {
+                    Caption = 'VAT %';
+                }
+                field(vatBaseAmount; Rec."VAT Base Amount")
+                {
+                    Caption = 'VAT Base Amount';
+                }
+                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
+                {
+                    Caption = 'VAT Bus. Posting Group';
+                }
+                field(vatCalculationType; Rec."VAT Calculation Type")
+                {
+                    Caption = 'VAT Calculation Type';
+                }
+                field(vatDifference; Rec."VAT Difference")
+                {
+                    Caption = 'VAT Difference';
+                }
+                field(vatIdentifier; Rec."VAT Identifier")
+                {
+                    Caption = 'VAT Identifier';
+                }
+                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
+                {
+                    Caption = 'VAT Prod. Posting Group';
+                }
+                field(variantCode; Rec."Variant Code")
+                {
+                    Caption = 'Variant Code';
+                }
+                field(vendorItemNo; Rec."Vendor Item No.")
+                {
+                    Caption = 'Vendor Item No.';
+                }
+                field(workCenterNo; Rec."Work Center No.")
+                {
+                    Caption = 'Work Center No.';
+                }
+            }
+        }
+    }
+}
+
+page 90045 "Time Sheet Detail"
+{
+    APIGroup = 'standardEndpoints';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'timeSheetDetail';
+    DelayedInsert = true;
+    EntityName = 'timeSheetDetail';
+    EntitySetName = 'timeSheetDetails';
+    PageType = API;
+    SourceTable = "Time Sheet Detail";
+
+    ODataKeyFields = SystemId;
+    Editable = false;
+    DataAccessIntent = ReadOnly;
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(assemblyOrderLineNo; Rec."Assembly Order Line No.")
+                {
+                    Caption = 'Assembly Order Line No.';
+                }
+                field(assemblyOrderNo; Rec."Assembly Order No.")
+                {
+                    Caption = 'Assembly Order No.';
+                }
+                field(causeOfAbsenceCode; Rec."Cause of Absence Code")
+                {
+                    Caption = 'Cause of Absence Code';
+                }
+                field("date"; Rec."Date")
+                {
+                    Caption = 'Date';
+                }
+                field(dimensionSetID; Rec."Dimension Set ID")
+                {
+                    Caption = 'Dimension Set ID';
+                }
+                field(jobId; Rec."Job Id")
+                {
+                    Caption = 'Job Id';
+                }
+                field(jobNo; Rec."Job No.")
+                {
+                    Caption = 'Job No.';
+                }
+                field(jobTaskNo; Rec."Job Task No.")
+                {
+                    Caption = 'Job Task No.';
+                }
+                field(lastModifiedDateTime; Rec."Last Modified DateTime")
+                {
+                    Caption = 'Last Modified DateTime';
+                }
+                field(posted; Rec.Posted)
+                {
+                    Caption = 'Posted';
+                }
+                field(postedQuantity; Rec."Posted Quantity")
+                {
+                    Caption = 'Posted Quantity';
+                }
+                field(quantity; Rec.Quantity)
+                {
+                    Caption = 'Quantity';
+                }
+                field(resourceNo; Rec."Resource No.")
+                {
+                    Caption = 'Resource No.';
+                }
+                field(serviceOrderLineNo; Rec."Service Order Line No.")
+                {
+                    Caption = 'Service Order Line No.';
+                }
+                field(serviceOrderNo; Rec."Service Order No.")
+                {
+                    Caption = 'Service Order No.';
                 }
                 field(status; Rec.Status)
                 {
@@ -20129,132 +14860,38 @@ page 90064 Job
                 {
                     Caption = 'SystemModifiedBy';
                 }
-                field(totalWIPCostAmount; Rec."Total WIP Cost Amount")
+                field(timeSheetLineNo; Rec."Time Sheet Line No.")
                 {
-                    Caption = 'Total WIP Cost Amount';
+                    Caption = 'Time Sheet Line No.';
                 }
-                field(totalWIPCostGLAmount; Rec."Total WIP Cost G/L Amount")
+                field(timeSheetNo; Rec."Time Sheet No.")
                 {
-                    Caption = 'Total WIP Cost G/L Amount';
+                    Caption = 'Time Sheet No.';
                 }
-                field(totalWIPSalesAmount; Rec."Total WIP Sales Amount")
+                field("type"; Rec."Type")
                 {
-                    Caption = 'Total WIP Sales Amount';
-                }
-                field(totalWIPSalesGLAmount; Rec."Total WIP Sales G/L Amount")
-                {
-                    Caption = 'Total WIP Sales G/L Amount';
-                }
-                field(wipCompletionCalculated; Rec."WIP Completion Calculated")
-                {
-                    Caption = 'WIP Completion Calculated';
-                }
-                field(wipCompletionPosted; Rec."WIP Completion Posted")
-                {
-                    Caption = 'WIP Completion Posted';
-                }
-                field(wipEntriesExist; Rec."WIP Entries Exist")
-                {
-                    Caption = 'WIP Entries Exist';
-                }
-                field(wipGLPostingDate; Rec."WIP G/L Posting Date")
-                {
-                    Caption = 'WIP G/L Posting Date';
-                }
-                field(wipMethod; Rec."WIP Method")
-                {
-                    Caption = 'WIP Method';
-                }
-                field(wipPostingDate; Rec."WIP Posting Date")
-                {
-                    Caption = 'WIP Posting Date';
-                }
-                field(wipPostingMethod; Rec."WIP Posting Method")
-                {
-                    Caption = 'WIP Posting Method';
-                }
-                field(wipWarnings; Rec."WIP Warnings")
-                {
-                    Caption = 'WIP Warnings';
-                }
-                field(yourReference; Rec."Your Reference")
-                {
-                    Caption = 'Your Reference';
-                }
-                field(planningDateFilter; Rec."Planning Date Filter")
-                {
-                    Caption = 'Planning Date Filter';
-                }
-                field(postingDateFilter; Rec."Posting Date Filter")
-                {
-                    Caption = 'Posting Date Filter';
-                }
-                field(resourceFilter; Rec."Resource Filter")
-                {
-                    Caption = 'Resource Filter';
-                }
-                field(resourceGrFilter; Rec."Resource Gr. Filter")
-                {
-                    Caption = 'Resource Gr. Filter';
+                    Caption = 'Type';
                 }
             }
         }
     }
 }
 
-page 90065 "Table Metadata"
-{
-    APIGroup = 'metadata';
-    APIPublisher = 'fivetran';
-    APIVersion = 'v1.0';
-    ApplicationArea = All;
-    Caption = 'tableMetadata';
-    DelayedInsert = true;
-    EntityName = 'tableMetadata';
-    EntitySetName = 'tableMetadata';
-    PageType = API;
-    SourceTable = "Table Metadata";
-    Editable = false;
-    DataAccessIntent = ReadOnly;
-
-    layout
-    {
-        area(content)
-        {
-            repeater(General)
-            {
-                field(ID; Rec.ID)
-                {
-                    Caption = 'Table ID';
-                }
-                field(Name; Rec.Name)
-                {
-                    Caption = 'Table Name';
-                }
-                field(DataPerCompany; Rec.DataPerCompany)
-                {
-                    Caption = 'Data Per Company';
-                }
-            }
-        }
-    }
-}
-
-page 90066 Company
+page 90046 "Sales Header"
 {
     APIGroup = 'standardEndpoints';
     APIPublisher = 'fivetran';
     APIVersion = 'v1.0';
     ApplicationArea = All;
-    Caption = 'company';
+    Caption = 'salesHeader';
     DelayedInsert = true;
-    EntityName = 'rawCompany';
-    EntitySetName = 'rawCompanies';
+    EntityName = 'salesHeader';
+    EntitySetName = 'salesHeaders';
     PageType = API;
-    SourceTable = Company;
+    SourceTable = "Sales Header";
+    ODataKeyFields = SystemId;
     Editable = false;
     DataAccessIntent = ReadOnly;
-    ODataKeyFields = SystemId;
 
     layout
     {
@@ -20262,25 +14899,3561 @@ page 90066 Company
         {
             repeater(General)
             {
-                field(businessProfileId; Rec."Business Profile Id")
+                field(allowLineDisc; Rec."Allow Line Disc.")
                 {
-                    Caption = 'Business Profile Id';
+                    Caption = 'Allow Line Disc.';
                 }
-                field(displayName; Rec."Display Name")
+                field(amount; Rec.Amount)
                 {
-                    Caption = 'Display Name';
+                    Caption = 'Amount';
                 }
-                field(evaluationCompany; Rec."Evaluation Company")
+                field(amountIncludingVAT; Rec."Amount Including VAT")
                 {
-                    Caption = 'Evaluation Company';
+                    Caption = 'Amount Including VAT';
                 }
-                field(id; Rec.Id)
+                field(amtShipNotInvLCY; Rec."Amt. Ship. Not Inv. (LCY)")
                 {
-                    Caption = 'Id';
+                    Caption = 'Amount Shipped Not Invoiced (LCY) Incl. VAT';
                 }
-                field(name; Rec.Name)
+                field(amtShipNotInvLCYBase; Rec."Amt. Ship. Not Inv. (LCY) Base")
                 {
-                    Caption = 'Name';
+                    Caption = 'Amount Shipped Not Invoiced (LCY)';
+                }
+                field(appliesToDocNo; Rec."Applies-to Doc. No.")
+                {
+                    Caption = 'Applies-to Doc. No.';
+                }
+                field(appliesToDocType; Rec."Applies-to Doc. Type")
+                {
+                    Caption = 'Applies-to Doc. Type';
+                }
+                field(appliesToID; Rec."Applies-to ID")
+                {
+                    Caption = 'Applies-to ID';
+                }
+                field("area"; Rec."Area")
+                {
+                    Caption = 'Area';
+                }
+                field(assignedUserID; Rec."Assigned User ID")
+                {
+                    Caption = 'Assigned User ID';
+                }
+                field(balAccountNo; Rec."Bal. Account No.")
+                {
+                    Caption = 'Bal. Account No.';
+                }
+                field(balAccountType; Rec."Bal. Account Type")
+                {
+                    Caption = 'Bal. Account Type';
+                }
+                field(billToAddress; Rec."Bill-to Address")
+                {
+                    Caption = 'Bill-to Address';
+                }
+                field(billToAddress2; Rec."Bill-to Address 2")
+                {
+                    Caption = 'Bill-to Address 2';
+                }
+                field(billToCity; Rec."Bill-to City")
+                {
+                    Caption = 'Bill-to City';
+                }
+                field(billToContact; Rec."Bill-to Contact")
+                {
+                    Caption = 'Bill-to Contact';
+                }
+                field(billToContactNo; Rec."Bill-to Contact No.")
+                {
+                    Caption = 'Bill-to Contact No.';
+                }
+                field(billToCountryRegionCode; Rec."Bill-to Country/Region Code")
+                {
+                    Caption = 'Bill-to Country/Region Code';
+                }
+                field(billToCounty; Rec."Bill-to County")
+                {
+                    Caption = 'Bill-to County';
+                }
+                field(billToCustomerNo; Rec."Bill-to Customer No.")
+                {
+                    Caption = 'Bill-to Customer No.';
+                }
+                field(billToCustomerTemplCode; Rec."Bill-to Customer Templ. Code")
+                {
+                    Caption = 'Bill-to Customer Template Code';
+                }
+                field(billToICPartnerCode; Rec."Bill-to IC Partner Code")
+                {
+                    Caption = 'Bill-to IC Partner Code';
+                }
+                field(billToName; Rec."Bill-to Name")
+                {
+                    Caption = 'Bill-to Name';
+                }
+                field(billToName2; Rec."Bill-to Name 2")
+                {
+                    Caption = 'Bill-to Name 2';
+                }
+                field(billToPostCode; Rec."Bill-to Post Code")
+                {
+                    Caption = 'Bill-to Post Code';
+                }
+                field(cfdiExportCode; Rec."CFDI Export Code")
+                {
+                    Caption = 'CFDI Export Code';
+                }
+                field(cfdiPeriod; Rec."CFDI Period")
+                {
+                    Caption = 'CFDI Period';
+                }
+                field(cfdiPurpose; Rec."CFDI Purpose")
+                {
+                    Caption = 'CFDI Purpose';
+                }
+                field(cfdiRelation; Rec."CFDI Relation")
+                {
+                    Caption = 'CFDI Relation';
+                }
+                field(campaignNo; Rec."Campaign No.")
+                {
+                    Caption = 'Campaign No.';
+                }
+                field(combineShipments; Rec."Combine Shipments")
+                {
+                    Caption = 'Combine Shipments';
+                }
+                field(comment; Rec.Comment)
+                {
+                    Caption = 'Comment';
+                }
+                field(companyBankAccountCode; Rec."Company Bank Account Code")
+                {
+                    Caption = 'Company Bank Account Code';
+                }
+                field(completelyShipped; Rec."Completely Shipped")
+                {
+                    Caption = 'Completely Shipped';
+                }
+                field(compressPrepayment; Rec."Compress Prepayment")
+                {
+                    Caption = 'Compress Prepayment';
+                }
+                field(correction; Rec.Correction)
+                {
+                    Caption = 'Correction';
+                }
+                field(coupledToDataverse; Rec."Coupled to Dataverse")
+                {
+                    Caption = 'Coupled to Dynamics 365 Sales';
+                }
+                field(currencyCode; Rec."Currency Code")
+                {
+                    Caption = 'Currency Code';
+                }
+                field(currencyFactor; Rec."Currency Factor")
+                {
+                    Caption = 'Currency Factor';
+                }
+                field(customerDiscGroup; Rec."Customer Disc. Group")
+                {
+                    Caption = 'Customer Disc. Group';
+                }
+                field(customerPostingGroup; Rec."Customer Posting Group")
+                {
+                    Caption = 'Customer Posting Group';
+                }
+                field(customerPriceGroup; Rec."Customer Price Group")
+                {
+                    Caption = 'Customer Price Group';
+                }
+                field(dimensionSetID; Rec."Dimension Set ID")
+                {
+                    Caption = 'Dimension Set ID';
+                }
+                field(directDebitMandateID; Rec."Direct Debit Mandate ID")
+                {
+                    Caption = 'Direct Debit Mandate ID';
+                }
+                field(docNoOccurrence; Rec."Doc. No. Occurrence")
+                {
+                    Caption = 'Doc. No. Occurrence';
+                }
+                field(documentDate; Rec."Document Date")
+                {
+                    Caption = 'Document Date';
+                }
+                field(documentType; Rec."Document Type")
+                {
+                    Caption = 'Document Type';
+                }
+                field(dueDate; Rec."Due Date")
+                {
+                    Caption = 'Due Date';
+                }
+                field(eu3PartyTrade; Rec."EU 3-Party Trade")
+                {
+                    Caption = 'EU 3-Party Trade';
+                }
+                field(exchangeRateUSD; Rec."Exchange Rate USD")
+                {
+                    Caption = 'Exchange Rate USD';
+                }
+                field(exitPoint; Rec."Exit Point")
+                {
+                    Caption = 'Exit Point';
+                }
+                field(externalDocumentNo; Rec."External Document No.")
+                {
+                    Caption = 'External Document No.';
+                }
+                field(foreignTrade; Rec."Foreign Trade")
+                {
+                    Caption = 'Foreign Trade';
+                }
+                field(formatRegion; Rec."Format Region")
+                {
+                    Caption = 'Format Region';
+                }
+                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
+                {
+                    Caption = 'Gen. Bus. Posting Group';
+                }
+                field(getShipmentUsed; Rec."Get Shipment Used")
+                {
+                    Caption = 'Get Shipment Used';
+                }
+                field(icDirection; Rec."IC Direction")
+                {
+                    Caption = 'IC Direction';
+                }
+                field(icReferenceDocumentNo; Rec."IC Reference Document No.")
+                {
+                    Caption = 'IC Reference Document No.';
+                }
+                field(icStatus; Rec."IC Status")
+                {
+                    Caption = 'IC Status';
+                }
+                field(incomingDocumentEntryNo; Rec."Incoming Document Entry No.")
+                {
+                    Caption = 'Incoming Document Entry No.';
+                }
+                field(insurerName; Rec."Insurer Name")
+                {
+                    Caption = 'Insurer Name';
+                }
+                field(insurerPolicyNumber; Rec."Insurer Policy Number")
+                {
+                    Caption = 'Insurer Policy Number';
+                }
+                field(invoice; Rec.Invoice)
+                {
+                    Caption = 'Invoice';
+                }
+                field(invoiceDiscCode; Rec."Invoice Disc. Code")
+                {
+                    Caption = 'Invoice Disc. Code';
+                }
+                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
+                {
+                    Caption = 'Invoice Discount Amount';
+                }
+                field(invoiceDiscountCalculation; Rec."Invoice Discount Calculation")
+                {
+                    Caption = 'Invoice Discount Calculation';
+                }
+                field(invoiceDiscountValue; Rec."Invoice Discount Value")
+                {
+                    Caption = 'Invoice Discount Value';
+                }
+                field(isTest; Rec.IsTest)
+                {
+                    Caption = 'IsTest';
+                }
+                field(jobQueueEntryID; Rec."Job Queue Entry ID")
+                {
+                    Caption = 'Job Queue Entry ID';
+                }
+                field(jobQueueStatus; Rec."Job Queue Status")
+                {
+                    Caption = 'Job Queue Status';
+                }
+                field(journalTemplName; Rec."Journal Templ. Name")
+                {
+                    Caption = 'Journal Template Name';
+                }
+                field(languageCode; Rec."Language Code")
+                {
+                    Caption = 'Language Code';
+                }
+                field(lastPostingNo; Rec."Last Posting No.")
+                {
+                    Caption = 'Last Posting No.';
+                }
+                field(lastPrepaymentNo; Rec."Last Prepayment No.")
+                {
+                    Caption = 'Last Prepayment No.';
+                }
+                field(lastPrepmtCrMemoNo; Rec."Last Prepmt. Cr. Memo No.")
+                {
+                    Caption = 'Last Prepmt. Cr. Memo No.';
+                }
+                field(lastReturnReceiptNo; Rec."Last Return Receipt No.")
+                {
+                    Caption = 'Last Return Receipt No.';
+                }
+                field(lastShipmentDate; Rec."Last Shipment Date")
+                {
+                    Caption = 'Last Shipment Date';
+                }
+                field(lastShippingNo; Rec."Last Shipping No.")
+                {
+                    Caption = 'Last Shipping No.';
+                }
+                field(lateOrderShipping; Rec."Late Order Shipping")
+                {
+                    Caption = 'Late Order Shipping';
+                }
+                field(locationCode; Rec."Location Code")
+                {
+                    Caption = 'Location Code';
+                }
+                field(medicalInsPolicyNumber; Rec."Medical Ins. Policy Number")
+                {
+                    Caption = 'Medical Ins. Policy Number';
+                }
+                field(medicalInsurerName; Rec."Medical Insurer Name")
+                {
+                    Caption = 'Medical Insurer Name';
+                }
+                field(no; Rec."No.")
+                {
+                    Caption = 'No.';
+                }
+                field(noPrinted; Rec."No. Printed")
+                {
+                    Caption = 'No. Printed';
+                }
+                field(noSeries; Rec."No. Series")
+                {
+                    Caption = 'No. Series';
+                }
+                field(noOfArchivedVersions; Rec."No. of Archived Versions")
+                {
+                    Caption = 'No. of Archived Versions';
+                }
+                field(onHold; Rec."On Hold")
+                {
+                    Caption = 'On Hold';
+                }
+                field(opportunityNo; Rec."Opportunity No.")
+                {
+                    Caption = 'Opportunity No.';
+                }
+                field(orderClass; Rec."Order Class")
+                {
+                    Caption = 'Order Class';
+                }
+                field(orderDate; Rec."Order Date")
+                {
+                    Caption = 'Order Date';
+                }
+                field(outboundWhseHandlingTime; Rec."Outbound Whse. Handling Time")
+                {
+                    Caption = 'Outbound Whse. Handling Time';
+                }
+                field(outstandingAmount; Rec."Outstanding Amount ($)")
+                {
+                    Caption = 'Outstanding Amount ($)';
+                }
+                field(packageTrackingNo; Rec."Package Tracking No.")
+                {
+                    Caption = 'Package Tracking No.';
+                }
+                field(paymentDiscount; Rec."Payment Discount %")
+                {
+                    Caption = 'Payment Discount %';
+                }
+                field(paymentMethodCode; Rec."Payment Method Code")
+                {
+                    Caption = 'Payment Method Code';
+                }
+                field(paymentServiceSetID; Rec."Payment Service Set ID")
+                {
+                    Caption = 'Payment Service Set ID';
+                }
+                field(paymentTermsCode; Rec."Payment Terms Code")
+                {
+                    Caption = 'Payment Terms Code';
+                }
+                field(pmtDiscountDate; Rec."Pmt. Discount Date")
+                {
+                    Caption = 'Pmt. Discount Date';
+                }
+                field(postingDate; Rec."Posting Date")
+                {
+                    Caption = 'Posting Date';
+                }
+                field(postingDescription; Rec."Posting Description")
+                {
+                    Caption = 'Posting Description';
+                }
+                field(postingNo; Rec."Posting No.")
+                {
+                    Caption = 'Posting No.';
+                }
+                field(postingNoSeries; Rec."Posting No. Series")
+                {
+                    Caption = 'Posting No. Series';
+                }
+                field(postingFromWhseRef; Rec."Posting from Whse. Ref.")
+                {
+                    Caption = 'Posting from Whse. Ref.';
+                }
+                field(prepayment; Rec."Prepayment %")
+                {
+                    Caption = 'Prepayment %';
+                }
+                field(prepaymentDueDate; Rec."Prepayment Due Date")
+                {
+                    Caption = 'Prepayment Due Date';
+                }
+                field(prepaymentNo; Rec."Prepayment No.")
+                {
+                    Caption = 'Prepayment No.';
+                }
+                field(prepaymentNoSeries; Rec."Prepayment No. Series")
+                {
+                    Caption = 'Prepayment No. Series';
+                }
+                field(prepmtCrMemoNo; Rec."Prepmt. Cr. Memo No.")
+                {
+                    Caption = 'Prepmt. Cr. Memo No.';
+                }
+                field(prepmtCrMemoNoSeries; Rec."Prepmt. Cr. Memo No. Series")
+                {
+                    Caption = 'Prepmt. Cr. Memo No. Series';
+                }
+                field(prepmtIncludeTax; Rec."Prepmt. Include Tax")
+                {
+                    Caption = 'Prepmt. Include Tax';
+                }
+                field(prepmtPaymentDiscount; Rec."Prepmt. Payment Discount %")
+                {
+                    Caption = 'Prepmt. Payment Discount %';
+                }
+                field(prepmtPaymentTermsCode; Rec."Prepmt. Payment Terms Code")
+                {
+                    Caption = 'Prepmt. Payment Terms Code';
+                }
+                field(prepmtPmtDiscountDate; Rec."Prepmt. Pmt. Discount Date")
+                {
+                    Caption = 'Prepmt. Pmt. Discount Date';
+                }
+                field(prepmtPostingDescription; Rec."Prepmt. Posting Description")
+                {
+                    Caption = 'Prepmt. Posting Description';
+                }
+                field(prepmtSalesTaxRoundingAmt; Rec."Prepmt. Sales Tax Rounding Amt")
+                {
+                    Caption = 'Prepayment Sales Tax Rounding Amount';
+                }
+                field(priceCalculationMethod; Rec."Price Calculation Method")
+                {
+                    Caption = 'Price Calculation Method';
+                }
+                field(pricesIncludingVAT; Rec."Prices Including VAT")
+                {
+                    Caption = 'Prices Including VAT';
+                }
+                field(printPostedDocuments; Rec."Print Posted Documents")
+                {
+                    Caption = 'Print Posted Documents';
+                }
+                field(promisedDeliveryDate; Rec."Promised Delivery Date")
+                {
+                    Caption = 'Promised Delivery Date';
+                }
+                field(quoteAccepted; Rec."Quote Accepted")
+                {
+                    Caption = 'Quote Accepted';
+                }
+                field(quoteAcceptedDate; Rec."Quote Accepted Date")
+                {
+                    Caption = 'Quote Accepted Date';
+                }
+                field(quoteNo; Rec."Quote No.")
+                {
+                    Caption = 'Quote No.';
+                }
+                field(quoteSentToCustomer; Rec."Quote Sent to Customer")
+                {
+                    Caption = 'Quote Sent to Customer';
+                }
+                field(quoteValidUntilDate; Rec."Quote Valid Until Date")
+                {
+                    Caption = 'Quote Valid To Date';
+                }
+                field(rcvdFromCountRegionCode; Rec."Rcvd.-from Count./Region Code")
+                {
+                    Caption = 'Received-from Country/Region Code';
+                }
+                field(reasonCode; Rec."Reason Code")
+                {
+                    Caption = 'Reason Code';
+                }
+                field(recalculateInvoiceDisc; Rec."Recalculate Invoice Disc.")
+                {
+                    Caption = 'Recalculate Invoice Disc.';
+                }
+                field(receive; Rec.Receive)
+                {
+                    Caption = 'Receive';
+                }
+                field(requestedDeliveryDate; Rec."Requested Delivery Date")
+                {
+                    Caption = 'Requested Delivery Date';
+                }
+                field(reserve; Rec.Reserve)
+                {
+                    Caption = 'Reserve';
+                }
+                field(responsibilityCenter; Rec."Responsibility Center")
+                {
+                    Caption = 'Responsibility Center';
+                }
+                field(returnReceiptNo; Rec."Return Receipt No.")
+                {
+                    Caption = 'Return Receipt No.';
+                }
+                field(returnReceiptNoSeries; Rec."Return Receipt No. Series")
+                {
+                    Caption = 'Return Receipt No. Series';
+                }
+                field(satAddressID; Rec."SAT Address ID")
+                {
+                    Caption = 'SAT Address ID';
+                }
+                field(satInternationalTradeTerm; Rec."SAT International Trade Term")
+                {
+                    Caption = 'SAT International Trade Term';
+                }
+                field(satWeightUnitOfMeasure; Rec."SAT Weight Unit Of Measure")
+                {
+                    Caption = 'SAT Weight Unit Of Measure';
+                }
+                field(steTransactionID; Rec."STE Transaction ID")
+                {
+                    Caption = 'STE Transaction ID';
+                }
+                field(salesTaxAmountRounding; Rec."Sales Tax Amount Rounding")
+                {
+                    Caption = 'Sales Tax Amount Rounding';
+                }
+                field(salespersonCode; Rec."Salesperson Code")
+                {
+                    Caption = 'Salesperson Code';
+                }
+                field(sellToAddress; Rec."Sell-to Address")
+                {
+                    Caption = 'Sell-to Address';
+                }
+                field(sellToAddress2; Rec."Sell-to Address 2")
+                {
+                    Caption = 'Sell-to Address 2';
+                }
+                field(sellToCity; Rec."Sell-to City")
+                {
+                    Caption = 'Sell-to City';
+                }
+                field(sellToContact; Rec."Sell-to Contact")
+                {
+                    Caption = 'Sell-to Contact';
+                }
+                field(sellToContactNo; Rec."Sell-to Contact No.")
+                {
+                    Caption = 'Sell-to Contact No.';
+                }
+                field(sellToCountryRegionCode; Rec."Sell-to Country/Region Code")
+                {
+                    Caption = 'Sell-to Country/Region Code';
+                }
+                field(sellToCounty; Rec."Sell-to County")
+                {
+                    Caption = 'Sell-to County';
+                }
+                field(sellToCustomerName; Rec."Sell-to Customer Name")
+                {
+                    Caption = 'Sell-to Customer Name';
+                }
+                field(sellToCustomerName2; Rec."Sell-to Customer Name 2")
+                {
+                    Caption = 'Sell-to Customer Name 2';
+                }
+                field(sellToCustomerNo; Rec."Sell-to Customer No.")
+                {
+                    Caption = 'Sell-to Customer No.';
+                }
+                field(sellToCustomerTemplCode; Rec."Sell-to Customer Templ. Code")
+                {
+                    Caption = 'Sell-to Customer Template Code';
+                }
+                field(sellToEMail; Rec."Sell-to E-Mail")
+                {
+                    Caption = 'Email';
+                }
+                field(sellToICPartnerCode; Rec."Sell-to IC Partner Code")
+                {
+                    Caption = 'Sell-to IC Partner Code';
+                }
+                field(sellToPhoneNo; Rec."Sell-to Phone No.")
+                {
+                    Caption = 'Sell-to Phone No.';
+                }
+                field(sellToPostCode; Rec."Sell-to Post Code")
+                {
+                    Caption = 'Sell-to Post Code';
+                }
+                field(sendICDocument; Rec."Send IC Document")
+                {
+                    Caption = 'Send IC Document';
+                }
+                field(ship; Rec.Ship)
+                {
+                    Caption = 'Ship';
+                }
+                field(shipToAddress; Rec."Ship-to Address")
+                {
+                    Caption = 'Ship-to Address';
+                }
+                field(shipToAddress2; Rec."Ship-to Address 2")
+                {
+                    Caption = 'Ship-to Address 2';
+                }
+                field(shipToCity; Rec."Ship-to City")
+                {
+                    Caption = 'Ship-to City';
+                }
+                field(shipToCode; Rec."Ship-to Code")
+                {
+                    Caption = 'Ship-to Code';
+                }
+                field(shipToContact; Rec."Ship-to Contact")
+                {
+                    Caption = 'Ship-to Contact';
+                }
+                field(shipToCountryRegionCode; Rec."Ship-to Country/Region Code")
+                {
+                    Caption = 'Ship-to Country/Region Code';
+                }
+                field(shipToCounty; Rec."Ship-to County")
+                {
+                    Caption = 'Ship-to County';
+                }
+                field(shipToName; Rec."Ship-to Name")
+                {
+                    Caption = 'Ship-to Name';
+                }
+                field(shipToName2; Rec."Ship-to Name 2")
+                {
+                    Caption = 'Ship-to Name 2';
+                }
+                field(shipToPostCode; Rec."Ship-to Post Code")
+                {
+                    Caption = 'Ship-to Post Code';
+                }
+                field(shipToUPSZone; Rec."Ship-to UPS Zone")
+                {
+                    Caption = 'Ship-to UPS Zone';
+                }
+                field(shipmentDate; Rec."Shipment Date")
+                {
+                    Caption = 'Shipment Date';
+                }
+                field(shipmentMethodCode; Rec."Shipment Method Code")
+                {
+                    Caption = 'Shipment Method Code';
+                }
+                field(shipped; Rec.Shipped)
+                {
+                    Caption = 'Shipped';
+                }
+                field(shippedNotInvoiced; Rec."Shipped Not Invoiced")
+                {
+                    Caption = 'Shipped Not Invoiced';
+                }
+                field(shippingAdvice; Rec."Shipping Advice")
+                {
+                    Caption = 'Shipping Advice';
+                }
+                field(shippingAgentCode; Rec."Shipping Agent Code")
+                {
+                    Caption = 'Shipping Agent Code';
+                }
+                field(shippingAgentServiceCode; Rec."Shipping Agent Service Code")
+                {
+                    Caption = 'Shipping Agent Service Code';
+                }
+                field(shippingNo; Rec."Shipping No.")
+                {
+                    Caption = 'Shipping No.';
+                }
+                field(shippingNoSeries; Rec."Shipping No. Series")
+                {
+                    Caption = 'Shipping No. Series';
+                }
+                field(shippingTime; Rec."Shipping Time")
+                {
+                    Caption = 'Shipping Time';
+                }
+                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
+                {
+                    Caption = 'Shortcut Dimension 1 Code';
+                }
+                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
+                {
+                    Caption = 'Shortcut Dimension 2 Code';
+                }
+                field(status; Rec.Status)
+                {
+                    Caption = 'Status';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+                field(taxAreaCode; Rec."Tax Area Code")
+                {
+                    Caption = 'Tax Area Code';
+                }
+                field(taxExemptionNo; Rec."Tax Exemption No.")
+                {
+                    Caption = 'Tax Exemption No.';
+                }
+                field(taxLiable; Rec."Tax Liable")
+                {
+                    Caption = 'Tax Liable';
+                }
+                field(trailer1; Rec."Trailer 1")
+                {
+                    Caption = 'Trailer 1';
+                }
+                field(trailer2; Rec."Trailer 2")
+                {
+                    Caption = 'Trailer 2';
+                }
+                field(transactionSpecification; Rec."Transaction Specification")
+                {
+                    Caption = 'Transaction Specification';
+                }
+                field("transactionType"; Rec."Transaction Type")
+                {
+                    Caption = 'Transaction Type';
+                }
+                field(transitDistance; Rec."Transit Distance")
+                {
+                    Caption = 'Transit Distance';
+                }
+                field(transitHours; Rec."Transit Hours")
+                {
+                    Caption = 'Transit Hours';
+                }
+                field(transitFromDateTime; Rec."Transit-from Date/Time")
+                {
+                    Caption = 'Transit-from Date/Time';
+                }
+                field(transportMethod; Rec."Transport Method")
+                {
+                    Caption = 'Transport Method';
+                }
+                field(transportOperators; Rec."Transport Operators")
+                {
+                    Caption = 'Transport Operators';
+                }
+                field(vatBaseDiscount; Rec."VAT Base Discount %")
+                {
+                    Caption = 'VAT Base Discount %';
+                }
+                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
+                {
+                    Caption = 'VAT Bus. Posting Group';
+                }
+                field(vatCountryRegionCode; Rec."VAT Country/Region Code")
+                {
+                    Caption = 'VAT Country/Region Code';
+                }
+                field(vatRegistrationNo; Rec."VAT Registration No.")
+                {
+                    Caption = 'VAT Registration No.';
+                }
+                field(vatReportingDate; Rec."VAT Reporting Date")
+                {
+                    Caption = 'VAT Date';
+                }
+                field(vehicleCode; Rec."Vehicle Code")
+                {
+                    Caption = 'Vehicle Code';
+                }
+                field(workDescription; Rec."Work Description")
+                {
+                    Caption = 'Work Description';
+                }
+                field(yourReference; Rec."Your Reference")
+                {
+                    Caption = 'Your Reference';
+                }
+                field(dateFilter; Rec."Date Filter")
+                {
+                    Caption = 'Date Filter';
+                }
+                field(locationFilter; Rec."Location Filter")
+                {
+                    Caption = 'Location Filter';
+                }
+            }
+        }
+    }
+}
+
+page 90047 "Sales Line"
+{
+    APIGroup = 'standardEndpoints';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'salesLine';
+    DelayedInsert = true;
+    EntityName = 'salesLine';
+    EntitySetName = 'salesLines';
+    PageType = API;
+    SourceTable = "Sales Line";
+    ODataKeyFields = SystemId;
+    Editable = false;
+    DataAccessIntent = ReadOnly;
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(atoWhseOutstandingQty; Rec."ATO Whse. Outstanding Qty.")
+                {
+                    Caption = 'ATO Whse. Outstanding Qty.';
+                }
+                field(atoWhseOutstdQtyBase; Rec."ATO Whse. Outstd. Qty. (Base)")
+                {
+                    Caption = 'ATO Whse. Outstd. Qty. (Base)';
+                }
+                field(allocAccModifiedByUser; Rec."Alloc. Acc. Modified by User")
+                {
+                    Caption = 'Allocation Account Distributions Modified';
+                }
+                field(allocationAccountNo; Rec."Allocation Account No.")
+                {
+                    Caption = 'Posting Allocation Account No.';
+                }
+                field(allowInvoiceDisc; Rec."Allow Invoice Disc.")
+                {
+                    Caption = 'Allow Invoice Disc.';
+                }
+                field(allowItemChargeAssignment; Rec."Allow Item Charge Assignment")
+                {
+                    Caption = 'Allow Item Charge Assignment';
+                }
+                field(allowLineDisc; Rec."Allow Line Disc.")
+                {
+                    Caption = 'Allow Line Disc.';
+                }
+                field(amount; Rec.Amount)
+                {
+                    Caption = 'Amount';
+                }
+                field(amountIncludingVAT; Rec."Amount Including VAT")
+                {
+                    Caption = 'Amount Including VAT';
+                }
+                field(applFromItemEntry; Rec."Appl.-from Item Entry")
+                {
+                    Caption = 'Appl.-from Item Entry';
+                }
+                field(applToItemEntry; Rec."Appl.-to Item Entry")
+                {
+                    Caption = 'Appl.-to Item Entry';
+                }
+                field("area"; Rec."Area")
+                {
+                    Caption = 'Area';
+                }
+                field(attachedDocCount; Rec."Attached Doc Count")
+                {
+                    Caption = 'Attached Doc Count';
+                }
+                field(attachedLinesCount; Rec."Attached Lines Count")
+                {
+                    Caption = 'Attached Lines Count';
+                }
+                field(attachedToLineNo; Rec."Attached to Line No.")
+                {
+                    Caption = 'Attached to Line No.';
+                }
+                field(bomItemNo; Rec."BOM Item No.")
+                {
+                    Caption = 'BOM Item No.';
+                }
+                field(billToCustomerNo; Rec."Bill-to Customer No.")
+                {
+                    Caption = 'Bill-to Customer No.';
+                }
+                field(binCode; Rec."Bin Code")
+                {
+                    Caption = 'Bin Code';
+                }
+                field(blanketOrderLineNo; Rec."Blanket Order Line No.")
+                {
+                    Caption = 'Blanket Order Line No.';
+                }
+                field(blanketOrderNo; Rec."Blanket Order No.")
+                {
+                    Caption = 'Blanket Order No.';
+                }
+                field(completelyShipped; Rec."Completely Shipped")
+                {
+                    Caption = 'Completely Shipped';
+                }
+                field(copiedFromPostedDoc; Rec."Copied From Posted Doc.")
+                {
+                    Caption = 'Copied From Posted Doc.';
+                }
+                field(currencyCode; Rec."Currency Code")
+                {
+                    Caption = 'Currency Code';
+                }
+                field(customTransitNumber; Rec."Custom Transit Number")
+                {
+                    Caption = 'Custom Transit Number';
+                }
+                field(customerDiscGroup; Rec."Customer Disc. Group")
+                {
+                    Caption = 'Customer Disc. Group';
+                }
+                field(customerPriceGroup; Rec."Customer Price Group")
+                {
+                    Caption = 'Customer Price Group';
+                }
+                field(deferralCode; Rec."Deferral Code")
+                {
+                    Caption = 'Deferral Code';
+                }
+                field(deprUntilFAPostingDate; Rec."Depr. until FA Posting Date")
+                {
+                    Caption = 'Depr. until FA Posting Date';
+                }
+                field(depreciationBookCode; Rec."Depreciation Book Code")
+                {
+                    Caption = 'Depreciation Book Code';
+                }
+                field(description; Rec.Description)
+                {
+                    Caption = 'Description';
+                }
+                field(description2; Rec."Description 2")
+                {
+                    Caption = 'Description 2';
+                }
+                field(dimensionSetID; Rec."Dimension Set ID")
+                {
+                    Caption = 'Dimension Set ID';
+                }
+                field(documentNo; Rec."Document No.")
+                {
+                    Caption = 'Document No.';
+                }
+                field(documentType; Rec."Document Type")
+                {
+                    Caption = 'Document Type';
+                }
+                field(dropShipment; Rec."Drop Shipment")
+                {
+                    Caption = 'Drop Shipment';
+                }
+                field(duplicateInDepreciationBook; Rec."Duplicate in Depreciation Book")
+                {
+                    Caption = 'Duplicate in Depreciation Book';
+                }
+                field(exitPoint; Rec."Exit Point")
+                {
+                    Caption = 'Exit Point';
+                }
+                field(faPostingDate; Rec."FA Posting Date")
+                {
+                    Caption = 'FA Posting Date';
+                }
+                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
+                {
+                    Caption = 'Gen. Bus. Posting Group';
+                }
+                field(genProdPostingGroup; Rec."Gen. Prod. Posting Group")
+                {
+                    Caption = 'Gen. Prod. Posting Group';
+                }
+                field(grossWeight; Rec."Gross Weight")
+                {
+                    Caption = 'Gross Weight';
+                }
+                field(icItemReferenceNo; Rec."IC Item Reference No.")
+                {
+                    Caption = 'IC Item Reference No.';
+                }
+                field(icPartnerCode; Rec."IC Partner Code")
+                {
+                    Caption = 'IC Partner Code';
+                }
+                field(icPartnerRefType; Rec."IC Partner Ref. Type")
+                {
+                    Caption = 'IC Partner Ref. Type';
+                }
+                field(icPartnerReference; Rec."IC Partner Reference")
+                {
+                    Caption = 'IC Partner Reference';
+                }
+                field(invDiscAmountToInvoice; Rec."Inv. Disc. Amount to Invoice")
+                {
+                    Caption = 'Inv. Disc. Amount to Invoice';
+                }
+                field(invDiscountAmount; Rec."Inv. Discount Amount")
+                {
+                    Caption = 'Inv. Discount Amount';
+                }
+                field(itemCategoryCode; Rec."Item Category Code")
+                {
+                    Caption = 'Item Category Code';
+                }
+                field(itemChargeQtyToHandle; Rec."Item Charge Qty. to Handle")
+                {
+                    Caption = 'Item Charge Qty. to Handle';
+                }
+                field(itemReferenceNo; Rec."Item Reference No.")
+                {
+                    Caption = 'Item Reference No.';
+                }
+                field(itemReferenceType; Rec."Item Reference Type")
+                {
+                    Caption = 'Item Reference Type';
+                }
+                field(itemReferenceTypeNo; Rec."Item Reference Type No.")
+                {
+                    Caption = 'Item Reference Type No.';
+                }
+                field(itemReferenceUnitOfMeasure; Rec."Item Reference Unit of Measure")
+                {
+                    Caption = 'Reference Unit of Measure';
+                }
+                field(jobContractEntryNo; Rec."Job Contract Entry No.")
+                {
+                    Caption = 'Job Contract Entry No.';
+                }
+                field(jobNo; Rec."Job No.")
+                {
+                    Caption = 'Job No.';
+                }
+                field(jobTaskNo; Rec."Job Task No.")
+                {
+                    Caption = 'Job Task No.';
+                }
+                field(lineAmount; Rec."Line Amount")
+                {
+                    Caption = 'Line Amount';
+                }
+                field(lineDiscount; Rec."Line Discount %")
+                {
+                    Caption = 'Line Discount %';
+                }
+                field(lineDiscountAmount; Rec."Line Discount Amount")
+                {
+                    Caption = 'Line Discount Amount';
+                }
+                field(lineDiscountCalculation; Rec."Line Discount Calculation")
+                {
+                    Caption = 'Line Discount Calculation';
+                }
+                field(lineNo; Rec."Line No.")
+                {
+                    Caption = 'Line No.';
+                }
+                field(locationCode; Rec."Location Code")
+                {
+                    Caption = 'Location Code';
+                }
+                field(netWeight; Rec."Net Weight")
+                {
+                    Caption = 'Net Weight';
+                }
+                field(no; Rec."No.")
+                {
+                    Caption = 'No.';
+                }
+                field(nonstock; Rec.Nonstock)
+                {
+                    Caption = 'Catalog';
+                }
+                field(originallyOrderedNo; Rec."Originally Ordered No.")
+                {
+                    Caption = 'Originally Ordered No.';
+                }
+                field(originallyOrderedVarCode; Rec."Originally Ordered Var. Code")
+                {
+                    Caption = 'Originally Ordered Var. Code';
+                }
+                field(outOfStockSubstitution; Rec."Out-of-Stock Substitution")
+                {
+                    Caption = 'Out-of-Stock Substitution';
+                }
+                field(outboundWhseHandlingTime; Rec."Outbound Whse. Handling Time")
+                {
+                    Caption = 'Outbound Whse. Handling Time';
+                }
+                field(outstandingAmount; Rec."Outstanding Amount")
+                {
+                    Caption = 'Outstanding Amount';
+                }
+                field(outstandingAmountLCY; Rec."Outstanding Amount (LCY)")
+                {
+                    Caption = 'Outstanding Amount (LCY)';
+                }
+                field(outstandingQtyBase; Rec."Outstanding Qty. (Base)")
+                {
+                    Caption = 'Outstanding Qty. (Base)';
+                }
+                field(outstandingQuantity; Rec."Outstanding Quantity")
+                {
+                    Caption = 'Outstanding Quantity';
+                }
+                field(packageTrackingNo; Rec."Package Tracking No.")
+                {
+                    Caption = 'Package Tracking No.';
+                }
+                field(planned; Rec.Planned)
+                {
+                    Caption = 'Planned';
+                }
+                field(plannedDeliveryDate; Rec."Planned Delivery Date")
+                {
+                    Caption = 'Planned Delivery Date';
+                }
+                field(plannedShipmentDate; Rec."Planned Shipment Date")
+                {
+                    Caption = 'Planned Shipment Date';
+                }
+                field(pmtDiscountAmount; Rec."Pmt. Discount Amount")
+                {
+                    Caption = 'Pmt. Discount Amount';
+                }
+                field(postingDate; Rec."Posting Date")
+                {
+                    Caption = 'Posting Date';
+                }
+                field(postingGroup; Rec."Posting Group")
+                {
+                    Caption = 'Posting Group';
+                }
+                field(prepayment; Rec."Prepayment %")
+                {
+                    Caption = 'Prepayment %';
+                }
+                field(prepaymentAmount; Rec."Prepayment Amount")
+                {
+                    Caption = 'Prepayment Amount';
+                }
+                field(prepaymentLine; Rec."Prepayment Line")
+                {
+                    Caption = 'Prepayment Line';
+                }
+                field(prepaymentTaxAreaCode; Rec."Prepayment Tax Area Code")
+                {
+                    Caption = 'Prepayment Tax Area Code';
+                }
+                field(prepaymentTaxGroupCode; Rec."Prepayment Tax Group Code")
+                {
+                    Caption = 'Prepayment Tax Group Code';
+                }
+                field(prepaymentTaxLiable; Rec."Prepayment Tax Liable")
+                {
+                    Caption = 'Prepayment Tax Liable';
+                }
+                field(prepaymentVAT; Rec."Prepayment VAT %")
+                {
+                    Caption = 'Prepayment VAT %';
+                }
+                field(prepaymentVATDifference; Rec."Prepayment VAT Difference")
+                {
+                    Caption = 'Prepayment VAT Difference';
+                }
+                field(prepaymentVATIdentifier; Rec."Prepayment VAT Identifier")
+                {
+                    Caption = 'Prepayment VAT Identifier';
+                }
+                field(prepmtAmtDeducted; Rec."Prepmt Amt Deducted")
+                {
+                    Caption = 'Prepmt Amt Deducted';
+                }
+                field(prepmtAmtToDeduct; Rec."Prepmt Amt to Deduct")
+                {
+                    Caption = 'Prepmt Amt to Deduct';
+                }
+                field(prepmtVATDiffDeducted; Rec."Prepmt VAT Diff. Deducted")
+                {
+                    Caption = 'Prepmt VAT Diff. Deducted';
+                }
+                field(prepmtVATDiffToDeduct; Rec."Prepmt VAT Diff. to Deduct")
+                {
+                    Caption = 'Prepmt VAT Diff. to Deduct';
+                }
+                field(prepmtAmountInvLCY; Rec."Prepmt. Amount Inv. (LCY)")
+                {
+                    Caption = 'Prepmt. Amount Inv. (LCY)';
+                }
+                field(prepmtAmountInvInclVAT; Rec."Prepmt. Amount Inv. Incl. VAT")
+                {
+                    Caption = 'Prepmt. Amount Inv. Incl. VAT';
+                }
+                field(prepmtAmtInclVAT; Rec."Prepmt. Amt. Incl. VAT")
+                {
+                    Caption = 'Prepmt. Amt. Incl. VAT';
+                }
+                field(prepmtAmtInv; Rec."Prepmt. Amt. Inv.")
+                {
+                    Caption = 'Prepmt. Amt. Inv.';
+                }
+                field(prepmtLineAmount; Rec."Prepmt. Line Amount")
+                {
+                    Caption = 'Prepmt. Line Amount';
+                }
+                field(prepmtPmtDiscountAmount; Rec."Prepmt. Pmt. Discount Amount")
+                {
+                    Caption = 'Prepmt. Pmt. Discount Amount';
+                }
+                field(prepmtVATAmountInvLCY; Rec."Prepmt. VAT Amount Inv. (LCY)")
+                {
+                    Caption = 'Prepmt. VAT Amount Inv. (LCY)';
+                }
+                field(prepmtVATBaseAmt; Rec."Prepmt. VAT Base Amt.")
+                {
+                    Caption = 'Prepmt. VAT Base Amt.';
+                }
+                field(prepmtVATCalcType; Rec."Prepmt. VAT Calc. Type")
+                {
+                    Caption = 'Prepmt. VAT Calc. Type';
+                }
+                field(priceCalculationMethod; Rec."Price Calculation Method")
+                {
+                    Caption = 'Price Calculation Method';
+                }
+                field(priceDescription; Rec."Price description")
+                {
+                    Caption = 'Price description';
+                }
+                field(profit; Rec."Profit %")
+                {
+                    Caption = 'Profit %';
+                }
+                field(promisedDeliveryDate; Rec."Promised Delivery Date")
+                {
+                    Caption = 'Promised Delivery Date';
+                }
+                field(purchOrderLineNo; Rec."Purch. Order Line No.")
+                {
+                    Caption = 'Purch. Order Line No.';
+                }
+                field(purchaseOrderNo; Rec."Purchase Order No.")
+                {
+                    Caption = 'Purchase Order No.';
+                }
+                field(purchasingCode; Rec."Purchasing Code")
+                {
+                    Caption = 'Purchasing Code';
+                }
+                field(qtyAssigned; Rec."Qty. Assigned")
+                {
+                    Caption = 'Qty. Assigned';
+                }
+                field(qtyInvoicedBase; Rec."Qty. Invoiced (Base)")
+                {
+                    Caption = 'Qty. Invoiced (Base)';
+                }
+                field(qtyRoundingPrecision; Rec."Qty. Rounding Precision")
+                {
+                    Caption = 'Qty. Rounding Precision';
+                }
+                field(qtyRoundingPrecisionBase; Rec."Qty. Rounding Precision (Base)")
+                {
+                    Caption = 'Qty. Rounding Precision (Base)';
+                }
+                field(qtyShippedBase; Rec."Qty. Shipped (Base)")
+                {
+                    Caption = 'Qty. Shipped (Base)';
+                }
+                field(qtyShippedNotInvdBase; Rec."Qty. Shipped Not Invd. (Base)")
+                {
+                    Caption = 'Qty. Shipped Not Invd. (Base)';
+                }
+                field(qtyShippedNotInvoiced; Rec."Qty. Shipped Not Invoiced")
+                {
+                    Caption = 'Qty. Shipped Not Invoiced';
+                }
+                field(qtyPerUnitOfMeasure; Rec."Qty. per Unit of Measure")
+                {
+                    Caption = 'Qty. per Unit of Measure';
+                }
+                field(qtyToAsmToOrderBase; Rec."Qty. to Asm. to Order (Base)")
+                {
+                    Caption = 'Qty. to Asm. to Order (Base)';
+                }
+                field(qtyToAssembleToOrder; Rec."Qty. to Assemble to Order")
+                {
+                    Caption = 'Qty. to Assemble to Order';
+                }
+                field(qtyToAssign; Rec."Qty. to Assign")
+                {
+                    Caption = 'Qty. to Assign';
+                }
+                field(qtyToInvoice; Rec."Qty. to Invoice")
+                {
+                    Caption = 'Qty. to Invoice';
+                }
+                field(qtyToInvoiceBase; Rec."Qty. to Invoice (Base)")
+                {
+                    Caption = 'Qty. to Invoice (Base)';
+                }
+                field(qtyToShip; Rec."Qty. to Ship")
+                {
+                    Caption = 'Qty. to Ship';
+                }
+                field(qtyToShipBase; Rec."Qty. to Ship (Base)")
+                {
+                    Caption = 'Qty. to Ship (Base)';
+                }
+                field(quantity; Rec.Quantity)
+                {
+                    Caption = 'Quantity';
+                }
+                field(quantityBase; Rec."Quantity (Base)")
+                {
+                    Caption = 'Quantity (Base)';
+                }
+                field(quantityInvoiced; Rec."Quantity Invoiced")
+                {
+                    Caption = 'Quantity Invoiced';
+                }
+                field(quantityShipped; Rec."Quantity Shipped")
+                {
+                    Caption = 'Quantity Shipped';
+                }
+                field(recalculateInvoiceDisc; Rec."Recalculate Invoice Disc.")
+                {
+                    Caption = 'Recalculate Invoice Disc.';
+                }
+                field(requestedDeliveryDate; Rec."Requested Delivery Date")
+                {
+                    Caption = 'Requested Delivery Date';
+                }
+                field(reserve; Rec.Reserve)
+                {
+                    Caption = 'Reserve';
+                }
+                field(reservedQtyBase; Rec."Reserved Qty. (Base)")
+                {
+                    Caption = 'Reserved Qty. (Base)';
+                }
+                field(reservedQuantity; Rec."Reserved Quantity")
+                {
+                    Caption = 'Reserved Quantity';
+                }
+                field(responsibilityCenter; Rec."Responsibility Center")
+                {
+                    Caption = 'Responsibility Center';
+                }
+                field(retQtyRcdNotInvdBase; Rec."Ret. Qty. Rcd. Not Invd.(Base)")
+                {
+                    Caption = 'Ret. Qty. Rcd. Not Invd.(Base)';
+                }
+                field(retentionAttachedToLineNo; Rec."Retention Attached to Line No.")
+                {
+                    Caption = 'Retention Attached to Line No.';
+                }
+                field(retentionVAT; Rec."Retention VAT %")
+                {
+                    Caption = 'Retention VAT %';
+                }
+                field(returnQtyRcdNotInvd; Rec."Return Qty. Rcd. Not Invd.")
+                {
+                    Caption = 'Return Qty. Rcd. Not Invd.';
+                }
+                field(returnQtyReceived; Rec."Return Qty. Received")
+                {
+                    Caption = 'Return Qty. Received';
+                }
+                field(returnQtyReceivedBase; Rec."Return Qty. Received (Base)")
+                {
+                    Caption = 'Return Qty. Received (Base)';
+                }
+                field(returnQtyToReceive; Rec."Return Qty. to Receive")
+                {
+                    Caption = 'Return Qty. to Receive';
+                }
+                field(returnQtyToReceiveBase; Rec."Return Qty. to Receive (Base)")
+                {
+                    Caption = 'Return Qty. to Receive (Base)';
+                }
+                field(returnRcdNotInvd; Rec."Return Rcd. Not Invd.")
+                {
+                    Caption = 'Return Rcd. Not Invd.';
+                }
+                field(returnRcdNotInvdLCY; Rec."Return Rcd. Not Invd. (LCY)")
+                {
+                    Caption = 'Return Rcd. Not Invd. (LCY)';
+                }
+                field(returnReasonCode; Rec."Return Reason Code")
+                {
+                    Caption = 'Return Reason Code';
+                }
+                field(returnReceiptLineNo; Rec."Return Receipt Line No.")
+                {
+                    Caption = 'Return Receipt Line No.';
+                }
+                field(returnReceiptNo; Rec."Return Receipt No.")
+                {
+                    Caption = 'Return Receipt No.';
+                }
+                field(returnsDeferralStartDate; Rec."Returns Deferral Start Date")
+                {
+                    Caption = 'Returns Deferral Start Date';
+                }
+                field(selectedAllocAccountNo; Rec."Selected Alloc. Account No.")
+                {
+                    Caption = 'Allocation Account No.';
+                }
+                field(sellToCustomerNo; Rec."Sell-to Customer No.")
+                {
+                    Caption = 'Sell-to Customer No.';
+                }
+                field(shipmentDate; Rec."Shipment Date")
+                {
+                    Caption = 'Shipment Date';
+                }
+                field(shipmentLineNo; Rec."Shipment Line No.")
+                {
+                    Caption = 'Shipment Line No.';
+                }
+                field(shipmentNo; Rec."Shipment No.")
+                {
+                    Caption = 'Shipment No.';
+                }
+                field(shippedNotInvLCYNoVAT; Rec."Shipped Not Inv. (LCY) No VAT")
+                {
+                    Caption = 'Shipped Not Invoiced (LCY)';
+                }
+                field(shippedNotInvoiced; Rec."Shipped Not Invoiced")
+                {
+                    Caption = 'Shipped Not Invoiced';
+                }
+                field(shippedNotInvoicedLCY; Rec."Shipped Not Invoiced (LCY)")
+                {
+                    Caption = 'Shipped Not Invoiced (LCY) Incl. VAT';
+                }
+                field(shippingAgentCode; Rec."Shipping Agent Code")
+                {
+                    Caption = 'Shipping Agent Code';
+                }
+                field(shippingAgentServiceCode; Rec."Shipping Agent Service Code")
+                {
+                    Caption = 'Shipping Agent Service Code';
+                }
+                field(shippingTime; Rec."Shipping Time")
+                {
+                    Caption = 'Shipping Time';
+                }
+                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
+                {
+                    Caption = 'Shortcut Dimension 1 Code';
+                }
+                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
+                {
+                    Caption = 'Shortcut Dimension 2 Code';
+                }
+                field(specialOrder; Rec."Special Order")
+                {
+                    Caption = 'Special Order';
+                }
+                field(specialOrderPurchLineNo; Rec."Special Order Purch. Line No.")
+                {
+                    Caption = 'Special Order Purch. Line No.';
+                }
+                field(specialOrderPurchaseNo; Rec."Special Order Purchase No.")
+                {
+                    Caption = 'Special Order Purchase No.';
+                }
+                field(substitutionAvailable; Rec."Substitution Available")
+                {
+                    Caption = 'Substitution Available';
+                }
+                field(subtype; Rec.Subtype)
+                {
+                    Caption = 'Subtype';
+                }
+                field(systemCreatedEntry; Rec."System-Created Entry")
+                {
+                    Caption = 'System-Created Entry';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+                field(taxAreaCode; Rec."Tax Area Code")
+                {
+                    Caption = 'Tax Area Code';
+                }
+                field(taxCategory; Rec."Tax Category")
+                {
+                    Caption = 'Tax Category';
+                }
+                field(taxGroupCode; Rec."Tax Group Code")
+                {
+                    Caption = 'Tax Group Code';
+                }
+                field(taxLiable; Rec."Tax Liable")
+                {
+                    Caption = 'Tax Liable';
+                }
+                field(transactionSpecification; Rec."Transaction Specification")
+                {
+                    Caption = 'Transaction Specification';
+                }
+                field("transactionType"; Rec."Transaction Type")
+                {
+                    Caption = 'Transaction Type';
+                }
+                field(transportMethod; Rec."Transport Method")
+                {
+                    Caption = 'Transport Method';
+                }
+                field("type"; Rec."Type")
+                {
+                    Caption = 'Type';
+                }
+                field(unitCost; Rec."Unit Cost")
+                {
+                    Caption = 'Unit Cost';
+                }
+                field(unitCostLCY; Rec."Unit Cost (LCY)")
+                {
+                    Caption = 'Unit Cost (LCY)';
+                }
+                field(unitPrice; Rec."Unit Price")
+                {
+                    Caption = 'Unit Price';
+                }
+                field(unitVolume; Rec."Unit Volume")
+                {
+                    Caption = 'Unit Volume';
+                }
+                field(unitOfMeasure; Rec."Unit of Measure")
+                {
+                    Caption = 'Unit of Measure';
+                }
+                field(unitOfMeasureCode; Rec."Unit of Measure Code")
+                {
+                    Caption = 'Unit of Measure Code';
+                }
+                field(unitsPerParcel; Rec."Units per Parcel")
+                {
+                    Caption = 'Units per Parcel';
+                }
+                field(useDuplicationList; Rec."Use Duplication List")
+                {
+                    Caption = 'Use Duplication List';
+                }
+                field(vat; Rec."VAT %")
+                {
+                    Caption = 'VAT %';
+                }
+                field(vatBaseAmount; Rec."VAT Base Amount")
+                {
+                    Caption = 'VAT Base Amount';
+                }
+                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
+                {
+                    Caption = 'VAT Bus. Posting Group';
+                }
+                field(vatCalculationType; Rec."VAT Calculation Type")
+                {
+                    Caption = 'VAT Calculation Type';
+                }
+                field(vatClauseCode; Rec."VAT Clause Code")
+                {
+                    Caption = 'VAT Clause Code';
+                }
+                field(vatDifference; Rec."VAT Difference")
+                {
+                    Caption = 'VAT Difference';
+                }
+                field(vatIdentifier; Rec."VAT Identifier")
+                {
+                    Caption = 'VAT Identifier';
+                }
+                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
+                {
+                    Caption = 'VAT Prod. Posting Group';
+                }
+                field(variantCode; Rec."Variant Code")
+                {
+                    Caption = 'Variant Code';
+                }
+                field(whseOutstandingQty; Rec."Whse. Outstanding Qty.")
+                {
+                    Caption = 'Whse. Outstanding Qty.';
+                }
+                field(whseOutstandingQtyBase; Rec."Whse. Outstanding Qty. (Base)")
+                {
+                    Caption = 'Whse. Outstanding Qty. (Base)';
+                }
+                field(workTypeCode; Rec."Work Type Code")
+                {
+                    Caption = 'Work Type Code';
+                }
+            }
+        }
+    }
+}
+
+page 90048 "Sales Invoice Header"
+{
+    APIGroup = 'standardEndpoints';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'salesInvoiceHeader';
+    DelayedInsert = true;
+    EntityName = 'salesInvoiceHeader';
+    EntitySetName = 'salesInvoiceHeaders';
+    PageType = API;
+    SourceTable = "Sales Invoice Header";
+    ODataKeyFields = SystemId;
+    DataAccessIntent = ReadOnly;
+    Editable = false;
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(allowLineDisc; Rec."Allow Line Disc.")
+                {
+                    Caption = 'Allow Line Disc.';
+                }
+                field(amount; Rec.Amount)
+                {
+                    Caption = 'Amount';
+                }
+                field(amountIncludingVAT; Rec."Amount Including VAT")
+                {
+                    Caption = 'Amount Including VAT';
+                }
+                field(appliesToDocNo; Rec."Applies-to Doc. No.")
+                {
+                    Caption = 'Applies-to Doc. No.';
+                }
+                field(appliesToDocType; Rec."Applies-to Doc. Type")
+                {
+                    Caption = 'Applies-to Doc. Type';
+                }
+                field("area"; Rec."Area")
+                {
+                    Caption = 'Area';
+                }
+                field(balAccountNo; Rec."Bal. Account No.")
+                {
+                    Caption = 'Bal. Account No.';
+                }
+                field(balAccountType; Rec."Bal. Account Type")
+                {
+                    Caption = 'Bal. Account Type';
+                }
+                field(billToAddress; Rec."Bill-to Address")
+                {
+                    Caption = 'Bill-to Address';
+                }
+                field(billToAddress2; Rec."Bill-to Address 2")
+                {
+                    Caption = 'Bill-to Address 2';
+                }
+                field(billToCity; Rec."Bill-to City")
+                {
+                    Caption = 'Bill-to City';
+                }
+                field(billToContact; Rec."Bill-to Contact")
+                {
+                    Caption = 'Bill-to Contact';
+                }
+                field(billToContactNo; Rec."Bill-to Contact No.")
+                {
+                    Caption = 'Bill-to Contact No.';
+                }
+                field(billToCountryRegionCode; Rec."Bill-to Country/Region Code")
+                {
+                    Caption = 'Bill-to Country/Region Code';
+                }
+                field(billToCounty; Rec."Bill-to County")
+                {
+                    Caption = 'Bill-to County';
+                }
+                field(billToCustomerNo; Rec."Bill-to Customer No.")
+                {
+                    Caption = 'Bill-to Customer No.';
+                }
+                field(billToName; Rec."Bill-to Name")
+                {
+                    Caption = 'Bill-to Name';
+                }
+                field(billToName2; Rec."Bill-to Name 2")
+                {
+                    Caption = 'Bill-to Name 2';
+                }
+                field(billToPostCode; Rec."Bill-to Post Code")
+                {
+                    Caption = 'Bill-to Post Code';
+                }
+                field(cfdiCancellationID; Rec."CFDI Cancellation ID")
+                {
+                    Caption = 'CFDI Cancellation ID';
+                }
+                field(cfdiCancellationReasonCode; Rec."CFDI Cancellation Reason Code")
+                {
+                    Caption = 'CFDI Cancellation Reason';
+                }
+                field(cfdiExportCode; Rec."CFDI Export Code")
+                {
+                    Caption = 'CFDI Export Code';
+                }
+                field(cfdiPeriod; Rec."CFDI Period")
+                {
+                    Caption = 'CFDI Period';
+                }
+                field(cfdiPurpose; Rec."CFDI Purpose")
+                {
+                    Caption = 'CFDI Purpose';
+                }
+                field(cfdiRelation; Rec."CFDI Relation")
+                {
+                    Caption = 'CFDI Relation';
+                }
+                field(campaignNo; Rec."Campaign No.")
+                {
+                    Caption = 'Campaign No.';
+                }
+                field(cancelled; Rec.Cancelled)
+                {
+                    Caption = 'Cancelled';
+                }
+                field(certificateSerialNo; Rec."Certificate Serial No.")
+                {
+                    Caption = 'Certificate Serial No.';
+                }
+                field(closed; Rec.Closed)
+                {
+                    Caption = 'Closed';
+                }
+                field(comment; Rec.Comment)
+                {
+                    Caption = 'Comment';
+                }
+                field(companyBankAccountCode; Rec."Company Bank Account Code")
+                {
+                    Caption = 'Company Bank Account Code';
+                }
+                field(correction; Rec.Correction)
+                {
+                    Caption = 'Correction';
+                }
+                field(corrective; Rec.Corrective)
+                {
+                    Caption = 'Corrective';
+                }
+                field(coupledToDataverse; Rec."Coupled to Dataverse")
+                {
+                    Caption = 'Coupled to Dynamics 365 Sales';
+                }
+                field(currencyCode; Rec."Currency Code")
+                {
+                    Caption = 'Currency Code';
+                }
+                field(currencyFactor; Rec."Currency Factor")
+                {
+                    Caption = 'Currency Factor';
+                }
+                field(custLedgerEntryNo; Rec."Cust. Ledger Entry No.")
+                {
+                    Caption = 'Cust. Ledger Entry No.';
+                }
+                field(customerDiscGroup; Rec."Customer Disc. Group")
+                {
+                    Caption = 'Customer Disc. Group';
+                }
+                field(customerPostingGroup; Rec."Customer Posting Group")
+                {
+                    Caption = 'Customer Posting Group';
+                }
+                field(customerPriceGroup; Rec."Customer Price Group")
+                {
+                    Caption = 'Customer Price Group';
+                }
+                field(dateTimeCancelSent; Rec."Date/Time Cancel Sent")
+                {
+                    Caption = 'Date/Time Cancel Sent';
+                }
+                field(dateTimeCanceled; Rec."Date/Time Canceled")
+                {
+                    Caption = 'Date/Time Canceled';
+                }
+                field(dateTimeFirstReqSent; Rec."Date/Time First Req. Sent")
+                {
+                    Caption = 'Date/Time First Req. Sent';
+                }
+                field(dateTimeSent; Rec."Date/Time Sent")
+                {
+                    Caption = 'Date/Time Sent';
+                }
+                field(dateTimeStampReceived; Rec."Date/Time Stamp Received")
+                {
+                    Caption = 'Date/Time Stamp Received';
+                }
+                field(dateTimeStamped; Rec."Date/Time Stamped")
+                {
+                    Caption = 'Date/Time Stamped';
+                }
+                field(digitalStampPAC; Rec."Digital Stamp PAC")
+                {
+                    Caption = 'Digital Stamp PAC';
+                }
+                field(digitalStampSAT; Rec."Digital Stamp SAT")
+                {
+                    Caption = 'Digital Stamp SAT';
+                }
+                field(dimensionSetID; Rec."Dimension Set ID")
+                {
+                    Caption = 'Dimension Set ID';
+                }
+                field(directDebitMandateID; Rec."Direct Debit Mandate ID")
+                {
+                    Caption = 'Direct Debit Mandate ID';
+                }
+                field(docExchOriginalIdentifier; Rec."Doc. Exch. Original Identifier")
+                {
+                    Caption = 'Doc. Exch. Original Identifier';
+                }
+                field(documentDate; Rec."Document Date")
+                {
+                    Caption = 'Document Date';
+                }
+                field(documentExchangeIdentifier; Rec."Document Exchange Identifier")
+                {
+                    Caption = 'Document Exchange Identifier';
+                }
+                field(documentExchangeStatus; Rec."Document Exchange Status")
+                {
+                    Caption = 'Document Exchange Status';
+                }
+                field(draftInvoiceSystemId; Rec."Draft Invoice SystemId")
+                {
+                    Caption = 'Draft Invoice SystemId';
+                }
+                field(dueDate; Rec."Due Date")
+                {
+                    Caption = 'Due Date';
+                }
+                field(eu3PartyTrade; Rec."EU 3-Party Trade")
+                {
+                    Caption = 'EU 3-Party Trade';
+                }
+                field(electronicDocumentSent; Rec."Electronic Document Sent")
+                {
+                    Caption = 'Electronic Document Sent';
+                }
+                field(electronicDocumentStatus; Rec."Electronic Document Status")
+                {
+                    Caption = 'Electronic Document Status';
+                }
+                field(errorCode; Rec."Error Code")
+                {
+                    Caption = 'Error Code';
+                }
+                field(errorDescription; Rec."Error Description")
+                {
+                    Caption = 'Error Description';
+                }
+                field(exchangeRateUSD; Rec."Exchange Rate USD")
+                {
+                    Caption = 'Exchange Rate USD';
+                }
+                field(exitPoint; Rec."Exit Point")
+                {
+                    Caption = 'Exit Point';
+                }
+                field(externalDocumentNo; Rec."External Document No.")
+                {
+                    Caption = 'External Document No.';
+                }
+                field(fiscalInvoiceNumberPAC; Rec."Fiscal Invoice Number PAC")
+                {
+                    Caption = 'Fiscal Invoice Number PAC';
+                }
+                field(foreignTrade; Rec."Foreign Trade")
+                {
+                    Caption = 'Foreign Trade';
+                }
+                field(formatRegion; Rec."Format Region")
+                {
+                    Caption = 'Format Region';
+                }
+                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
+                {
+                    Caption = 'Gen. Bus. Posting Group';
+                }
+                field(getShipmentUsed; Rec."Get Shipment Used")
+                {
+                    Caption = 'Get Shipment Used';
+                }
+                field(invoiceDiscCode; Rec."Invoice Disc. Code")
+                {
+                    Caption = 'Invoice Disc. Code';
+                }
+                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
+                {
+                    Caption = 'Invoice Discount Amount';
+                }
+                field(invoiceDiscountCalculation; Rec."Invoice Discount Calculation")
+                {
+                    Caption = 'Invoice Discount Calculation';
+                }
+                field(invoiceDiscountValue; Rec."Invoice Discount Value")
+                {
+                    Caption = 'Invoice Discount Value';
+                }
+                field(languageCode; Rec."Language Code")
+                {
+                    Caption = 'Language Code';
+                }
+                field(locationCode; Rec."Location Code")
+                {
+                    Caption = 'Location Code';
+                }
+                field(markedAsCanceled; Rec."Marked as Canceled")
+                {
+                    Caption = 'Marked as Canceled';
+                }
+                field(no; Rec."No.")
+                {
+                    Caption = 'No.';
+                }
+                field(noPrinted; Rec."No. Printed")
+                {
+                    Caption = 'No. Printed';
+                }
+                field(noSeries; Rec."No. Series")
+                {
+                    Caption = 'No. Series';
+                }
+                field(noOfEDocumentsSent; Rec."No. of E-Documents Sent")
+                {
+                    Caption = 'No. of E-Documents Sent';
+                }
+                field(onHold; Rec."On Hold")
+                {
+                    Caption = 'On Hold';
+                }
+                field(opportunityNo; Rec."Opportunity No.")
+                {
+                    Caption = 'Opportunity No.';
+                }
+                field(orderDate; Rec."Order Date")
+                {
+                    Caption = 'Order Date';
+                }
+                field(orderNo; Rec."Order No.")
+                {
+                    Caption = 'Order No.';
+                }
+                field(orderNoSeries; Rec."Order No. Series")
+                {
+                    Caption = 'Order No. Series';
+                }
+                field(originalDocumentXML; Rec."Original Document XML")
+                {
+                    Caption = 'Original Document XML';
+                }
+                field(originalString; Rec."Original String")
+                {
+                    Caption = 'Original String';
+                }
+                field(pacWebServiceName; Rec."PAC Web Service Name")
+                {
+                    Caption = 'PAC Web Service Name';
+                }
+                field(packageTrackingNo; Rec."Package Tracking No.")
+                {
+                    Caption = 'Package Tracking No.';
+                }
+                field(paymentDiscount; Rec."Payment Discount %")
+                {
+                    Caption = 'Payment Discount %';
+                }
+                field(paymentMethodCode; Rec."Payment Method Code")
+                {
+                    Caption = 'Payment Method Code';
+                }
+                field(paymentReference; Rec."Payment Reference")
+                {
+                    Caption = 'Payment Reference';
+                }
+                field(paymentServiceSetID; Rec."Payment Service Set ID")
+                {
+                    Caption = 'Payment Service Set ID';
+                }
+                field(paymentTermsCode; Rec."Payment Terms Code")
+                {
+                    Caption = 'Payment Terms Code';
+                }
+                field(pmtDiscountDate; Rec."Pmt. Discount Date")
+                {
+                    Caption = 'Pmt. Discount Date';
+                }
+                field(postingDate; Rec."Posting Date")
+                {
+                    Caption = 'Posting Date';
+                }
+                field(postingDescription; Rec."Posting Description")
+                {
+                    Caption = 'Posting Description';
+                }
+                field(preAssignedNo; Rec."Pre-Assigned No.")
+                {
+                    Caption = 'Pre-Assigned No.';
+                }
+                field(preAssignedNoSeries; Rec."Pre-Assigned No. Series")
+                {
+                    Caption = 'Pre-Assigned No. Series';
+                }
+                field(prepaymentInvoice; Rec."Prepayment Invoice")
+                {
+                    Caption = 'Prepayment Invoice';
+                }
+                field(prepaymentNoSeries; Rec."Prepayment No. Series")
+                {
+                    Caption = 'Prepayment No. Series';
+                }
+                field(prepaymentOrderNo; Rec."Prepayment Order No.")
+                {
+                    Caption = 'Prepayment Order No.';
+                }
+                field(priceCalculationMethod; Rec."Price Calculation Method")
+                {
+                    Caption = 'Price Calculation Method';
+                }
+                field(pricesIncludingVAT; Rec."Prices Including VAT")
+                {
+                    Caption = 'Prices Including VAT';
+                }
+                field(qrCode; Rec."QR Code")
+                {
+                    Caption = 'QR Code';
+                }
+                field(quoteNo; Rec."Quote No.")
+                {
+                    Caption = 'Quote No.';
+                }
+                field(reasonCode; Rec."Reason Code")
+                {
+                    Caption = 'Reason Code';
+                }
+                field(remainingAmount; Rec."Remaining Amount")
+                {
+                    Caption = 'Remaining Amount';
+                }
+                field(responsibilityCenter; Rec."Responsibility Center")
+                {
+                    Caption = 'Responsibility Center';
+                }
+                field(reversed; Rec.Reversed)
+                {
+                    Caption = 'Reversed';
+                }
+                field(satAddressID; Rec."SAT Address ID")
+                {
+                    Caption = 'SAT Address ID';
+                }
+                field(satInternationalTradeTerm; Rec."SAT International Trade Term")
+                {
+                    Caption = 'SAT International Trade Term';
+                }
+                field(steTransactionID; Rec."STE Transaction ID")
+                {
+                    Caption = 'STE Transaction ID';
+                }
+                field(salespersonCode; Rec."Salesperson Code")
+                {
+                    Caption = 'Salesperson Code';
+                }
+                field(sellToAddress; Rec."Sell-to Address")
+                {
+                    Caption = 'Sell-to Address';
+                }
+                field(sellToAddress2; Rec."Sell-to Address 2")
+                {
+                    Caption = 'Sell-to Address 2';
+                }
+                field(sellToCity; Rec."Sell-to City")
+                {
+                    Caption = 'Sell-to City';
+                }
+                field(sellToContact; Rec."Sell-to Contact")
+                {
+                    Caption = 'Sell-to Contact';
+                }
+                field(sellToContactNo; Rec."Sell-to Contact No.")
+                {
+                    Caption = 'Sell-to Contact No.';
+                }
+                field(sellToCountryRegionCode; Rec."Sell-to Country/Region Code")
+                {
+                    Caption = 'Sell-to Country/Region Code';
+                }
+                field(sellToCounty; Rec."Sell-to County")
+                {
+                    Caption = 'Sell-to County';
+                }
+                field(sellToCustomerName; Rec."Sell-to Customer Name")
+                {
+                    Caption = 'Sell-to Customer Name';
+                }
+                field(sellToCustomerName2; Rec."Sell-to Customer Name 2")
+                {
+                    Caption = 'Sell-to Customer Name 2';
+                }
+                field(sellToCustomerNo; Rec."Sell-to Customer No.")
+                {
+                    Caption = 'Sell-to Customer No.';
+                }
+                field(sellToEMail; Rec."Sell-to E-Mail")
+                {
+                    Caption = 'Email';
+                }
+                field(sellToPhoneNo; Rec."Sell-to Phone No.")
+                {
+                    Caption = 'Sell-to Phone No.';
+                }
+                field(sellToPostCode; Rec."Sell-to Post Code")
+                {
+                    Caption = 'Sell-to Post Code';
+                }
+                field(shipToAddress; Rec."Ship-to Address")
+                {
+                    Caption = 'Ship-to Address';
+                }
+                field(shipToAddress2; Rec."Ship-to Address 2")
+                {
+                    Caption = 'Ship-to Address 2';
+                }
+                field(shipToCity; Rec."Ship-to City")
+                {
+                    Caption = 'Ship-to City';
+                }
+                field(shipToCode; Rec."Ship-to Code")
+                {
+                    Caption = 'Ship-to Code';
+                }
+                field(shipToContact; Rec."Ship-to Contact")
+                {
+                    Caption = 'Ship-to Contact';
+                }
+                field(shipToCountryRegionCode; Rec."Ship-to Country/Region Code")
+                {
+                    Caption = 'Ship-to Country/Region Code';
+                }
+                field(shipToCounty; Rec."Ship-to County")
+                {
+                    Caption = 'Ship-to County';
+                }
+                field(shipToName; Rec."Ship-to Name")
+                {
+                    Caption = 'Ship-to Name';
+                }
+                field(shipToName2; Rec."Ship-to Name 2")
+                {
+                    Caption = 'Ship-to Name 2';
+                }
+                field(shipToPostCode; Rec."Ship-to Post Code")
+                {
+                    Caption = 'Ship-to Post Code';
+                }
+                field(shipToUPSZone; Rec."Ship-to UPS Zone")
+                {
+                    Caption = 'Ship-to UPS Zone';
+                }
+                field(shipmentDate; Rec."Shipment Date")
+                {
+                    Caption = 'Shipment Date';
+                }
+                field(shipmentMethodCode; Rec."Shipment Method Code")
+                {
+                    Caption = 'Shipment Method Code';
+                }
+                field(shippingAgentCode; Rec."Shipping Agent Code")
+                {
+                    Caption = 'Shipping Agent Code';
+                }
+                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
+                {
+                    Caption = 'Shortcut Dimension 1 Code';
+                }
+                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
+                {
+                    Caption = 'Shortcut Dimension 2 Code';
+                }
+                field(signedDocumentXML; Rec."Signed Document XML")
+                {
+                    Caption = 'Signed Document XML';
+                }
+                field(sourceCode; Rec."Source Code")
+                {
+                    Caption = 'Source Code';
+                }
+                field(substitutionDocumentNo; Rec."Substitution Document No.")
+                {
+                    Caption = 'Substitution Document No.';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+                field(taxAreaCode; Rec."Tax Area Code")
+                {
+                    Caption = 'Tax Area Code';
+                }
+                field(taxExemptionNo; Rec."Tax Exemption No.")
+                {
+                    Caption = 'Tax Exemption No.';
+                }
+                field(taxLiable; Rec."Tax Liable")
+                {
+                    Caption = 'Tax Liable';
+                }
+                field(transactionSpecification; Rec."Transaction Specification")
+                {
+                    Caption = 'Transaction Specification';
+                }
+                field("transactionType"; Rec."Transaction Type")
+                {
+                    Caption = 'Transaction Type';
+                }
+                field(transportMethod; Rec."Transport Method")
+                {
+                    Caption = 'Transport Method';
+                }
+                field(userID; Rec."User ID")
+                {
+                    Caption = 'User ID';
+                }
+                field(vatBaseDiscount; Rec."VAT Base Discount %")
+                {
+                    Caption = 'VAT Base Discount %';
+                }
+                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
+                {
+                    Caption = 'VAT Bus. Posting Group';
+                }
+                field(vatCountryRegionCode; Rec."VAT Country/Region Code")
+                {
+                    Caption = 'VAT Country/Region Code';
+                }
+                field(vatRegistrationNo; Rec."VAT Registration No.")
+                {
+                    Caption = 'VAT Registration No.';
+                }
+                field(vatReportingDate; Rec."VAT Reporting Date")
+                {
+                    Caption = 'VAT Date';
+                }
+                field(workDescription; Rec."Work Description")
+                {
+                    Caption = 'Work Description';
+                }
+                field(yourReference; Rec."Your Reference")
+                {
+                    Caption = 'Your Reference';
+                }
+            }
+        }
+    }
+}
+
+page 90049 "Sales Invoice Line"
+{
+    APIGroup = 'standardEndpoints';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'salesInvoiceLine';
+    DelayedInsert = true;
+    EntityName = 'salesInvoiceLine';
+    EntitySetName = 'salesInvoiceLines';
+    PageType = API;
+    SourceTable = "Sales Invoice Line";
+    ODataKeyFields = SystemId;
+    DataAccessIntent = ReadOnly;
+    Editable = false;
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(allocationAccountNo; Rec."Allocation Account No.")
+                {
+                    Caption = 'Allocation Account No.';
+                }
+                field(allowInvoiceDisc; Rec."Allow Invoice Disc.")
+                {
+                    Caption = 'Allow Invoice Disc.';
+                }
+                field(allowLineDisc; Rec."Allow Line Disc.")
+                {
+                    Caption = 'Allow Line Disc.';
+                }
+                field(amount; Rec.Amount)
+                {
+                    Caption = 'Amount';
+                }
+                field(amountIncludingVAT; Rec."Amount Including VAT")
+                {
+                    Caption = 'Amount Including VAT';
+                }
+                field(applFromItemEntry; Rec."Appl.-from Item Entry")
+                {
+                    Caption = 'Appl.-from Item Entry';
+                }
+                field(applToItemEntry; Rec."Appl.-to Item Entry")
+                {
+                    Caption = 'Appl.-to Item Entry';
+                }
+                field("area"; Rec."Area")
+                {
+                    Caption = 'Area';
+                }
+                field(attachedToLineNo; Rec."Attached to Line No.")
+                {
+                    Caption = 'Attached to Line No.';
+                }
+                field(billToCustomerNo; Rec."Bill-to Customer No.")
+                {
+                    Caption = 'Bill-to Customer No.';
+                }
+                field(binCode; Rec."Bin Code")
+                {
+                    Caption = 'Bin Code';
+                }
+                field(blanketOrderLineNo; Rec."Blanket Order Line No.")
+                {
+                    Caption = 'Blanket Order Line No.';
+                }
+                field(blanketOrderNo; Rec."Blanket Order No.")
+                {
+                    Caption = 'Blanket Order No.';
+                }
+                field(customTransitNumber; Rec."Custom Transit Number")
+                {
+                    Caption = 'Custom Transit Number';
+                }
+                field(customerDiscGroup; Rec."Customer Disc. Group")
+                {
+                    Caption = 'Customer Disc. Group';
+                }
+                field(customerPriceGroup; Rec."Customer Price Group")
+                {
+                    Caption = 'Customer Price Group';
+                }
+                field(deferralCode; Rec."Deferral Code")
+                {
+                    Caption = 'Deferral Code';
+                }
+                field(deprUntilFAPostingDate; Rec."Depr. until FA Posting Date")
+                {
+                    Caption = 'Depr. until FA Posting Date';
+                }
+                field(depreciationBookCode; Rec."Depreciation Book Code")
+                {
+                    Caption = 'Depreciation Book Code';
+                }
+                field(description; Rec.Description)
+                {
+                    Caption = 'Description';
+                }
+                field(description2; Rec."Description 2")
+                {
+                    Caption = 'Description 2';
+                }
+                field(dimensionSetID; Rec."Dimension Set ID")
+                {
+                    Caption = 'Dimension Set ID';
+                }
+                field(documentNo; Rec."Document No.")
+                {
+                    Caption = 'Document No.';
+                }
+                field(dropShipment; Rec."Drop Shipment")
+                {
+                    Caption = 'Drop Shipment';
+                }
+                field(duplicateInDepreciationBook; Rec."Duplicate in Depreciation Book")
+                {
+                    Caption = 'Duplicate in Depreciation Book';
+                }
+                field(exitPoint; Rec."Exit Point")
+                {
+                    Caption = 'Exit Point';
+                }
+                field(faPostingDate; Rec."FA Posting Date")
+                {
+                    Caption = 'FA Posting Date';
+                }
+                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
+                {
+                    Caption = 'Gen. Bus. Posting Group';
+                }
+                field(genProdPostingGroup; Rec."Gen. Prod. Posting Group")
+                {
+                    Caption = 'Gen. Prod. Posting Group';
+                }
+                field(grossWeight; Rec."Gross Weight")
+                {
+                    Caption = 'Gross Weight';
+                }
+                field(icItemReferenceNo; Rec."IC Item Reference No.")
+                {
+                    Caption = 'IC Item Reference No.';
+                }
+                field(icPartnerCode; Rec."IC Partner Code")
+                {
+                    Caption = 'IC Partner Code';
+                }
+                field(icPartnerRefType; Rec."IC Partner Ref. Type")
+                {
+                    Caption = 'IC Partner Ref. Type';
+                }
+                field(icPartnerReference; Rec."IC Partner Reference")
+                {
+                    Caption = 'IC Partner Reference';
+                }
+                field(invDiscountAmount; Rec."Inv. Discount Amount")
+                {
+                    Caption = 'Inv. Discount Amount';
+                }
+                field(itemCategoryCode; Rec."Item Category Code")
+                {
+                    Caption = 'Item Category Code';
+                }
+                field(itemReferenceNo; Rec."Item Reference No.")
+                {
+                    Caption = 'Item Reference No.';
+                }
+                field(itemReferenceType; Rec."Item Reference Type")
+                {
+                    Caption = 'Item Reference Type';
+                }
+                field(itemReferenceTypeNo; Rec."Item Reference Type No.")
+                {
+                    Caption = 'Item Reference Type No.';
+                }
+                field(itemReferenceUnitOfMeasure; Rec."Item Reference Unit of Measure")
+                {
+                    Caption = 'Unit of Measure (Item Ref.)';
+                }
+                field(jobContractEntryNo; Rec."Job Contract Entry No.")
+                {
+                    Caption = 'Job Contract Entry No.';
+                }
+                field(jobNo; Rec."Job No.")
+                {
+                    Caption = 'Job No.';
+                }
+                field(jobTaskNo; Rec."Job Task No.")
+                {
+                    Caption = 'Job Task No.';
+                }
+                field(lineAmount; Rec."Line Amount")
+                {
+                    Caption = 'Line Amount';
+                }
+                field(lineDiscount; Rec."Line Discount %")
+                {
+                    Caption = 'Line Discount %';
+                }
+                field(lineDiscountAmount; Rec."Line Discount Amount")
+                {
+                    Caption = 'Line Discount Amount';
+                }
+                field(lineDiscountCalculation; Rec."Line Discount Calculation")
+                {
+                    Caption = 'Line Discount Calculation';
+                }
+                field(lineNo; Rec."Line No.")
+                {
+                    Caption = 'Line No.';
+                }
+                field(locationCode; Rec."Location Code")
+                {
+                    Caption = 'Location Code';
+                }
+                field(netWeight; Rec."Net Weight")
+                {
+                    Caption = 'Net Weight';
+                }
+                field(no; Rec."No.")
+                {
+                    Caption = 'No.';
+                }
+                field(nonstock; Rec.Nonstock)
+                {
+                    Caption = 'Catalog';
+                }
+                field(orderLineNo; Rec."Order Line No.")
+                {
+                    Caption = 'Order Line No.';
+                }
+                field(orderNo; Rec."Order No.")
+                {
+                    Caption = 'Order No.';
+                }
+                field(packageTrackingNo; Rec."Package Tracking No.")
+                {
+                    Caption = 'Package Tracking No.';
+                }
+                field(pmtDiscountAmount; Rec."Pmt. Discount Amount")
+                {
+                    Caption = 'Pmt. Discount Amount';
+                }
+                field(postingDate; Rec."Posting Date")
+                {
+                    Caption = 'Posting Date';
+                }
+                field(postingGroup; Rec."Posting Group")
+                {
+                    Caption = 'Posting Group';
+                }
+                field(prepaymentLine; Rec."Prepayment Line")
+                {
+                    Caption = 'Prepayment Line';
+                }
+                field(priceCalculationMethod; Rec."Price Calculation Method")
+                {
+                    Caption = 'Price Calculation Method';
+                }
+                field(priceDescription; Rec."Price description")
+                {
+                    Caption = 'Price description';
+                }
+                field(purchasingCode; Rec."Purchasing Code")
+                {
+                    Caption = 'Purchasing Code';
+                }
+                field(qtyPerUnitOfMeasure; Rec."Qty. per Unit of Measure")
+                {
+                    Caption = 'Qty. per Unit of Measure';
+                }
+                field(quantity; Rec.Quantity)
+                {
+                    Caption = 'Quantity';
+                }
+                field(quantityBase; Rec."Quantity (Base)")
+                {
+                    Caption = 'Quantity (Base)';
+                }
+                field(responsibilityCenter; Rec."Responsibility Center")
+                {
+                    Caption = 'Responsibility Center';
+                }
+                field(retentionAttachedToLineNo; Rec."Retention Attached to Line No.")
+                {
+                    Caption = 'Retention Attached to Line No.';
+                }
+                field(retentionVAT; Rec."Retention VAT %")
+                {
+                    Caption = 'Retention VAT %';
+                }
+                field(returnReasonCode; Rec."Return Reason Code")
+                {
+                    Caption = 'Return Reason Code';
+                }
+                field(sellToCustomerNo; Rec."Sell-to Customer No.")
+                {
+                    Caption = 'Sell-to Customer No.';
+                }
+                field(shipmentDate; Rec."Shipment Date")
+                {
+                    Caption = 'Shipment Date';
+                }
+                field(shipmentLineNo; Rec."Shipment Line No.")
+                {
+                    Caption = 'Shipment Line No.';
+                }
+                field(shipmentNo; Rec."Shipment No.")
+                {
+                    Caption = 'Shipment No.';
+                }
+                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
+                {
+                    Caption = 'Shortcut Dimension 1 Code';
+                }
+                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
+                {
+                    Caption = 'Shortcut Dimension 2 Code';
+                }
+                field(systemCreatedEntry; Rec."System-Created Entry")
+                {
+                    Caption = 'System-Created Entry';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+                field(taxAreaCode; Rec."Tax Area Code")
+                {
+                    Caption = 'Tax Area Code';
+                }
+                field(taxCategory; Rec."Tax Category")
+                {
+                    Caption = 'Tax Category';
+                }
+                field(taxGroupCode; Rec."Tax Group Code")
+                {
+                    Caption = 'Tax Group Code';
+                }
+                field(taxLiable; Rec."Tax Liable")
+                {
+                    Caption = 'Tax Liable';
+                }
+                field(transactionSpecification; Rec."Transaction Specification")
+                {
+                    Caption = 'Transaction Specification';
+                }
+                field("transactionType"; Rec."Transaction Type")
+                {
+                    Caption = 'Transaction Type';
+                }
+                field(transportMethod; Rec."Transport Method")
+                {
+                    Caption = 'Transport Method';
+                }
+                field("type"; Rec."Type")
+                {
+                    Caption = 'Type';
+                }
+                field(unitCost; Rec."Unit Cost")
+                {
+                    Caption = 'Unit Cost';
+                }
+                field(unitCostLCY; Rec."Unit Cost (LCY)")
+                {
+                    Caption = 'Unit Cost (LCY)';
+                }
+                field(unitPrice; Rec."Unit Price")
+                {
+                    Caption = 'Unit Price';
+                }
+                field(unitVolume; Rec."Unit Volume")
+                {
+                    Caption = 'Unit Volume';
+                }
+                field(unitOfMeasure; Rec."Unit of Measure")
+                {
+                    Caption = 'Unit of Measure';
+                }
+                field(unitOfMeasureCode; Rec."Unit of Measure Code")
+                {
+                    Caption = 'Unit of Measure Code';
+                }
+                field(unitsPerParcel; Rec."Units per Parcel")
+                {
+                    Caption = 'Units per Parcel';
+                }
+                field(useDuplicationList; Rec."Use Duplication List")
+                {
+                    Caption = 'Use Duplication List';
+                }
+                field(vat; Rec."VAT %")
+                {
+                    Caption = 'VAT %';
+                }
+                field(vatBaseAmount; Rec."VAT Base Amount")
+                {
+                    Caption = 'VAT Base Amount';
+                }
+                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
+                {
+                    Caption = 'VAT Bus. Posting Group';
+                }
+                field(vatCalculationType; Rec."VAT Calculation Type")
+                {
+                    Caption = 'VAT Calculation Type';
+                }
+                field(vatClauseCode; Rec."VAT Clause Code")
+                {
+                    Caption = 'VAT Clause Code';
+                }
+                field(vatDifference; Rec."VAT Difference")
+                {
+                    Caption = 'VAT Difference';
+                }
+                field(vatIdentifier; Rec."VAT Identifier")
+                {
+                    Caption = 'VAT Identifier';
+                }
+                field(vatProdPostingGroup; Rec."VAT Prod. Posting Group")
+                {
+                    Caption = 'VAT Prod. Posting Group';
+                }
+                field(variantCode; Rec."Variant Code")
+                {
+                    Caption = 'Variant Code';
+                }
+                field(workTypeCode; Rec."Work Type Code")
+                {
+                    Caption = 'Work Type Code';
+                }
+            }
+        }
+    }
+}
+
+page 90050 "Purchase Header"
+{
+    APIGroup = 'standardEndpoints';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'purchaseHeader';
+    DelayedInsert = true;
+    EntityName = 'purchaseHeader';
+    EntitySetName = 'purchaseHeaders';
+    PageType = API;
+    SourceTable = "Purchase Header";
+    ODataKeyFields = SystemId;
+    DataAccessIntent = ReadOnly;
+    Editable = false;
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(aRcdNotInvExVATLCY; Rec."A. Rcd. Not Inv. Ex. VAT (LCY)")
+                {
+                    Caption = 'Amount Received Not Invoiced (LCY)';
+                }
+                field(amount; Rec.Amount)
+                {
+                    Caption = 'Amount';
+                }
+                field(amountIncludingVAT; Rec."Amount Including VAT")
+                {
+                    Caption = 'Amount Including VAT';
+                }
+                field(amtRcdNotInvoicedLCY; Rec."Amt. Rcd. Not Invoiced (LCY)")
+                {
+                    Caption = 'Amount Received Not Invoiced (LCY) Incl. VAT';
+                }
+                field(appliesToDocNo; Rec."Applies-to Doc. No.")
+                {
+                    Caption = 'Applies-to Doc. No.';
+                }
+                field(appliesToDocType; Rec."Applies-to Doc. Type")
+                {
+                    Caption = 'Applies-to Doc. Type';
+                }
+                field(appliesToID; Rec."Applies-to ID")
+                {
+                    Caption = 'Applies-to ID';
+                }
+                field("area"; Rec."Area")
+                {
+                    Caption = 'Area';
+                }
+                field(assignedUserID; Rec."Assigned User ID")
+                {
+                    Caption = 'Assigned User ID';
+                }
+                field(balAccountNo; Rec."Bal. Account No.")
+                {
+                    Caption = 'Bal. Account No.';
+                }
+                field(balAccountType; Rec."Bal. Account Type")
+                {
+                    Caption = 'Bal. Account Type';
+                }
+                field(buyFromAddress; Rec."Buy-from Address")
+                {
+                    Caption = 'Buy-from Address';
+                }
+                field(buyFromAddress2; Rec."Buy-from Address 2")
+                {
+                    Caption = 'Buy-from Address 2';
+                }
+                field(buyFromCity; Rec."Buy-from City")
+                {
+                    Caption = 'Buy-from City';
+                }
+                field(buyFromContact; Rec."Buy-from Contact")
+                {
+                    Caption = 'Buy-from Contact';
+                }
+                field(buyFromContactNo; Rec."Buy-from Contact No.")
+                {
+                    Caption = 'Buy-from Contact No.';
+                }
+                field(buyFromCountryRegionCode; Rec."Buy-from Country/Region Code")
+                {
+                    Caption = 'Buy-from Country/Region Code';
+                }
+                field(buyFromCounty; Rec."Buy-from County")
+                {
+                    Caption = 'Buy-from County';
+                }
+                field(buyFromICPartnerCode; Rec."Buy-from IC Partner Code")
+                {
+                    Caption = 'Buy-from IC Partner Code';
+                }
+                field(buyFromPostCode; Rec."Buy-from Post Code")
+                {
+                    Caption = 'Buy-from Post Code';
+                }
+                field(buyFromVendorName; Rec."Buy-from Vendor Name")
+                {
+                    Caption = 'Buy-from Vendor Name';
+                }
+                field(buyFromVendorName2; Rec."Buy-from Vendor Name 2")
+                {
+                    Caption = 'Buy-from Vendor Name 2';
+                }
+                field(buyFromVendorNo; Rec."Buy-from Vendor No.")
+                {
+                    Caption = 'Buy-from Vendor No.';
+                }
+                field(campaignNo; Rec."Campaign No.")
+                {
+                    Caption = 'Campaign No.';
+                }
+                field(comment; Rec.Comment)
+                {
+                    Caption = 'Comment';
+                }
+                field(completelyReceived; Rec."Completely Received")
+                {
+                    Caption = 'Completely Received';
+                }
+                field(compressPrepayment; Rec."Compress Prepayment")
+                {
+                    Caption = 'Compress Prepayment';
+                }
+                field(correction; Rec.Correction)
+                {
+                    Caption = 'Correction';
+                }
+                field(creditorNo; Rec."Creditor No.")
+                {
+                    Caption = 'Creditor No.';
+                }
+                field(currencyCode; Rec."Currency Code")
+                {
+                    Caption = 'Currency Code';
+                }
+                field(currencyFactor; Rec."Currency Factor")
+                {
+                    Caption = 'Currency Factor';
+                }
+                field(dimensionSetID; Rec."Dimension Set ID")
+                {
+                    Caption = 'Dimension Set ID';
+                }
+                field(docNoOccurrence; Rec."Doc. No. Occurrence")
+                {
+                    Caption = 'Doc. No. Occurrence';
+                }
+                field(documentDate; Rec."Document Date")
+                {
+                    Caption = 'Document Date';
+                }
+                field(documentType; Rec."Document Type")
+                {
+                    Caption = 'Document Type';
+                }
+                field(dueDate; Rec."Due Date")
+                {
+                    Caption = 'Due Date';
+                }
+                field(entryPoint; Rec."Entry Point")
+                {
+                    Caption = 'Entry Point';
+                }
+                field(expectedReceiptDate; Rec."Expected Receipt Date")
+                {
+                    Caption = 'Expected Receipt Date';
+                }
+                field(fiscalInvoiceNumberPAC; Rec."Fiscal Invoice Number PAC")
+                {
+                    Caption = 'Fiscal Invoice Number PAC';
+                }
+                field(formatRegion; Rec."Format Region")
+                {
+                    Caption = 'Format Region';
+                }
+                field(gstHSTTaxType; Rec."GST/HST Tax Type")
+                {
+                    Caption = 'GST HST Tax Type';
+                }
+                field(genBusPostingGroup; Rec."Gen. Bus. Posting Group")
+                {
+                    Caption = 'Gen. Bus. Posting Group';
+                }
+                field(icDirection; Rec."IC Direction")
+                {
+                    Caption = 'IC Direction';
+                }
+                field(icReferenceDocumentNo; Rec."IC Reference Document No.")
+                {
+                    Caption = 'IC Reference Document No.';
+                }
+                field(icStatus; Rec."IC Status")
+                {
+                    Caption = 'IC Status';
+                }
+                field(irs1099Amount; Rec."IRS 1099 Amount")
+                {
+                    Caption = 'IRS 1099 Amount';
+                }
+                field(irs1099Code; Rec."IRS 1099 Code")
+                {
+                    Caption = 'IRS 1099 Code';
+                }
+                field(inboundWhseHandlingTime; Rec."Inbound Whse. Handling Time")
+                {
+                    Caption = 'Inbound Whse. Handling Time';
+                }
+                field(incomingDocumentEntryNo; Rec."Incoming Document Entry No.")
+                {
+                    Caption = 'Incoming Document Entry No.';
+                }
+                field(invoice; Rec.Invoice)
+                {
+                    Caption = 'Invoice';
+                }
+                field(invoiceDiscCode; Rec."Invoice Disc. Code")
+                {
+                    Caption = 'Invoice Disc. Code';
+                }
+                field(invoiceDiscountAmount; Rec."Invoice Discount Amount")
+                {
+                    Caption = 'Invoice Discount Amount';
+                }
+                field(invoiceDiscountCalculation; Rec."Invoice Discount Calculation")
+                {
+                    Caption = 'Invoice Discount Calculation';
+                }
+                field(invoiceDiscountValue; Rec."Invoice Discount Value")
+                {
+                    Caption = 'Invoice Discount Value';
+                }
+                field(invoiceReceivedDate; Rec."Invoice Received Date")
+                {
+                    Caption = 'Invoice Received Date';
+                }
+                field(jobQueueEntryID; Rec."Job Queue Entry ID")
+                {
+                    Caption = 'Job Queue Entry ID';
+                }
+                field(jobQueueStatus; Rec."Job Queue Status")
+                {
+                    Caption = 'Job Queue Status';
+                }
+                field(journalTemplName; Rec."Journal Templ. Name")
+                {
+                    Caption = 'Journal Template Name';
+                }
+                field(languageCode; Rec."Language Code")
+                {
+                    Caption = 'Language Code';
+                }
+                field(lastPostingNo; Rec."Last Posting No.")
+                {
+                    Caption = 'Last Posting No.';
+                }
+                field(lastPrepaymentNo; Rec."Last Prepayment No.")
+                {
+                    Caption = 'Last Prepayment No.';
+                }
+                field(lastPrepmtCrMemoNo; Rec."Last Prepmt. Cr. Memo No.")
+                {
+                    Caption = 'Last Prepmt. Cr. Memo No.';
+                }
+                field(lastReceivingNo; Rec."Last Receiving No.")
+                {
+                    Caption = 'Last Receiving No.';
+                }
+                field(lastReturnShipmentNo; Rec."Last Return Shipment No.")
+                {
+                    Caption = 'Last Return Shipment No.';
+                }
+                field(leadTimeCalculation; Rec."Lead Time Calculation")
+                {
+                    Caption = 'Lead Time Calculation';
+                }
+                field(locationCode; Rec."Location Code")
+                {
+                    Caption = 'Location Code';
+                }
+                field(no; Rec."No.")
+                {
+                    Caption = 'No.';
+                }
+                field(noPrinted; Rec."No. Printed")
+                {
+                    Caption = 'No. Printed';
+                }
+                field(noSeries; Rec."No. Series")
+                {
+                    Caption = 'No. Series';
+                }
+                field(noOfArchivedVersions; Rec."No. of Archived Versions")
+                {
+                    Caption = 'No. of Archived Versions';
+                }
+                field(onHold; Rec."On Hold")
+                {
+                    Caption = 'On Hold';
+                }
+                field(orderAddressCode; Rec."Order Address Code")
+                {
+                    Caption = 'Order Address Code';
+                }
+                field(orderClass; Rec."Order Class")
+                {
+                    Caption = 'Order Class';
+                }
+                field(orderDate; Rec."Order Date")
+                {
+                    Caption = 'Order Date';
+                }
+                field(partiallyInvoiced; Rec."Partially Invoiced")
+                {
+                    Caption = 'Partially Invoiced';
+                }
+                field(payToAddress; Rec."Pay-to Address")
+                {
+                    Caption = 'Pay-to Address';
+                }
+                field(payToAddress2; Rec."Pay-to Address 2")
+                {
+                    Caption = 'Pay-to Address 2';
+                }
+                field(payToCity; Rec."Pay-to City")
+                {
+                    Caption = 'Pay-to City';
+                }
+                field(payToContact; Rec."Pay-to Contact")
+                {
+                    Caption = 'Pay-to Contact';
+                }
+                field(payToContactNo; Rec."Pay-to Contact No.")
+                {
+                    Caption = 'Pay-to Contact No.';
+                }
+                field(payToCountryRegionCode; Rec."Pay-to Country/Region Code")
+                {
+                    Caption = 'Pay-to Country/Region Code';
+                }
+                field(payToCounty; Rec."Pay-to County")
+                {
+                    Caption = 'Pay-to County';
+                }
+                field(payToICPartnerCode; Rec."Pay-to IC Partner Code")
+                {
+                    Caption = 'Pay-to IC Partner Code';
+                }
+                field(payToName; Rec."Pay-to Name")
+                {
+                    Caption = 'Pay-to Name';
+                }
+                field(payToName2; Rec."Pay-to Name 2")
+                {
+                    Caption = 'Pay-to Name 2';
+                }
+                field(payToPostCode; Rec."Pay-to Post Code")
+                {
+                    Caption = 'Pay-to Post Code';
+                }
+                field(payToVendorNo; Rec."Pay-to Vendor No.")
+                {
+                    Caption = 'Pay-to Vendor No.';
+                }
+                field(paymentDiscount; Rec."Payment Discount %")
+                {
+                    Caption = 'Payment Discount %';
+                }
+                field(paymentMethodCode; Rec."Payment Method Code")
+                {
+                    Caption = 'Payment Method Code';
+                }
+                field(paymentReference; Rec."Payment Reference")
+                {
+                    Caption = 'Payment Reference';
+                }
+                field(paymentTermsCode; Rec."Payment Terms Code")
+                {
+                    Caption = 'Payment Terms Code';
+                }
+                field(pendingApprovals; Rec."Pending Approvals")
+                {
+                    Caption = 'Pending Approvals';
+                }
+                field(pmtDiscountDate; Rec."Pmt. Discount Date")
+                {
+                    Caption = 'Pmt. Discount Date';
+                }
+                field(postingDate; Rec."Posting Date")
+                {
+                    Caption = 'Posting Date';
+                }
+                field(postingDescription; Rec."Posting Description")
+                {
+                    Caption = 'Posting Description';
+                }
+                field(postingNo; Rec."Posting No.")
+                {
+                    Caption = 'Posting No.';
+                }
+                field(postingNoSeries; Rec."Posting No. Series")
+                {
+                    Caption = 'Posting No. Series';
+                }
+                field(postingFromWhseRef; Rec."Posting from Whse. Ref.")
+                {
+                    Caption = 'Posting from Whse. Ref.';
+                }
+                field(prepayment; Rec."Prepayment %")
+                {
+                    Caption = 'Prepayment %';
+                }
+                field(prepaymentDueDate; Rec."Prepayment Due Date")
+                {
+                    Caption = 'Prepayment Due Date';
+                }
+                field(prepaymentNo; Rec."Prepayment No.")
+                {
+                    Caption = 'Prepayment No.';
+                }
+                field(prepaymentNoSeries; Rec."Prepayment No. Series")
+                {
+                    Caption = 'Prepayment No. Series';
+                }
+                field(prepmtCrMemoNo; Rec."Prepmt. Cr. Memo No.")
+                {
+                    Caption = 'Prepmt. Cr. Memo No.';
+                }
+                field(prepmtCrMemoNoSeries; Rec."Prepmt. Cr. Memo No. Series")
+                {
+                    Caption = 'Prepmt. Cr. Memo No. Series';
+                }
+                field(prepmtIncludeTax; Rec."Prepmt. Include Tax")
+                {
+                    Caption = 'Prepmt. Include Tax';
+                }
+                field(prepmtPaymentDiscount; Rec."Prepmt. Payment Discount %")
+                {
+                    Caption = 'Prepmt. Payment Discount %';
+                }
+                field(prepmtPaymentTermsCode; Rec."Prepmt. Payment Terms Code")
+                {
+                    Caption = 'Prepmt. Payment Terms Code';
+                }
+                field(prepmtPmtDiscountDate; Rec."Prepmt. Pmt. Discount Date")
+                {
+                    Caption = 'Prepmt. Pmt. Discount Date';
+                }
+                field(prepmtPostingDescription; Rec."Prepmt. Posting Description")
+                {
+                    Caption = 'Prepmt. Posting Description';
+                }
+                field(priceCalculationMethod; Rec."Price Calculation Method")
+                {
+                    Caption = 'Price Calculation Method';
+                }
+                field(pricesIncludingVAT; Rec."Prices Including VAT")
+                {
+                    Caption = 'Prices Including VAT';
+                }
+                field(printPostedDocuments; Rec."Print Posted Documents")
+                {
+                    Caption = 'Print Posted Documents';
+                }
+                field(promisedReceiptDate; Rec."Promised Receipt Date")
+                {
+                    Caption = 'Promised Receipt Date';
+                }
+                field(provincialTaxAreaCode; Rec."Provincial Tax Area Code")
+                {
+                    Caption = 'Provincial Tax Area Code';
+                }
+                field(purchaserCode; Rec."Purchaser Code")
+                {
+                    Caption = 'Purchaser Code';
+                }
+                field(quoteNo; Rec."Quote No.")
+                {
+                    Caption = 'Quote No.';
+                }
+                field(reasonCode; Rec."Reason Code")
+                {
+                    Caption = 'Reason Code';
+                }
+                field(recalculateInvoiceDisc; Rec."Recalculate Invoice Disc.")
+                {
+                    Caption = 'Recalculate Invoice Disc.';
+                }
+                field(receive; Rec.Receive)
+                {
+                    Caption = 'Receive';
+                }
+                field(receivingNo; Rec."Receiving No.")
+                {
+                    Caption = 'Receiving No.';
+                }
+                field(receivingNoSeries; Rec."Receiving No. Series")
+                {
+                    Caption = 'Receiving No. Series';
+                }
+                field(remitToCode; Rec."Remit-to Code")
+                {
+                    Caption = 'Remit-to Code';
+                }
+                field(requestedReceiptDate; Rec."Requested Receipt Date")
+                {
+                    Caption = 'Requested Receipt Date';
+                }
+                field(responsibilityCenter; Rec."Responsibility Center")
+                {
+                    Caption = 'Responsibility Center';
+                }
+                field(returnShipmentNo; Rec."Return Shipment No.")
+                {
+                    Caption = 'Return Shipment No.';
+                }
+                field(returnShipmentNoSeries; Rec."Return Shipment No. Series")
+                {
+                    Caption = 'Return Shipment No. Series';
+                }
+                field(steTransactionID; Rec."STE Transaction ID")
+                {
+                    Caption = 'STE Transaction ID';
+                }
+                field(sellToCustomerNo; Rec."Sell-to Customer No.")
+                {
+                    Caption = 'Sell-to Customer No.';
+                }
+                field(sendICDocument; Rec."Send IC Document")
+                {
+                    Caption = 'Send IC Document';
+                }
+                field(ship; Rec.Ship)
+                {
+                    Caption = 'Ship';
+                }
+                field(shipToAddress; Rec."Ship-to Address")
+                {
+                    Caption = 'Ship-to Address';
+                }
+                field(shipToAddress2; Rec."Ship-to Address 2")
+                {
+                    Caption = 'Ship-to Address 2';
+                }
+                field(shipToCity; Rec."Ship-to City")
+                {
+                    Caption = 'Ship-to City';
+                }
+                field(shipToCode; Rec."Ship-to Code")
+                {
+                    Caption = 'Ship-to Code';
+                }
+                field(shipToContact; Rec."Ship-to Contact")
+                {
+                    Caption = 'Ship-to Contact';
+                }
+                field(shipToCountryRegionCode; Rec."Ship-to Country/Region Code")
+                {
+                    Caption = 'Ship-to Country/Region Code';
+                }
+                field(shipToCounty; Rec."Ship-to County")
+                {
+                    Caption = 'Ship-to County';
+                }
+                field(shipToName; Rec."Ship-to Name")
+                {
+                    Caption = 'Ship-to Name';
+                }
+                field(shipToName2; Rec."Ship-to Name 2")
+                {
+                    Caption = 'Ship-to Name 2';
+                }
+                field(shipToPostCode; Rec."Ship-to Post Code")
+                {
+                    Caption = 'Ship-to Post Code';
+                }
+                field(shipToUPSZone; Rec."Ship-to UPS Zone")
+                {
+                    Caption = 'Ship-to UPS Zone';
+                }
+                field(shipmentMethodCode; Rec."Shipment Method Code")
+                {
+                    Caption = 'Shipment Method Code';
+                }
+                field(shortcutDimension1Code; Rec."Shortcut Dimension 1 Code")
+                {
+                    Caption = 'Shortcut Dimension 1 Code';
+                }
+                field(shortcutDimension2Code; Rec."Shortcut Dimension 2 Code")
+                {
+                    Caption = 'Shortcut Dimension 2 Code';
+                }
+                field(status; Rec.Status)
+                {
+                    Caption = 'Status';
+                }
+                field(systemCreatedAt; Rec.SystemCreatedAt)
+                {
+                    Caption = 'SystemCreatedAt';
+                }
+                field(systemCreatedBy; Rec.SystemCreatedBy)
+                {
+                    Caption = 'SystemCreatedBy';
+                }
+                field(systemId; Rec.SystemId)
+                {
+                    Caption = 'SystemId';
+                }
+                field(systemModifiedAt; Rec.SystemModifiedAt)
+                {
+                    Caption = 'SystemModifiedAt';
+                }
+                field(systemModifiedBy; Rec.SystemModifiedBy)
+                {
+                    Caption = 'SystemModifiedBy';
+                }
+                field(taxAreaCode; Rec."Tax Area Code")
+                {
+                    Caption = 'Tax Area Code';
+                }
+                field(taxExemptionNo; Rec."Tax Exemption No.")
+                {
+                    Caption = 'Tax Exemption No.';
+                }
+                field(taxLiable; Rec."Tax Liable")
+                {
+                    Caption = 'Tax Liable';
+                }
+                field(transactionSpecification; Rec."Transaction Specification")
+                {
+                    Caption = 'Transaction Specification';
+                }
+                field("transactionType"; Rec."Transaction Type")
+                {
+                    Caption = 'Transaction Type';
+                }
+                field(transportMethod; Rec."Transport Method")
+                {
+                    Caption = 'Transport Method';
+                }
+                field(vatBaseDiscount; Rec."VAT Base Discount %")
+                {
+                    Caption = 'VAT Base Discount %';
+                }
+                field(vatBusPostingGroup; Rec."VAT Bus. Posting Group")
+                {
+                    Caption = 'VAT Bus. Posting Group';
+                }
+                field(vatCountryRegionCode; Rec."VAT Country/Region Code")
+                {
+                    Caption = 'VAT Country/Region Code';
+                }
+                field(vatRegistrationNo; Rec."VAT Registration No.")
+                {
+                    Caption = 'VAT Registration No.';
+                }
+                field(vatReportingDate; Rec."VAT Reporting Date")
+                {
+                    Caption = 'VAT Date';
+                }
+                field(vendorAuthorizationNo; Rec."Vendor Authorization No.")
+                {
+                    Caption = 'Vendor Authorization No.';
+                }
+                field(vendorCrMemoNo; Rec."Vendor Cr. Memo No.")
+                {
+                    Caption = 'Vendor Cr. Memo No.';
+                }
+                field(vendorInvoiceNo; Rec."Vendor Invoice No.")
+                {
+                    Caption = 'Vendor Invoice No.';
+                }
+                field(vendorOrderNo; Rec."Vendor Order No.")
+                {
+                    Caption = 'Vendor Order No.';
+                }
+                field(vendorPostingGroup; Rec."Vendor Posting Group")
+                {
+                    Caption = 'Vendor Posting Group';
+                }
+                field(vendorShipmentNo; Rec."Vendor Shipment No.")
+                {
+                    Caption = 'Vendor Shipment No.';
+                }
+                field(yourReference; Rec."Your Reference")
+                {
+                    Caption = 'Your Reference';
+                }
+                field(dateFilter; Rec."Date Filter")
+                {
+                    Caption = 'Date Filter';
+                }
+                field(locationFilter; Rec."Location Filter")
+                {
+                    Caption = 'Location Filter';
+                }
+            }
+
+        }
+    }
+}
+
+page 90051 dimensionSetEntry
+{
+    APIGroup = 'standardEndpoints';
+    APIPublisher = 'fivetran';
+    APIVersion = 'v1.0';
+    ApplicationArea = All;
+    Caption = 'dimensionSetEntry';
+    DelayedInsert = true;
+    EntityName = 'dimensionSetEntry';
+    EntitySetName = 'dimensionSetEntries';
+    PageType = API;
+    SourceTable = "Dimension Set Entry";
+
+    layout
+    {
+        area(content)
+        {
+            repeater(General)
+            {
+                field(dimensionCode; Rec."Dimension Code")
+                {
+                    Caption = 'Dimension Code';
+                }
+                field(dimensionName; Rec."Dimension Name")
+                {
+                    Caption = 'Dimension Name';
+                }
+                field(dimensionSetID; Rec."Dimension Set ID")
+                {
+                    Caption = 'Dimension Set ID';
+                }
+                field(dimensionValueCode; Rec."Dimension Value Code")
+                {
+                    Caption = 'Dimension Value Code';
+                }
+                field(dimensionValueID; Rec."Dimension Value ID")
+                {
+                    Caption = 'Dimension Value ID';
+                }
+                field(dimensionValueName; Rec."Dimension Value Name")
+                {
+                    Caption = 'Dimension Value Name';
+                }
+                field(globalDimensionNo; Rec."Global Dimension No.")
+                {
+                    Caption = 'Shortcut Dimension No.';
                 }
                 field(systemCreatedAt; Rec.SystemCreatedAt)
                 {
