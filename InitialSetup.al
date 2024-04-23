@@ -28,9 +28,7 @@ table 90000 "Custom Subscription"
         {
             caption = 'Table ID';
         }
-
     }
-
     trigger OnInsert()
     begin
         id := System.CreateGuid();
@@ -365,15 +363,31 @@ codeunit 50101 GlobalEventHandle
         subscription: Record "Custom Subscription";
         company: Record Company;
         systemId: Text[200];
+        recordOfSharedTable: Boolean;
     begin
-        company.Get(RecRef.CurrentCompany);
-        subscription.SetCurrentKey(companyId, tableId);
+        recordOfSharedTable := false;
+
+        subscription.SetCurrentKey(tableId);
         subscription.SetFilter(tableId, Format(RecRef.Number()));
-        subscription.SetFilter(companyId, Format(company.Id).ToLower().Replace('{', '').Replace('}', ''));
+
+        if (subscription.FindFirst()) then begin
+            if (subscription.companyId = 'ALL') then begin
+                recordOfSharedTable := true;
+            end;
+        end;
+
+        if (not recordOfSharedTable) then begin
+            company.Get(RecRef.CurrentCompany);
+            subscription.SetCurrentKey(companyId, tableId);
+            subscription.SetFilter(tableId, Format(RecRef.Number()));
+            subscription.SetFilter(companyId, Format(company.Id).ToLower().Replace('{', '').Replace('}', ''));
+        end;
+
 
         if subscription.FindSet() then begin
             JSONObject.Add('tableId', RecRef.Number());
             JSONObject.Add('companyId', Format(company.Id).ToLower().Replace('{', '').Replace('}', ''));
+            JSONObject.Add('position', RecRef.GetPosition());
             JSONObject.Add('payloadId', '');
             JSONObject.Add('systemId', Format(RecRef.Field(2000000000).Value).ToLower().Replace('{', '').Replace('}', ''));
             systemModifiedAt := RecRef.Field(RecRef.SystemCreatedAtNo).Value;
