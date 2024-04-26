@@ -390,7 +390,7 @@ codeunit 50101 GlobalEventHandle
             JSONObject.Add('position', RecRef.GetPosition());
             JSONObject.Add('payloadId', '');
             JSONObject.Add('systemId', Format(RecRef.Field(2000000000).Value).ToLower().Replace('{', '').Replace('}', ''));
-            systemModifiedAt := RecRef.Field(RecRef.SystemCreatedAtNo).Value;
+            systemModifiedAt := RecRef.Field(RecRef.SystemModifiedAtNo).Value;
             JSONObject.Add('systemModifiedAt', systemModifiedAt);
             repeat
                 subscription.recordsDeleted := subscription.recordsDeleted + 1;
