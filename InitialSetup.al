@@ -338,7 +338,7 @@ page 90002 "Table Metadata"
     }
 }
 
-codeunit 50101 GlobalEventHandle
+codeunit 90101 GlobalEventHandle
 {
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Global Triggers", 'GetDatabaseTableTriggerSetup', '', false, false)]
     local procedure GetDatabaseTableTriggerSetup(TableId: Integer; var OnDatabaseInsert: Boolean; var OnDatabaseModify: Boolean; var OnDatabaseDelete: Boolean)
