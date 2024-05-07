@@ -9040,8 +9040,8 @@ page 90032 "Purch. Rcpt. Header"
     EntityCaption = 'Purch. Rcpt. Header';
     EntitySetCaption = 'Purch. Rcpt. Headers';
     ODataKeyFields = SystemId;
-    EntityName = 'PurchaseReceiptHeader';
-    EntitySetName = 'PurchaseReceiptHeaders';
+    EntityName = 'purchaseReceiptHeader';
+    EntitySetName = 'purchaseReceiptHeaders';
     SourceTable = "Purch. Rcpt. Header";
 
     layout
