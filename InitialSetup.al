@@ -338,9 +338,18 @@ page 90002 "Table Metadata"
     }
 }
 
-codeunit 90101 GlobalEventHandle
+permissionset 90000 FIVETRAN_SETUP
 {
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Global Triggers", 'GetDatabaseTableTriggerSetup', '', false, false)]
+    Assignable = true;
+    Permissions =
+        tabledata "Custom Subscription" = RM,
+        table "Custom Subscription" = X,
+        codeunit FivetranGlobalEventHandle = X;
+}
+
+codeunit 90101 FivetranGlobalEventHandle
+{
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Global Triggers", 'GetDatabaseTableTriggerSetup', '', true, true)]
     local procedure GetDatabaseTableTriggerSetup(TableId: Integer; var OnDatabaseInsert: Boolean; var OnDatabaseModify: Boolean; var OnDatabaseDelete: Boolean)
     begin
         OnDatabaseInsert := false;
@@ -349,7 +358,7 @@ codeunit 90101 GlobalEventHandle
     end;
 
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Global Triggers", 'OnDatabaseDelete', '', false, false)]
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Global Triggers", 'OnDatabaseDelete', '', true, true)]
     local procedure OnDatabaseDelete(RecRef: RecordRef)
     var
         JSONObject: JsonObject;
