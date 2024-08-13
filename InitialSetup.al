@@ -338,6 +338,15 @@ page 90002 "Table Metadata"
     }
 }
 
+permissionset 90000 FIVETRAN_SETUP
+{
+    Assignable = true;
+    Permissions =
+        tabledata "Custom Subscription" = RM,
+        table "Custom Subscription" = X,
+        codeunit FivetranGlobalEventHandle = X;
+}
+
 codeunit 50101 FivetranGlobalEventHandle
 {
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Global Triggers", 'GetDatabaseTableTriggerSetup', '', true, true)]
