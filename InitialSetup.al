@@ -347,7 +347,7 @@ permissionset 90000 FIVETRAN_SETUP
         codeunit FivetranGlobalEventHandle = X;
 }
 
-codeunit 50101 FivetranGlobalEventHandle
+codeunit 90101 FivetranGlobalEventHandle
 {
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Global Triggers", 'GetDatabaseTableTriggerSetup', '', true, true)]
     local procedure GetDatabaseTableTriggerSetup(TableId: Integer; var OnDatabaseInsert: Boolean; var OnDatabaseModify: Boolean; var OnDatabaseDelete: Boolean)
