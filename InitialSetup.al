@@ -432,13 +432,13 @@ page 90003 "G/L Account"
     DelayedInsert = true;
     DeleteAllowed = false;
     Editable = false;
-    EntityName = 'generalLedgerAccount'; // page Name - schema - destination
-    EntitySetName = 'generalLedgerAccounts'; // url 
+    EntityName = 'generalLedgerAccount';
+    EntitySetName = 'generalLedgerAccounts';
     InsertAllowed = false;
     ModifyAllowed = false;
     ODataKeyFields = SystemId;
     PageType = API;
-    SourceTable = "G/L Account"; // no - access
+    SourceTable = "G/L Account";
     DataAccessIntent = ReadOnly;
 
     layout
@@ -951,10 +951,6 @@ page 90004 "Bank Account"
                 {
                     Caption = 'Global Dimension 2 Code';
                 }
-                field(homePage; Rec."Home Page")
-                {
-                    Caption = 'Home Page';
-                }
                 field(iban; Rec.IBAN)
                 {
                     Caption = 'IBAN';
@@ -1292,10 +1288,6 @@ page 90005 "API - Company Information"
                 {
                     Caption = 'Giro No.';
                 }
-                field(homePage; Rec."Home Page")
-                {
-                    Caption = 'Home Page';
-                }
                 field(iban; Rec.IBAN)
                 {
                     Caption = 'IBAN';
@@ -1615,10 +1607,6 @@ page 90006 "Contact"
                 field(formatRegion; Rec."Format Region")
                 {
                     Caption = 'Format Region';
-                }
-                field(homePage; Rec."Home Page")
-                {
-                    Caption = 'Home Page';
                 }
                 field(image; Rec.Image)
                 {
@@ -2620,10 +2608,6 @@ page 90010 "Customer"
                 field(globalDimension2Code; Rec."Global Dimension 2 Code")
                 {
                     Caption = 'Global Dimension 2 Code';
-                }
-                field(homePage; Rec."Home Page")
-                {
-                    Caption = 'Home Page';
                 }
                 field(icPartnerCode; Rec."IC Partner Code")
                 {
@@ -3704,14 +3688,6 @@ page 90013 "Gen. Journal Line"
                 field(icPartnerTransactionNo; Rec."IC Partner Transaction No.")
                 {
                     Caption = 'IC Partner Transaction No.';
-                }
-                field(irs1099Amount; Rec."IRS 1099 Amount")
-                {
-                    Caption = 'IRS 1099 Amount';
-                }
-                field(irs1099Code; Rec."IRS 1099 Code")
-                {
-                    Caption = 'IRS 1099 Code';
                 }
                 field(incomingDocumentEntryNo; Rec."Incoming Document Entry No.")
                 {
@@ -5406,10 +5382,6 @@ page 90020 "Vendor"
                 {
                     Caption = 'Exclude from Payment Practices';
                 }
-                field(fatcaFilingRequirement; Rec."FATCA filing requirement")
-                {
-                    Caption = 'FATCA filing requirement';
-                }
                 field(faxNo; Rec."Fax No.")
                 {
                     Caption = 'Fax No.';
@@ -5450,17 +5422,9 @@ page 90020 "Vendor"
                 {
                     Caption = 'Global Dimension 2 Code';
                 }
-                field(homePage; Rec."Home Page")
-                {
-                    Caption = 'Home Page';
-                }
                 field(icPartnerCode; Rec."IC Partner Code")
                 {
                     Caption = 'IC Partner Code';
-                }
-                field(irs1099Code; Rec."IRS 1099 Code")
-                {
-                    Caption = 'IRS 1099 Code';
                 }
                 field(image; Rec.Image)
                 {
@@ -7532,10 +7496,7 @@ page 90026 "Location"
                 {
                     Caption = 'From-Production Bin Code';
                 }
-                field(homePage; Rec."Home Page")
-                {
-                    Caption = 'Home Page';
-                }
+
                 field(idUbicacion; Rec."ID Ubicacion")
                 {
                     Caption = 'ID Ubicacion';
@@ -10316,10 +10277,6 @@ page 90035 "Sales Credit Memo Header"
                 {
                     Caption = 'PAC Web Service Name';
                 }
-                field(packageTrackingNo; Rec."Package Tracking No.")
-                {
-                    Caption = 'Package Tracking No.';
-                }
                 field(paid; Rec.Paid)
                 {
                     Caption = 'Paid';
@@ -10842,10 +10799,6 @@ page 90036 "Purchase Line"
                 field(icPartnerReference; Rec."IC Partner Reference")
                 {
                     Caption = 'IC Partner Reference';
-                }
-                field(irs1099Liable; Rec."IRS 1099 Liable")
-                {
-                    Caption = 'IRS 1099 Liable';
                 }
                 field(inboundWhseHandlingTime; Rec."Inbound Whse. Handling Time")
                 {
@@ -12293,10 +12246,6 @@ page 90038 "Sales Shipment Header"
                 {
                     Caption = 'PAC Web Service Name';
                 }
-                field(packageTrackingNo; Rec."Package Tracking No.")
-                {
-                    Caption = 'Package Tracking No.';
-                }
                 field(paymentDiscount; Rec."Payment Discount %")
                 {
                     Caption = 'Payment Discount %';
@@ -13241,14 +13190,6 @@ page 90042 "Posted General Journal Line"
                 {
                     Caption = 'IC Partner Transaction No.';
                 }
-                field(irs1099Amount; Rec."IRS 1099 Amount")
-                {
-                    Caption = 'IRS 1099 Amount';
-                }
-                field(irs1099Code; Rec."IRS 1099 Code")
-                {
-                    Caption = 'IRS 1099 Code';
-                }
                 field(incomingDocumentEntryNo; Rec."Incoming Document Entry No.")
                 {
                     Caption = 'Incoming Document Entry No.';
@@ -13900,10 +13841,7 @@ page 90043 "Purchase Invoice Header"
                 {
                     Caption = 'Gen. Bus. Posting Group';
                 }
-                field(irs1099Code; Rec."IRS 1099 Code")
-                {
-                    Caption = 'IRS 1099 Code';
-                }
+
                 field(invoiceDiscCode; Rec."Invoice Disc. Code")
                 {
                     Caption = 'Invoice Disc. Code';
@@ -15289,10 +15227,6 @@ page 90046 "Sales Header"
                 field(outstandingAmount; Rec."Outstanding Amount ($)")
                 {
                     Caption = 'Outstanding Amount ($)';
-                }
-                field(packageTrackingNo; Rec."Package Tracking No.")
-                {
-                    Caption = 'Package Tracking No.';
                 }
                 field(paymentDiscount; Rec."Payment Discount %")
                 {
@@ -16956,10 +16890,6 @@ page 90048 "Sales Invoice Header"
                 {
                     Caption = 'PAC Web Service Name';
                 }
-                field(packageTrackingNo; Rec."Package Tracking No.")
-                {
-                    Caption = 'Package Tracking No.';
-                }
                 field(paymentDiscount; Rec."Payment Discount %")
                 {
                     Caption = 'Payment Discount %';
@@ -17924,14 +17854,6 @@ page 90050 "Purchase Header"
                 field(icStatus; Rec."IC Status")
                 {
                     Caption = 'IC Status';
-                }
-                field(irs1099Amount; Rec."IRS 1099 Amount")
-                {
-                    Caption = 'IRS 1099 Amount';
-                }
-                field(irs1099Code; Rec."IRS 1099 Code")
-                {
-                    Caption = 'IRS 1099 Code';
                 }
                 field(inboundWhseHandlingTime; Rec."Inbound Whse. Handling Time")
                 {
