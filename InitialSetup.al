@@ -439,6 +439,7 @@ page 90003 "G/L Account"
     ODataKeyFields = SystemId;
     PageType = API;
     SourceTable = "G/L Account";
+    DataAccessIntent = ReadOnly;
 
     layout
     {
