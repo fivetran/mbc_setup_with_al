@@ -352,8 +352,6 @@ codeunit 90101 FivetranGlobalEventHandle
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Global Triggers", 'GetDatabaseTableTriggerSetup', '', true, true)]
     local procedure GetDatabaseTableTriggerSetup(TableId: Integer; var OnDatabaseInsert: Boolean; var OnDatabaseModify: Boolean; var OnDatabaseDelete: Boolean)
     begin
-        OnDatabaseInsert := false;
-        OnDatabaseModify := false;
         OnDatabaseDelete := true;
     end;
 
